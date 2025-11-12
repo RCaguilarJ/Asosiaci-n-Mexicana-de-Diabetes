@@ -115,14 +115,14 @@
             <h2>Consejos de Salud</h2>
             <div class="tips-list">
                 <article class="tip-item">
-                    <img src="assets/images/platilloSano.jpg" alt="Plato de comida saludable" class="tip-image">
+                    <img src="assets/img/platilloSano.jpg" alt="Plato de comida saludable" class="tip-image">
                     <div class="tip-content">
                         <h3>Alimentación Saludable</h3>
                         <p>Mantén una dieta balanceada rica en fibra, verduras y proteínas magras.</p>
                     </div>
                 </article>
                 <article class="tip-item">
-                    <img src="assets/images/medidorInsulina.jpg" alt="Monitor de glucosa" class="tip-image">
+                    <img src="assets/img/medidorInsulina.jpg" alt="Monitor de glucosa" class="tip-image">
                     <div class="tip-content">
                         <h3>Monitoreo Regular</h3>
                         <p>Registra tus niveles de glucosa diariamente para un mejor control.</p>
