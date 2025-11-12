@@ -27,7 +27,7 @@
             </a>
         </li>
         <li>
-            <a href="#" class="menu-drawer-link"> <span class="menu-drawer-link__icon">
+            <a href="calculadora.php" class="menu-drawer-link"> <span class="menu-drawer-link__icon">
                     </span>
                 <span class="menu-drawer-link__text">
                     <span class="menu-drawer-link__title">Calculadora de Diabetes</span>

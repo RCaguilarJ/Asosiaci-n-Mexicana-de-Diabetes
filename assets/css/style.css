@@ -570,7 +570,7 @@ a { text-decoration: none; color: var(--color-primario-azul-borde); }
     margin-bottom: 15px; /* Espacio entre el título y el primer campo */
 }
 .card-form-legend svg {
-    color: var(--color-secundario-verde); /* Iconos de leyenda en verde */
+    /* color: var(--color-secundario-verde); Iconos de leyenda en verde */
     width: 24px;
     height: 24px;
 }
@@ -652,7 +652,7 @@ a { text-decoration: none; color: var(--color-primario-azul-borde); }
 }
 .alert-importante .alert-icon {
     flex-shrink: 0;
-    color: #d9534f;
+    /* color: #d9534f; El color se define en el SVG */
 }
 .alert-importante .alert-text strong {
     display: block;
@@ -729,7 +729,7 @@ a { text-decoration: none; color: var(--color-primario-azul-borde); }
 }
 .alert-status .alert-icon {
     flex-shrink: 0;
-    color: #f59e0b; /* Naranja */
+    /* color: #f59e0b; El color se define en el SVG */
 }
 .alert-status .alert-text p {
     font-size: 14px;

@@ -1,141 +1,147 @@
 <?php
-    // 1. Definimos la página actual y el título
-    $paginaActual = 'calculadora';
-    $tituloDeLaPagina = "Calculadora - Asoc. Mexicana de Diabetes"; 
+    $paginaActual = 'inicio'; // <-- ESTA LÍNEA ES IMPORTANTE
+    $tituloDeLaPagina = "Mi Panel - Asoc. Mexicana de Diabetes"; 
 ?>
 <!DOCTYPE html>
 <html lang="es">
 
 <?php 
-    // 2. Incluimos el <head>
+    // 1. Incluimos el <head>
     include 'includes/head.php'; 
 ?>
 
 <body>
 
     <?php 
-        // 3. Incluimos el menú deslizante
+        // 2. INCLUIMOS EL NUEVO MENÚ DESLIZANTE
         include 'includes/menu-drawer.php'; 
     ?>
 
     <?php 
-        // 4. Incluimos el header (barra superior)
+        // 3. INCLUIMOS EL HEADER (QUE AHORA SOLO TIENE EL BOTÓN)
         include 'includes/header.php'; 
     ?>
 
-    <header class="page-header">
-        <div class="page-header-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"></rect><line x1="8" x2="16" y1="6" y2="6"></line><line x1="16" x2="16" y1="14" y2="18"></line><path d="M16 10h.01"></path><path d="M12 10h.01"></path><path d="M8 10h.01"></path><path d="M12 14h.01"></path><path d="M8 14h.01"></path><path d="M12 18h.01"></path><path d="M8 18h.01"></path></svg>
+    <section class="welcome-hero">
+        <div class="welcome-hero-content">
+            <div class="welcome-text">
+                <h1>¡Bienvenido!</h1>
+                <p>Cuidando tu salud cada día</p>
+            </div>
+            <div class="welcome-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart w-7 h-7 text-white" aria-hidden="true"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"></path></svg>
+            </div>
         </div>
-        <div class="page-header-text">
-            <h1>Calculadora</h1>
-            <p>Calcula tu dosis de insulina</p>
+
+        <div class="status-cards-container">
+            <div class="status-card">
+                <div class="status-icon-container" style="background-color: #e0f0ff;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-droplet w-6 h-6" aria-hidden="true" style="color: rgb(0, 102, 178);"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"></path></svg>
+                </div>
+                <div class="status-text">
+                    <span class="status-title">Nivel de Glucosa</span>
+                    <span class="status-value">120 mg/DL</span>
+                </div>
+                <div class="status-bar" style="background-color: #007bff;"></div>
+            </div>
+            <div class="status-card">
+                <div class="status-icon-container" style="background-color: #e0fff0;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-activity w-6 h-6" aria-hidden="true" style="color: rgb(124, 179, 66);"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path></svg>
+                </div>
+                <div class="status-text">
+                    <span class="status-title">Última Medición</span>
+                    <span class="status-value">Hace 2 horas</span>
+                </div>
+                <div class="status-bar" style="background-color: #28a745;"></div>
+            </div>
+            <div class="status-card">
+                <div class="status-icon-container" style="background-color: #f0e6ff;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-up w-6 h-6" aria-hidden="true" style="color: rgb(0, 151, 216);"><path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path></svg>
+                </div>
+                <div class="status-text">
+                    <span class="status-title">Promedio Semanal</span>
+                    <span class="status-value">125 mg/DL</span>
+                </div>
+                <div class="status-bar" style="background-color: #007bff;"></div>
+            </div>
         </div>
-    </header>
+    </section>
 
     <main class="contenedor">
     
-        <form id="form-calculadora" class="calculadora-form">
-
-            <fieldset class="card-form">
-                <legend class="card-form-legend">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path></svg>
-                    <span>Nivel de Glucosa</span>
-                </legend>
-                
-                <div class="form-group">
-                    <label for="glucosa">Glucosa (mg/DL)</label>
-                    <input type="number" id="glucosa" name="glucosa" class="form-control" placeholder="120" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="momento">Momento de medición</label>
-                    <select id="momento" name="momento" class="form-control" required>
-                        <option value="" disabled selected>Selecciona el momento</option>
-                        <option value="ayunas">En ayunas</option>
-                        <option value="despues_comer">Después de comer (2h)</option>
-                        <option value="antes_comer">Antes de comer</option>
-                        <option value="antes_dormir">Antes de dormir</option>
-                    </select>
-                </div>
-            </fieldset>
-
-            <fieldset class="card-form">
-                <legend class="card-form-legend">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"></rect><line x1="8" x2="16" y1="6" y2="6"></line><line x1="16" x2="16" y1="14" y2="18"></line><path d="M16 10h.01"></path><path d="M12 10h.01"></path><path d="M8 10h.01"></path><path d="M12 14h.01"></path><path d="M8 14h.01"></path><path d="M12 18h.01"></path><path d="M8 18h.01"></path></svg>
-                    <span>Calculadora de Insulina</span>
-                </legend>
-                
-                <div class="form-group">
-                    <label for="carbohidratos">Carbohidratos a consumir (g)</label>
-                    <input type="number" id="carbohidratos" name="carbohidratos" class="form-control" placeholder="45" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="ratio">Ratio insulina:carbohidratos (1:X)</label>
-                    <select id="ratio" name="ratio" class="form-control" required>
-                        <option value="" disabled selected>Selecciona el ratio</option>
-                        <option value="10">1:10</option>
-                        <option value="12">1:12</option>
-                        <option value="15">1:15</option>
-                        <option value="20">1:20</option>
-                    </select>
-                </div>
-            </fieldset>
-
-            <button type="submit" id="btn-calcular" class="btn-calculadora" disabled>
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"></rect><line x1="8" x2="16" y1="6" y2="6"></line><line x1="16" x2="16" y1="14" y2="18"></line><path d="M16 10h.01"></path><path d="M12 10h.01"></path><path d="M8 10h.01"></path><path d="M12 14h.01"></path><path d="M8 14h.01"></path><path d="M12 18h.01"></path><path d="M8 18h.01"></path></svg>
-                <span>Calcular Resultados</span>
-            </button>
-
-
-            <section id="seccion-resultados" class="seccion-resultados oculto">
-                
-                <h3 class="titulo-resultados">Resultados del Análisis</h3>
-                
-                <div class="card-resultados">
-                    
-                    <div class="resultado-item">
-                        <span class="resultado-label">Interpretación:</span>
-                        <span id="resultado-interpretacion" class="resultado-valor"></span>
-                    </div>
-
-                    <div class="resultado-item">
-                        <span class="resultado-label">Dosis de insulina sugerida:</span>
-                        <span id="resultado-dosis" class="resultado-valor resultado-valor--dosis"></span>
-                    </div>
-
-                    <div class="alert-status">
-                        <div class="alert-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="16" y2="12"></line><line x1="12" x2="12.01" y1="8" y2="8"></line></svg>
-                        </div>
-                        <div class="alert-text">
-                            <p id="resultado-mensaje"></p>
-                        </div>
-                    </div>
-
-                    <button type="button" class="btn-guardar">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-                        <span>Guardar en Historial</span>
-                    </button>
-
-                </div>
-            </section>
-            <div class="alert-importante">
-                <div class="alert-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg>
-                </div>
-                <div class="alert-text">
-                    <strong>Importante:</strong>
-                    <p>Esta calculadora es solo una herramienta de apoyo. Siempre consulta con tu médico antes de hacer cambios en tu tratamiento.</p>
+        <section class="reminders-section">
+            <div class="card-base card-reminder">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-alert w-5 h-5 mt-0.5" aria-hidden="true" style="color: rgb(245, 158, 11);"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg>
+                <div class="card-content">
+                    <span class="card-title">Recordatorio de Medicamento</span>
+                    <span class="card-subtitle">Tomar medicamento a las 8:00 PM</span>
                 </div>
             </div>
+            <div class="card-base card-appointment">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar w-5 h-5 mt-0.5" aria-hidden="true" style="color: rgb(0, 102, 178);"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
+                <div class="card-content">
+                    <span class="card-title">Próxima Cita Médica</span>
+                    <span class="card-subtitle">15 de Noviembre de 2025</span>
+                </div>
+            </div>
+        </section>
 
-        </form>
+        <section class="quick-actions">
+            <h2>Acciones Rápidas</h2>
+            <div class="actions-grid">
+                
+                <a href="calculadora.php" class="action-button action-button--blue"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calculator w-7 h-7" aria-hidden="true" style="color: rgb(0, 102, 178);"><rect width="16" height="20" x="4" y="2" rx="2"></rect><line x1="8" x2="16" y1="6" y2="6"></line><line x1="16" x2="16" y1="14" y2="18"></line><path d="M16 10h.01"></path><path d="M12 10h.01"></path><path d="M8 10h.01"></path><path d="M12 14h.01"></path><path d="M8 14h.01"></path><path d="M12 18h.01"></path><path d="M8 18h.01"></path></svg>
+                    <span>Calculadora</span>
+                </a>
+                
+                <a href="eventos.php" class="action-button action-button--eventos">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open w-7 h-7" aria-hidden="true" style="color: rgb(124, 179, 66);"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+                    <span>Eventos</span>
+                </a>
+                
+                <a href="blog.php" class="action-button action-button--blue">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open w-7 h-7" aria-hidden="true" style="color: rgb(0, 151, 216);"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+                    <span>Blog</span>
+                </a>
+                
+                <a href="contacto.php" class="action-button action-button--contacto">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users w-7 h-7" aria-hidden="true" style="color: rgb(0, 168, 89);"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><path d="M16 3.128a4 4 0 0 1 0 7.744"></path><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><circle cx="9" cy="7" r="4"></circle></svg>
+                    <span>Contacto</span>
+                </a>
+            </div>
+        </section>
+
+        <section class="health-tips">
+            <h2>Consejos de Salud</h2>
+            <div class="tips-list">
+                <article class="tip-item">
+                    <img src="assets/images/platilloSano.jpg" alt="Plato de comida saludable" class="tip-image">
+                    <div class="tip-content">
+                        <h3>Alimentación Saludable</h3>
+                        <p>Mantén una dieta balanceada rica en fibra, verduras y proteínas magras.</p>
+                    </div>
+                </article>
+                <article class="tip-item">
+                    <img src="assets/images/medidorInsulina.jpg" alt="Monitor de glucosa" class="tip-image">
+                    <div class="tip-content">
+                        <h3>Monitoreo Regular</h3>
+                        <p>Registra tus niveles de glucosa diariamente para un mejor control.</p>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="nutrition-tip-card">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-apple w-8 h-8" aria-hidden="true" style="color: white;"><path d="M12 6.528V3a1 1 0 0 1 1-1h0"></path><path d="M18.237 21A15 15 0 0 0 22 11a6 6 0 0 0-10-4.472A6 6 0 0 0 2 11a15.1 15.1 0 0 0 3.763 10 3 3 0 0 0 3.648.648 5.5 5.5 0 0 1 5.178 0A3 3 0 0 0 18.237 21"></path></svg>
+            <h3>Tips Nutricionales</h3>
+            <p>Una alimentación balanceada es fundamental. Incluye vegetales, proteínas magras y granos enteros en tu dieta diaria.</p>
+            <a href="#" class="btn-ver-mas">Ver más consejos</a>
+        </section>
 
     </main>
+
     <?php 
-        // 5. Incluimos el pie de página
+        // 4. Incluimos el pie de página
         include 'includes/footer.php'; 
     ?>
 
