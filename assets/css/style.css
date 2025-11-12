@@ -1,0 +1,763 @@
+/* ====================================
+   1. VARIABLES GLOBALES
+   ==================================== */
+:root {
+    /* Colores Azules (Calculadora, Blog) */
+    --color-primario-azul-borde: rgb(0, 102, 178);
+    --color-primario-azul-fondo: rgb(230, 244, 255);
+    
+    /* Colores Eventos (Verde 1) */
+    --color-eventos-borde: rgb(124, 179, 66);
+    --color-eventos-fondo: rgb(241, 248, 233);
+    
+    /* Colores Contacto (Verde 2) */
+    --color-contacto-borde: rgb(0, 168, 89);
+    --color-contacto-fondo: rgb(232, 245, 233);
+    
+    /* Color Verde Sólido (Tips) */
+    --color-secundario-verde: #28a745;
+
+    /* Otros */
+    --color-advertencia: #ffc107;
+    --color-blanco: #FFFFFF;
+    --color-texto-oscuro: #333333;
+    --color-texto-gris: #6c757d;
+    --color-texto-blanco: #FFFFFF;
+    --color-fondo-app: #f8f9fa;
+    --color-borde-suave: #eeeeee; /* Borde gris sutil */
+    --color-borde-cita: #8446ff;
+
+    /* Estilos de Tarjetas */
+    --radio-borde-grande: 15px;
+    --radio-borde-pequeno: 8px;
+    --sombra-tarjeta: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* ====================================
+   2. ESTILOS BASE (Mobile First)
+   ==================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', -apple-system, sans-serif;
+    background-color: var(--color-fondo-app);
+    color: var(--color-texto-oscuro);
+    font-size: 16px;
+    line-height: 1.5;
+}
+h1, h2, h3 { font-weight: 700; }
+h2 { font-size: 22px; margin-bottom: 15px; }
+h3 { font-size: 18px; margin-bottom: 5px; }
+img { max-width: 100%; display: block; }
+a { text-decoration: none; color: var(--color-primario-azul-borde); }
+
+.contenedor {
+    width: 90%;
+    margin: 0 auto;
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+.body-noscroll { /* Para el menú */
+    overflow: hidden;
+}
+
+/* ====================================
+   3. HEADER (Menú Superior)
+   ==================================== */
+.site-header {
+    background-color: var(--color-blanco);
+    padding: 15px 5%;
+    border-bottom: 1px solid var(--color-borde-suave);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+.header-contenido {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.site-header .logo img {
+    height: 30px;
+}
+.menu-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
+.menu-btn span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: var(--color-texto-oscuro);
+    margin: 5px 0;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+.menu-btn.activo span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.menu-btn.activo span:nth-child(2) { opacity: 0; }
+.menu-btn.activo span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+/* ====================================
+   4. WELCOME HERO (Sección Azul)
+   ==================================== */
+.welcome-hero {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: var(--color-texto-blanco);
+    padding: 30px 5%;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+}
+.welcome-hero-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+.welcome-hero h1 { font-size: 28px; margin-bottom: 4px; }
+.welcome-hero p { font-size: 16px; font-weight: 300; opacity: 0.9; }
+.welcome-icon {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ====================================
+   5. TARJETAS DE ESTADO
+   ==================================== */
+.status-cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.status-card {
+    background-color: var(--color-blanco);
+    color: var(--color-texto-oscuro);
+    border-radius: var(--radio-borde-grande);
+    box-shadow: var(--sombra-tarjeta);
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    overflow: hidden;
+}
+.status-icon-container {
+    padding: 10px;
+    border-radius: var(--radio-borde-pequeno);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.status-text { flex-grow: 1; }
+.status-text .status-title {
+    display: block;
+    font-size: 14px;
+    color: var(--color-texto-gris);
+}
+.status-text .status-value {
+    display: block;
+    font-size: 18px;
+    font-weight: 700;
+}
+.status-bar {
+    width: 8px;
+    height: 50px;
+    border-radius: 4px;
+}
+
+/* ====================================
+   6. SECCIÓN RECORDATORIOS
+   ==================================== */
+.reminders-section {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.card-base {
+    background-color: var(--color-blanco);
+    border-radius: var(--radio-borde-pequeno);
+    box-shadow: var(--sombra-tarjeta);
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-left-width: 5px;
+    border-left-style: solid;
+}
+.card-base svg { flex-shrink: 0; }
+.card-base .card-title {
+    font-weight: 500;
+    display: block;
+    color: var(--color-texto-oscuro);
+}
+.card-base .card-subtitle {
+    font-size: 14px;
+    color: var(--color-texto-gris);
+}
+.card-reminder { border-left-color: var(--color-advertencia); }
+.card-appointment { border-left-color: var(--color-borde-cita); }
+
+/* ====================================
+   7. SECCIÓN ACCIONES RÁPIDAS
+   ==================================== */
+.quick-actions {
+    margin-top: 25px;
+}
+.actions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+.action-button {
+    border-radius: var(--radio-borde-pequeno);
+    padding: 20px 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 10px;
+    font-weight: 500;
+    border: 2px solid;
+    box-shadow: var(--sombra-tarjeta);
+    outline-style: none;
+    transition: all 0.2s ease;
+}
+.action-button--blue {
+    background-color: var(--color-primario-azul-fondo);
+    border-color: var(--color-primario-azul-borde);
+    color: var(--color-primario-azul-borde);
+}
+.action-button--eventos {
+    background-color: var(--color-eventos-fondo);
+    border-color: var(--color-eventos-borde);
+    color: var(--color-eventos-borde);
+}
+.action-button--contacto {
+    background-color: var(--color-contacto-fondo);
+    border-color: var(--color-contacto-borde);
+    color: var(--color-contacto-borde);
+}
+/* --- Efectos Hover --- */
+.action-button:hover {
+    transform: translateY(-2px);
+    color: var(--color-blanco);
+}
+.action-button--blue:hover {
+    background-color: var(--color-primario-azul-borde);
+    border-color: var(--color-primario-azul-borde);
+}
+.action-button--eventos:hover {
+    background-color: var(--color-eventos-borde);
+    border-color: var(--color-eventos-borde);
+}
+.action-button--contacto:hover {
+    background-color: var(--color-contacto-borde);
+    border-color: var(--color-contacto-borde);
+}
+
+/* ====================================
+   8. SECCIÓN CONSEJOS DE SALUD
+   ==================================== */
+.health-tips {
+    margin-top: 25px;
+}
+.tips-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.tip-item {
+    background-color: var(--color-blanco);
+    border-radius: var(--radio-borde-grande); 
+    box-shadow: var(--sombra-tarjeta);
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border: 1px solid var(--color-borde-suave); 
+}
+.tip-item .tip-image {
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radio-borde-pequeno); 
+    object-fit: cover;
+    flex-shrink: 0;
+}
+.tip-item .tip-content h3 {
+    font-size: 16px;
+    color: var(--color-primario-azul-borde);
+}
+.tip-item .tip-content p {
+    font-size: 14px;
+    color: var(--color-texto-gris);
+    line-height: 1.4;
+}
+
+/* ====================================
+   9. TARJETA TIP NUTRICIONAL
+   ==================================== */
+.nutrition-tip-card {
+    background-color: var(--color-secundario-verde);
+    color: var(--color-texto-blanco);
+    border-radius: var(--radio-borde-grande);
+    padding: 25px;
+    margin-top: 25px;
+    text-align: center;
+}
+.nutrition-tip-card svg {
+    margin: 0 auto 10px auto;
+}
+.nutrition-tip-card h3 {
+    font-size: 20px;
+}
+.nutrition-tip-card p {
+    font-weight: 300;
+    opacity: 0.9;
+    margin-bottom: 20px;
+}
+.nutrition-tip-card .btn-ver-mas {
+    background-color: transparent;
+    color: var(--color-texto-blanco);
+    border: 2px solid var(--color-texto-blanco);
+    padding: 10px 25px;
+    border-radius: 50px;
+    font-weight: 700;
+    display: inline-block;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    outline-style: none;
+}
+.nutrition-tip-card .btn-ver-mas:hover {
+    background-color: var(--color-blanco);
+    color: var(--color-secundario-verde);
+}
+
+/* ====================================
+   10. FOOTER
+   ==================================== */
+.site-footer {
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 20px;
+    border-top: 1px solid var(--color-borde-suave);
+}
+.site-footer p {
+    font-size: 12px;
+    color: var(--color-texto-gris);
+}
+
+/* ====================================
+   11. AJUSTES PARA TABLETS
+   ==================================== */
+@media (min-width: 768px) {
+    .contenedor {
+        width: 90%;
+        max-width: 700px;
+    }
+    .welcome-hero {
+        padding-left: calc( (100% - 700px) / 2 );
+        padding-right: calc( (100% - 700px) / 2 );
+    }
+    .actions-grid {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+}
+
+/* ====================================
+   12. ESTILOS DEL MENÚ DESLIZANTE (OFFCANVAS)
+   ==================================== */
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1001;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+.offcanvas-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 320px;
+    max-width: 90%;
+    height: 100%;
+    background-color: var(--color-blanco);
+    z-index: 1002;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+}
+/* --- Estados Visibles --- */
+.menu-overlay.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+.offcanvas-menu.visible {
+    transform: translateX(0);
+    box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+}
+/* --- Estilos Internos del Menú --- */
+.menu-drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--color-borde-suave);
+    flex-shrink: 0;
+}
+.menu-drawer-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.menu-drawer-logo img { height: 35px; }
+.menu-drawer-logo span {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+.menu-drawer-logo strong {
+    font-size: 14px;
+    color: var(--color-texto-oscuro);
+}
+.menu-drawer-logo small {
+    font-size: 12px;
+    color: var(--color-texto-gris);
+}
+.menu-close-btn {
+    background: none;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    color: var(--color-texto-gris);
+}
+.menu-close-btn:hover { color: var(--color-texto-oscuro); }
+.menu-drawer-nav {
+    list-style: none;
+    padding: 15px 10px;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+.menu-drawer-link {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+.menu-drawer-link:hover {
+    background-color: var(--color-fondo-app);
+}
+.menu-drawer-link__icon {
+    flex-shrink: 0;
+    color: var(--color-texto-gris);
+}
+.menu-drawer-link__icon svg { width: 22px; height: 22px; }
+.menu-drawer-link__text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.3;
+}
+.menu-drawer-link__title {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-texto-oscuro);
+}
+.menu-drawer-link__subtitle {
+    font-size: 12px;
+    color: var(--color-texto-gris);
+}
+.menu-drawer-link.active {
+    background-color: var(--color-primario-azul-fondo);
+}
+.menu-drawer-link.active .menu-drawer-link__icon,
+.menu-drawer-link.active .menu-drawer-link__title {
+    color: var(--color-primario-azul-borde);
+}
+.menu-drawer-link.active .menu-drawer-link__subtitle {
+    color: var(--color-primario-azul-borde);
+    opacity: 0.8;
+}
+.menu-drawer-footer {
+    padding: 20px;
+    border-top: 1px solid var(--color-borde-suave);
+    background-color: var(--color-fondo-app);
+    flex-shrink: 0;
+}
+.menu-drawer-footer p {
+    font-size: 11px;
+    color: var(--color-texto-gris);
+    text-align: center;
+    line-height: 1.4;
+}
+
+/* ====================================
+   13. ESTILOS PÁGINA CALCULADORA (NUEVO)
+   ==================================== */
+
+/* Encabezado azul de la página */
+.page-header {
+    background: var(--color-primario-azul-borde);
+    color: var(--color-texto-blanco);
+    padding: 20px 5%;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+}
+.page-header-icon {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: var(--radio-borde-pequeno);
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.page-header-icon svg {
+    stroke: var(--color-blanco);
+}
+.page-header h1 {
+    font-size: 24px;
+    margin-bottom: 2px;
+}
+.page-header p {
+    font-size: 14px;
+    font-weight: 300;
+    opacity: 0.9;
+}
+
+/* Formulario y tarjetas */
+.calculadora-form {
+    margin-top: -20px; /* Sube las tarjetas sobre el arco azul */
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Espacio entre tarjetas */
+}
+.card-form {
+    background: var(--color-blanco);
+    border: 1px solid var(--color-borde-suave);
+    border-radius: var(--radio-borde-grande);
+    box-shadow: var(--sombra-tarjeta);
+    padding: 20px;
+    margin: 0;
+}
+.card-form-legend {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-texto-oscuro);
+    margin-bottom: 15px; /* Espacio entre el título y el primer campo */
+}
+.card-form-legend svg {
+    color: var(--color-secundario-verde); /* Iconos de leyenda en verde */
+    width: 24px;
+    height: 24px;
+}
+
+/* Grupos de Formulario (label + input) */
+.form-group {
+    margin-bottom: 15px;
+}
+.form-group:last-child {
+    margin-bottom: 0;
+}
+.form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-texto-gris);
+    margin-bottom: 8px;
+}
+.form-group .form-control {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 16px;
+    font-family: var(--fuente-principal);
+    border: 1px solid #ccc;
+    border-radius: var(--radio-borde-pequeno);
+    background-color: var(--color-fondo-app);
+    appearance: none; /* Quita estilos por defecto de select */
+}
+.form-group select.form-control {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%236c757d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 16px;
+}
+
+/* Botón de Calcular */
+.btn-calculadora {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: var(--radio-borde-pequeno);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+.btn-calculadora:disabled {
+    background-color: #e0e0e0;
+    color: var(--color-texto-gris);
+    cursor: not-allowed;
+}
+.btn-calculadora:disabled svg {
+    stroke: var(--color-texto-gris);
+}
+.btn-calculadora:not(:disabled) {
+    background-color: var(--color-primario-azul-borde);
+    color: var(--color-blanco);
+}
+.btn-calculadora:not(:disabled):hover {
+    background-color: #0056b3;
+}
+.btn-calculadora:not(:disabled) svg {
+    stroke: var(--color-blanco);
+}
+
+/* Alerta de "Importante" (Roja) */
+.alert-importante {
+    display: flex;
+    gap: 15px;
+    background-color: #fff8f8;
+    border: 1px solid #f0c0c0;
+    border-radius: var(--radio-borde-pequeno);
+    padding: 15px;
+    margin-top: 10px;
+}
+.alert-importante .alert-icon {
+    flex-shrink: 0;
+    color: #d9534f;
+}
+.alert-importante .alert-text strong {
+    display: block;
+    color: #a94442;
+    margin-bottom: 5px;
+}
+.alert-importante .alert-text p {
+    font-size: 14px;
+    color: var(--color-texto-oscuro);
+    line-height: 1.5;
+}
+
+/* ====================================
+   14. ESTILOS SECCIÓN DE RESULTADOS (NUEVO)
+   ==================================== */
+
+/* Clase para ocultar/mostrar la sección */
+.seccion-resultados.oculto {
+    display: none;
+}
+
+.titulo-resultados {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--color-primario-azul-borde); 
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
+.card-resultados {
+    background: var(--color-blanco);
+    border: 1px solid var(--color-borde-suave);
+    border-radius: var(--radio-borde-grande);
+    box-shadow: var(--sombra-tarjeta);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Espacio entre items */
+}
+
+.resultado-item {
+    /* Contenedor para label + valor */
+}
+
+.resultado-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-texto-gris);
+    margin-bottom: 5px;
+}
+
+.resultado-valor {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-texto-oscuro);
+}
+
+.resultado-valor--dosis {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--color-secundario-verde); /* Verde para la dosis */
+}
+
+/* Alerta de Estado (Amarilla/Naranja) */
+.alert-status {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    background-color: #fffaf0; /* Fondo naranja claro */
+    border: 1px solid #fce0a8; /* Borde naranja */
+    border-radius: var(--radio-borde-pequeno);
+    padding: 15px;
+}
+.alert-status .alert-icon {
+    flex-shrink: 0;
+    color: #f59e0b; /* Naranja */
+}
+.alert-status .alert-text p {
+    font-size: 14px;
+    color: var(--color-texto-oscuro);
+    line-height: 1.5;
+    font-weight: 500;
+    margin: 0;
+}
+
+/* Botón de Guardar (Fantasma) */
+.btn-guardar {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: var(--radio-borde-pequeno);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    
+    background-color: transparent;
+    border: 2px solid var(--color-primario-azul-borde);
+    color: var(--color-primario-azul-borde);
+    outline: none;
+}
+.btn-guardar:hover {
+    background-color: var(--color-primario-azul-fondo);
+}
