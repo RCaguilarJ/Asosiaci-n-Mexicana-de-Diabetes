@@ -17,7 +17,7 @@
 
     <ul class="menu-drawer-nav">
         <li>
-            <a href="index.php" class="menu-drawer-link active">
+            <a href="index.php" class="menu-drawer-link <?php echo (isset($paginaActual) && $paginaActual === 'inicio') ? 'active' : ''; ?>">
                 <span class="menu-drawer-link__icon">
                     </span>
                 <span class="menu-drawer-link__text">
@@ -27,7 +27,7 @@
             </a>
         </li>
         <li>
-            <a href="calculadora.php" class="menu-drawer-link"> <span class="menu-drawer-link__icon">
+            <a href="calculadora.php" class="menu-drawer-link <?php echo (isset($paginaActual) && $paginaActual === 'calculadora') ? 'active' : ''; ?>"> <span class="menu-drawer-link__icon">
                     </span>
                 <span class="menu-drawer-link__text">
                     <span class="menu-drawer-link__title">Calculadora de Diabetes</span>
@@ -36,7 +36,7 @@
             </a>
         </li>
         <li>
-            <a href="eventos.php" class="menu-drawer-link">
+            <a href="eventos.php" class="menu-drawer-link <?php echo (isset($paginaActual) && $paginaActual === 'eventos') ? 'active' : ''; ?>">
                 <span class="menu-drawer-link__icon">
                     </span>
                 <span class="menu-drawer-link__text">
@@ -46,17 +46,18 @@
             </a>
         </li>
         <li>
-            <a href="blog.php" class="menu-drawer-link">
+            <a href="blog.php" class="menu-drawer-link <?php echo (isset($paginaActual) && $paginaActual === 'blog') ? 'active' : ''; ?>">
                 <span class="menu-drawer-link__icon">
-                    </span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                 </span>
                 <span class="menu-drawer-link__text">
-                    <span class="menu-drawer-link__title">Blog</span>
-                    <span class="menu-drawer-link__subtitle">Educación y consejos</span>
+                       <span class="menu-drawer-link__title">Blog</span>
+                       <span class="menu-drawer-link__subtitle">Educación y consejos</span>
                 </span>
             </a>
         </li>
         <li>
-            <a href="#" class="menu-drawer-link"> <span class="menu-drawer-link__icon">
+            <a href="#" class="menu-drawer-link <?php echo (isset($paginaActual) && $paginaActual === 'videos') ? 'active' : ''; ?>"> <span class="menu-drawer-link__icon">
                     </span>
                 <span class="menu-drawer-link__text">
                     <span class="menu-drawer-link__title">Galería de Videos</span>
@@ -65,7 +66,7 @@
             </a>
         </li>
         <li>
-            <a href="#" class="menu-drawer-link"> <span class="menu-drawer-link__icon">
+            <a href="#" class="menu-drawer-link <?php echo (isset($paginaActual) && $paginaActual === 'educadores') ? 'active' : ''; ?>"> <span class="menu-drawer-link__icon">
                     </span>
                 <span class="menu-drawer-link__text">
                     <span class="menu-drawer-link__title">Educadores en Diabetes</span>
@@ -74,7 +75,7 @@
             </a>
         </li>
         <li>
-            <a href="#" class="menu-drawer-link"> <span class="menu-drawer-link__icon">
+            <a href="citas.php" class="menu-drawer-link <?php echo (isset($paginaActual) && $paginaActual === 'citas') ? 'active' : ''; ?>"> <span class="menu-drawer-link__icon">
                     </span>
                 <span class="menu-drawer-link__text">
                     <span class="menu-drawer-link__title">Agendar Cita</span>
@@ -83,13 +84,32 @@
             </a>
         </li>
         <li>
-            <a href="#" class="menu-drawer-link"> <span class="menu-drawer-link__icon">
-                    </span>
+            <a href="contacto.php" class="menu-drawer-link <?php echo (isset($paginaActual) && $paginaActual === 'contacto') ? 'active' : ''; ?>">
+                <span class="menu-drawer-link__icon"></span>
                 <span class="menu-drawer-link__text">
-                    <span class="menu-drawer-link__title">Acceso Usuarios</span>
-                    <span class="menu-drawer-link__subtitle">Iniciar sesión</span>
+                    <span class="menu-drawer-link__title">Contacto</span>
+                    <span class="menu-drawer-link__subtitle">Envianos un mensaje</span>
                 </span>
             </a>
+        </li>
+        <li>
+            <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true): ?>
+                <a href="logout.php" class="menu-drawer-link">
+                    <span class="menu-drawer-link__icon"></span>
+                    <span class="menu-drawer-link__text">
+                        <span class="menu-drawer-link__title">Cerrar Sesión</span>
+                        <span class="menu-drawer-link__subtitle">Salir de la cuenta</span>
+                    </span>
+                </a>
+            <?php else: ?>
+                <a href="login.php" class="menu-drawer-link <?php echo (isset($paginaActual) && $paginaActual === 'usuarios') ? 'active' : ''; ?>">
+                    <span class="menu-drawer-link__icon"></span>
+                    <span class="menu-drawer-link__text">
+                        <span class="menu-drawer-link__title">Acceso Usuarios</span>
+                        <span class="menu-drawer-link__subtitle">Iniciar sesión</span>
+                    </span>
+                </a>
+            <?php endif; ?>
         </li>
     </ul>
 

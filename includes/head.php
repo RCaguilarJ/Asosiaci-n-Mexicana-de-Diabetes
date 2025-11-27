@@ -1,4 +1,5 @@
 <?php
+    session_start();
     // Si no se ha definido un título, ponemos uno por defecto
     if(!isset($tituloDeLaPagina)) {
         // ACTUALIZADO:

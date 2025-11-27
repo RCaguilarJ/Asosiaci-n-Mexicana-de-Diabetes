@@ -101,3 +101,71 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 });
+/* ====================================
+   FUNCIONALIDAD LOGIN (Simulación)
+   ==================================== */
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // 1. Toggle Password (Ver/Ocultar Contraseña)
+    const togglePassword = document.querySelector('#toggle-password');
+    const passwordInput = document.querySelector('#login-password');
+
+    if (togglePassword && passwordInput) {
+        togglePassword.addEventListener('click', function() {
+            // Alternar tipo de input
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            
+            // Cambiar color del ícono para indicar estado
+            this.style.color = type === 'text' ? '#007bff' : '#6c757d';
+        });
+    }
+
+    // 2. Lógica de Registro y Login Simulado
+    const loginForm = document.querySelector('#login-form');
+    const btnCrearCuenta = document.querySelector('#btn-crear-cuenta');
+    const emailInput = document.querySelector('#login-email');
+
+    if (loginForm && btnCrearCuenta) {
+
+        // --- CREAR CUENTA (Simulado) ---
+        btnCrearCuenta.addEventListener('click', function() {
+            // Usamos prompt para simular un flujo rápido de registro
+            const nuevoEmail = prompt("REGISTRO: Ingresa tu correo electrónico:");
+            if (!nuevoEmail) return;
+
+            const nuevaPass = prompt("REGISTRO: Crea una contraseña:");
+            if (!nuevaPass) return;
+
+            // Guardar en localStorage (Base de datos del navegador)
+            localStorage.setItem('demoUserEmail', nuevoEmail);
+            localStorage.setItem('demoUserPass', nuevaPass);
+
+            alert("¡Cuenta creada con éxito!\n\nUsuario: " + nuevoEmail + "\nContraseña: " + nuevaPass + "\n\nAhora puedes iniciar sesión.");
+            
+            // Llenar el campo de email automáticamente
+            if (emailInput) emailInput.value = nuevoEmail;
+        });
+
+        // --- INICIAR SESIÓN (Simulado) ---
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const inputEmail = emailInput.value;
+            const inputPass = passwordInput.value;
+
+            // Obtener datos guardados
+            const storedEmail = localStorage.getItem('demoUserEmail');
+            const storedPass = localStorage.getItem('demoUserPass');
+
+            // Validar
+            if (inputEmail === storedEmail && inputPass === storedPass) {
+                alert("¡Bienvenido de nuevo! Has iniciado sesión correctamente.");
+                // Redirigir al inicio (simulado)
+                window.location.href = 'index.php'; 
+            } else {
+                alert("Error: Correo o contraseña incorrectos.\n(Asegúrate de haber creado una cuenta primero con el botón 'Crear Nueva Cuenta')");
+            }
+        });
+    }
+});

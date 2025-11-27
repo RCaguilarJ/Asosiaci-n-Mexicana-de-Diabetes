@@ -84,6 +84,17 @@ a { text-decoration: none; color: var(--color-primario-azul-borde); }
 .site-header .logo img {
     height: 30px;
 }
+.navegacion-principal {
+    display: none; /* Oculta la barra cuando se muestra el menú hamburguesa */
+    gap: 20px;
+    font-weight: 500;
+}
+.navegacion-principal a {
+    color: var(--color-texto-oscuro);
+}
+.navegacion-principal a.activo {
+    color: var(--color-primario-azul-borde);
+}
 .menu-btn {
     background: none;
     border: none;
@@ -102,6 +113,18 @@ a { text-decoration: none; color: var(--color-primario-azul-borde); }
 .menu-btn.activo span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
 .menu-btn.activo span:nth-child(2) { opacity: 0; }
 .menu-btn.activo span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+body.body-noscroll .navegacion-principal {
+    display: none; /* Oculta el menú principal cuando el offcanvas está abierto */
+}
+@media (min-width: 992px) {
+    .menu-btn {
+        display: none;
+    }
+    .navegacion-principal {
+        display: flex;
+        align-items: center;
+    }
+}
 
 /* ====================================
    4. WELCOME HERO (Sección Azul)
@@ -247,23 +270,7 @@ a { text-decoration: none; color: var(--color-primario-azul-borde); }
     border-color: var(--color-contacto-borde);
     color: var(--color-contacto-borde);
 }
-/* --- Efectos Hover --- */
-.action-button:hover {
-    transform: translateY(-2px);
-    color: var(--color-blanco);
-}
-.action-button--blue:hover {
-    background-color: var(--color-primario-azul-borde);
-    border-color: var(--color-primario-azul-borde);
-}
-.action-button--eventos:hover {
-    background-color: var(--color-eventos-borde);
-    border-color: var(--color-eventos-borde);
-}
-.action-button--contacto:hover {
-    background-color: var(--color-contacto-borde);
-    border-color: var(--color-contacto-borde);
-}
+
 
 /* ====================================
    8. SECCIÓN CONSEJOS DE SALUD
@@ -760,4 +767,901 @@ a { text-decoration: none; color: var(--color-primario-azul-borde); }
 }
 .btn-guardar:hover {
     background-color: var(--color-primario-azul-fondo);
+}
+/* ====================================
+   17. ESTILOS PÁGINA AGENDAR CITA
+   ==================================== */
+
+/* Título de la sección "Próximas Citas" */
+.section-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-texto-oscuro);
+    margin-bottom: 15px;
+    margin-top: -10px; /* Ajuste visual por el arco azul */
+    position: relative;
+    z-index: 2;
+}
+
+/* Lista de citas */
+.appointments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    position: relative;
+    z-index: 2;
+}
+
+/* Tarjeta de Cita (Doctor) */
+.appointment-card {
+    background: var(--color-blanco);
+    border-radius: var(--radio-borde-grande);
+    box-shadow: var(--sombra-tarjeta);
+    padding: 20px;
+    /* Borde izquierdo azul como en el diseño */
+    border-left: 5px solid var(--color-primario-azul-borde);
+}
+
+/* Cabecera de la tarjeta (Nombre + Badge) */
+.appointment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.doctor-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-texto-oscuro);
+    margin-bottom: 2px;
+}
+
+.doctor-specialty {
+    font-size: 14px;
+    color: var(--color-texto-gris);
+}
+
+/* Etiquetas de Estado */
+.status-badge {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 4px;
+}
+
+.status-confirmed {
+    background-color: #dff0d8; /* Verde claro */
+    color: #3c763d; /* Verde oscuro */
+}
+
+.status-pending {
+    background-color: #fcf8e3; /* Naranja/Amarillo claro */
+    color: #8a6d3b; /* Marrón/Naranja oscuro */
+}
+
+/* Detalles de la cita (lista) */
+.appointment-details {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.appointment-details li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--color-texto-gris);
+    margin-bottom: 8px;
+}
+
+.appointment-details li svg {
+    width: 16px;
+    height: 16px;
+    color: var(--color-primario-azul-borde); /* Íconos azules */
+}
+
+/* Utilidad: Margen superior */
+.mt-30 {
+    margin-top: 30px;
+}
+
+/* Utilidad: Grid de 2 columnas para formularios */
+.form-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+/* Banner de Ayuda (Verde) */
+.help-banner {
+    background-color: #28a745; /* Verde fuerte */
+    border-radius: var(--radio-borde-grande);
+    padding: 30px 20px;
+    text-align: center;
+    color: var(--color-blanco);
+    margin-top: 30px;
+}
+
+.help-icon svg {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 10px;
+    stroke: var(--color-blanco);
+}
+
+.help-banner h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.help-banner p {
+    font-size: 14px;
+    opacity: 0.9;
+    margin-bottom: 20px;
+}
+
+.btn-help {
+    display: inline-block;
+    background-color: var(--color-blanco);
+    color: #28a745; /* Texto verde */
+    font-size: 18px;
+    font-weight: 700;
+    padding: 12px 30px;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: transform 0.2s ease;
+}
+
+.btn-help:hover {
+    transform: scale(1.05);
+}
+/* ====================================
+   18. ESTILOS PÁGINA LOGIN
+   ==================================== */
+
+.section-subtitle {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-texto-oscuro);
+    margin-bottom: 15px;
+}
+
+/* Contenedor de tarjetas de beneficios */
+.benefits-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.benefit-card {
+    background: var(--color-blanco);
+    border-radius: var(--radio-borde-grande);
+    box-shadow: var(--sombra-tarjeta);
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border: 1px solid var(--color-borde-suave);
+}
+
+/* Círculos de íconos */
+.benefit-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.benefit-icon svg { width: 20px; height: 20px; }
+
+.benefit-icon--blue { background-color: #e0f0ff; color: #007bff; }
+.benefit-icon--green { background-color: #e0fff0; color: #28a745; }
+.benefit-icon--cyan { background-color: #e0f7fa; color: #00bcd4; }
+
+.benefit-text h4 {
+    font-size: 16px;
+    margin-bottom: 2px;
+    color: var(--color-texto-oscuro);
+}
+.benefit-text p {
+    font-size: 12px;
+    color: var(--color-texto-gris);
+    line-height: 1.3;
+}
+
+/* --- Inputs con Íconos --- */
+.input-icon-wrapper {
+    position: relative;
+}
+.input-icon-left {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-texto-gris);
+    pointer-events: none; /* Clic pasa a través */
+}
+.form-control.pl-icon {
+    padding-left: 40px; /* Espacio para el ícono */
+}
+
+/* Toggle Password (Ojo) */
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-texto-gris);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+.toggle-password:hover { color: var(--color-primario-azul-borde); }
+
+.forgot-link {
+    display: block;
+    font-size: 13px;
+    color: var(--color-primario-azul-borde);
+    text-decoration: underline;
+    margin-top: 5px;
+}
+
+.mt-20 { margin-top: 20px; }
+
+/* Separador */
+.form-divider {
+    text-align: center;
+    margin: 15px 0;
+    position: relative;
+}
+.form-divider span {
+    background-color: var(--color-blanco);
+    padding: 0 10px;
+    color: var(--color-texto-gris);
+    font-size: 12px;
+    position: relative;
+    z-index: 1;
+}
+.form-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: var(--color-borde-suave);
+    z-index: 0;
+}
+
+/* Botón Crear Cuenta (Outline Verde) */
+.btn-outline-green {
+    background-color: transparent;
+    border: 2px solid var(--color-secundario-verde);
+    color: var(--color-secundario-verde);
+}
+.btn-outline-green:hover {
+    background-color: var(--color-secundario-verde);
+    color: var(--color-blanco);
+}
+.btn-outline-green svg { stroke: currentColor; }
+
+
+/* Banner de Seguridad (Footer) */
+.security-banner {
+    background-color: #eaf2ff; /* Azul muy claro */
+    border: 1px solid #cce5ff;
+    border-radius: var(--radio-borde-pequeno);
+    padding: 15px;
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+    align-items: flex-start;
+}
+.security-icon {
+    color: var(--color-primario-azul-borde);
+    flex-shrink: 0;
+}
+.security-text h4 {
+    font-size: 14px;
+    color: var(--color-primario-azul-borde);
+    margin-bottom: 5px;
+}
+.security-text p {
+    font-size: 11px;
+    color: var(--color-texto-gris);
+    line-height: 1.4;
+}
+/* ====================================
+   16. ESTILOS PÁGINA CONTACTO
+   ==================================== */
+
+/* Grid de Info (2x2) */
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: -20px; /* Sube las tarjetas sobre el banner */
+    position: relative;
+    z-index: 2;
+}
+
+.info-card {
+    background: var(--color-blanco);
+    border: 1px solid var(--color-borde-suave);
+    border-radius: var(--radio-borde-grande);
+    box-shadow: var(--sombra-tarjeta);
+    padding: 20px;
+    text-align: center;
+}
+.info-card svg {
+    margin: 0 auto 10px auto;
+    /* El color se debe definir en el SVG */
+    width: 28px;
+    height: 28px;
+}
+.info-card h3 {
+    font-size: 16px;
+    margin-bottom: 5px;
+    color: var(--color-texto-oscuro);
+}
+.info-card a, 
+.info-card p {
+    font-size: 14px;
+    color: var(--color-texto-gris);
+    line-height: 1.4;
+    text-decoration: none;
+    word-break: break-word; /* Para emails largos */
+    display: block;
+}
+
+/* Sección de Redes Sociales */
+.social-section {
+    margin-top: 30px;
+}
+.social-section h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--color-primario-azul-borde);
+    margin-bottom: 15px;
+}
+.social-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+}
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    border-radius: var(--radio-borde-pequeno);
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    border: 1px solid;
+    transition: all 0.2s ease;
+}
+.social-btn svg {
+    width: 20px;
+    height: 20px;
+}
+/* Colores de cada botón */
+.social-btn--facebook {
+    background-color: #eaf2ff;
+    border-color: #b3d1ff;
+    color: #3b5998;
+}
+.social-btn--facebook:hover {
+    background-color: #3b5998;
+    color: white;
+}
+.social-btn--instagram {
+    background-color: #fff0f5;
+    border-color: #ffcce0;
+    color: #c13584;
+}
+.social-btn--instagram:hover {
+    background-color: #c13584;
+    color: white;
+}
+.social-btn--whatsapp {
+    background-color: #eaf6ea;
+    border-color: #b3ddb3;
+    color: #25D366;
+}
+.social-btn--whatsapp:hover {
+    background-color: #25D366;
+    color: white;
+}
+
+/* Grid del formulario para Email/Teléfono */
+.contact-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+/* Estilo para el <textarea> */
+.form-control[rows] {
+    min-height: 120px;
+    resize: vertical; /* Permite al usuario cambiar el tamaño verticalmente */
+}
+
+/* Tarjeta de Mapa */
+.map-card {
+    background-color: var(--color-primario-azul-fondo);
+    border: 1px solid var(--color-primario-azul-borde);
+    border-radius: var(--radio-borde-grande);
+    padding: 25px;
+    text-align: center;
+    margin-top: 20px;
+}
+.map-card svg {
+    margin: 0 auto 10px auto;
+    /* El color debe venir del SVG */
+    width: 32px;
+    height: 32px;
+}
+.map-card h3 {
+    font-size: 18px;
+    color: var(--color-primario-azul-borde);
+}
+.map-card p {
+    font-size: 14px;
+    color: var(--color-texto-gris);
+    margin-bottom: 15px;
+}
+.btn-maps {
+    display: inline-block;
+    background-color: var(--color-primario-azul-borde);
+    color: var(--color-blanco);
+    padding: 10px 25px;
+    font-size: 14px;
+    font-weight: 700;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+.btn-maps:hover {
+    background-color: #0056b3;
+}
+
+/* Tarjeta de Emergencias */
+.emergency-card {
+    background-color: #d9534f; /* Rojo */
+    border-radius: var(--radio-borde-grande);
+    padding: 25px;
+    text-align: center;
+    margin-top: 20px;
+    color: var(--color-blanco);
+}
+.emergency-card svg {
+    margin: 0 auto 10px auto;
+    stroke: var(--color-blanco);
+    width: 32px;
+    height: 32px;
+}
+.emergency-card h3 {
+    font-size: 18px;
+    color: var(--color-blanco);
+}
+.emergency-card p {
+    font-size: 14px;
+    color: var(--color-blanco);
+    opacity: 0.9;
+    margin-bottom: 15px;
+}
+.btn-emergency {
+    display: inline-block;
+    background-color: var(--color-blanco);
+    color: #d9534f; /* Texto rojo */
+    padding: 12px 30px;
+    font-size: 18px;
+    font-weight: 700;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+.btn-emergency:hover {
+    transform: scale(1.05);
+}
+/* ====================================
+   19. ESTILOS PÁGINA BLOG
+   ==================================== */
+
+/* Utilidades de padding/overflow para las tarjetas */
+.p-0 { padding: 0 !important; }
+.p-20 { padding: 20px; }
+.overflow-hidden { overflow: hidden; }
+
+/* --- Hero Blog --- */
+.blog-hero {
+    background: linear-gradient(120deg, #0188d5, #00b7c8);
+    color: var(--color-blanco);
+    padding: 36px 0 60px;
+    border-bottom-left-radius: 32px;
+    border-bottom-right-radius: 32px;
+    margin-bottom: -40px;
+}
+.blog-hero-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+.blog-hero-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+.blog-hero-icon {
+    width: 68px;
+    height: 68px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.08));
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 5px 12px rgba(255,255,255,0.12);
+}
+.blog-hero-icon svg {
+    stroke: var(--color-blanco);
+}
+.blog-hero-text {
+    flex: 1 1 280px;
+}
+.blog-hero-text h1 {
+    font-size: 28px;
+    margin: 5px 0;
+}
+.blog-hero-text p {
+    margin: 0;
+    color: rgba(255,255,255,0.92);
+    line-height: 1.4;
+}
+.hero-label {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 0;
+    opacity: 0.85;
+}
+.blog-hero-logo img {
+    width: 140px;
+}
+.blog-hero-tabs {
+    background-color: rgba(255,255,255,0.18);
+    border-radius: 24px;
+    padding: 14px 16px;
+    backdrop-filter: blur(8px);
+}
+.category-filter {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+.category-filter::-webkit-scrollbar { display: none; }
+.cat-btn {
+    border: 1px solid rgba(255,255,255,0.4);
+    background-color: rgba(255,255,255,0.92);
+    color: #0c84c6;
+    padding: 9px 20px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    white-space: nowrap;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+}
+.cat-btn--todos {
+    background-color: #006ee3;
+    color: var(--color-blanco);
+    border-color: #006ee3;
+}
+.cat-btn--nutricion {
+    color: #1f8c4c;
+    border-color: #b2e3c6;
+    background-color: #f2fff7;
+}
+.cat-btn--actividad {
+    color: #1391d3;
+    border-color: #b6e4ff;
+    background-color: #f0fbff;
+}
+.cat-btn--tecnologia {
+    color: #3657d6;
+    border-color: #c1ccff;
+    background-color: #f3f6ff;
+}
+.cat-btn--bienestar {
+    color: #1f9a64;
+    border-color: #b8efd6;
+    background-color: #f1fff8;
+}
+.cat-btn.active {
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+}
+.category-scroll-indicator {
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.scroll-arrow {
+    width: 30px;
+    height: 22px;
+    border: none;
+    border-radius: 999px;
+    background-color: rgba(255,255,255,0.9);
+    color: #0f6fd1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+.scroll-track {
+    flex: 1;
+    height: 6px;
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 999px;
+    overflow: hidden;
+    position: relative;
+}
+.scroll-track span {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 35%;
+    height: 100%;
+    background-color: var(--color-blanco);
+}
+}
+
+/* --- Contenido del Blog --- */
+.blog-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    position: relative;
+    z-index: 2;
+    margin-top: -35px;
+}
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+.section-header h2 {
+    margin: 0;
+}
+.link-ver-blog {
+    font-size: 14px;
+    color: var(--color-primario-azul-borde);
+    font-weight: 600;
+}
+.featured-post {
+    padding: 0;
+    overflow: hidden;
+    border-radius: 28px;
+}
+.featured-image-container {
+    width: 100%;
+    height: 240px;
+}
+.featured-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.featured-content {
+    padding: 26px;
+}
+.featured-content h2 {
+    font-size: 23px;
+    margin: 12px 0 8px;
+    color: var(--color-texto-oscuro);
+}
+.featured-content p {
+    color: var(--color-texto-gris);
+    margin-bottom: 18px;
+}
+.tags-container {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.blog-tag {
+    display: inline-flex;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 14px;
+    border-radius: 999px;
+}
+.blog-tag--destacado {
+    background-color: #fff8e1;
+    color: #c77700;
+}
+.tag-nutricion {
+    background-color: #e3f6e8;
+    color: #1f8c4c;
+}
+.tag-actividad {
+    background-color: #e2f5ff;
+    color: #0f7abf;
+}
+.tag-tecnologia {
+    background-color: #e7ebff;
+    color: #3a4cc0;
+}
+.tag-bienestar {
+    background-color: #f0fff5;
+    color: #2a9d6a;
+}
+.tag-salud {
+    background-color: #ecf2ff;
+    color: #326ad2;
+}
+.post-meta {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: #7b889a;
+}
+.meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.post-meta--compact {
+    font-size: 12px;
+    color: #9aa3b5;
+    justify-content: space-between;
+}
+.btn-blog-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 22px;
+    background-color: var(--color-primario-azul-borde);
+    color: var(--color-blanco);
+    border-radius: 999px;
+    font-weight: 600;
+}
+.btn-blog-link svg {
+    stroke: currentColor;
+}
+.blog-recent-section .section-header {
+    margin-bottom: 10px;
+}
+.blog-recent-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.blog-card {
+    display: flex;
+    gap: 18px;
+    align-items: stretch;
+    border-radius: 22px;
+    padding: 18px;
+}
+.blog-card__image {
+    width: 96px;
+    border-radius: 18px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+.blog-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.blog-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+}
+.blog-card__body h3 {
+    font-size: 17px;
+    margin: 0;
+    color: var(--color-texto-oscuro);
+}
+.blog-card__body p {
+    margin: 0;
+    color: var(--color-texto-gris);
+}
+.blog-card__link {
+    margin-top: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+    color: var(--color-primario-azul-borde);
+}
+.texto-suave {
+    font-size: 14px;
+    color: var(--color-texto-gris);
+}
+
+.newsletter-card {
+    background: linear-gradient(120deg, #00b877, #00a0e3);
+    border-radius: 28px;
+    padding: 32px 24px;
+    text-align: center;
+    color: var(--color-blanco);
+    box-shadow: var(--sombra-tarjeta);
+}
+.newsletter-icon {
+    margin-bottom: 14px;
+}
+.newsletter-card h3 {
+    font-size: 22px;
+    margin-bottom: 8px;
+}
+.newsletter-card p {
+    margin-bottom: 18px;
+    opacity: 0.9;
+}
+.btn-suscribir {
+    background-color: var(--color-blanco);
+    color: #00a878;
+    border: none;
+    padding: 12px 38px;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+.btn-suscribir:hover {
+    transform: scale(1.04);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+}
+
+@media (max-width: 900px) {
+    .blog-hero-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .blog-hero-logo img {
+        width: 110px;
+    }
+    .blog-card {
+        flex-direction: column;
+    }
+    .blog-card__image {
+        width: 100%;
+        height: 190px;
+    }
+}
+
+@media (max-width: 600px) {
+    .blog-hero {
+        padding: 30px 0 50px;
+    }
+    .blog-hero-tabs {
+        padding: 10px;
+    }
+    .featured-image-container {
+        height: 190px;
+    }
+    .featured-content {
+        padding: 20px;
+    }
 }
