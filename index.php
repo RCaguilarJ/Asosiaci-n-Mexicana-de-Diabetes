@@ -1,48 +1,41 @@
 <?php
-    session_start(); // 1. INICIAR SESIÓN (IMPORTANTE: Debe ser la primera línea)
+    session_start(); // 1. INICIAR SESIÓN (SIEMPRE PRIMERO)
 
     // 2. EL "CADENERO": Verificar si el usuario está logueado
     if (!isset($_SESSION['usuario_id'])) {
-        // Si no existe la variable de sesión, lo mandamos al login
         header('Location: login.php');
         exit;
     }
 
-    // 3. CONECTAR A LA BASE DE DATOS
-    require 'includes/db.php';
+    require 'includes/db.php'; // 3. CONECTAR A LA BASE DE DATOS
 
     $paginaActual = 'inicio';
     $tituloDeLaPagina = "Mi Panel - Asoc. Mexicana de Diabetes"; 
     
-    // Variables por defecto (por si es nuevo y no tiene datos)
+    // Variables por defecto
     $nivelGlucosa = "--";
     $ultimaMedicion = "Sin registros";
     $promedioSemanal = "--";
-    $colorGlucosa = "#e0f0ff"; // Azul por defecto
+    $colorGlucosa = "#e0f0ff"; 
 
-    // 4. CONSULTAR EL ÚLTIMO REGISTRO DEL USUARIO
+    // 4. CONSULTAR DATOS
     try {
-        // Buscamos el registro más reciente (ORDER BY fecha DESC LIMIT 1)
         $stmt = $pdo->prepare("SELECT * FROM registros_glucosa WHERE usuario_id = ? ORDER BY fecha_registro DESC LIMIT 1");
         $stmt->execute([$_SESSION['usuario_id']]);
         $ultimoRegistro = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($ultimoRegistro) {
             $nivelGlucosa = $ultimoRegistro['nivel_glucosa'] . " mg/dL";
-            
-            // Formatear fecha (Ej: "Hace 2 horas" o la fecha real)
             $fechaRegistro = new DateTime($ultimoRegistro['fecha_registro']);
             $ultimaMedicion = $fechaRegistro->format('d/m/Y h:i A');
 
-            // Lógica simple de color (Ejemplo visual)
             if ($ultimoRegistro['nivel_glucosa'] > 180) {
-                $colorGlucosa = "#ffe0e0"; // Rojo si es alto
+                $colorGlucosa = "#ffe0e0"; 
             } elseif ($ultimoRegistro['nivel_glucosa'] < 70) {
-                $colorGlucosa = "#fffbe0"; // Amarillo si es bajo
+                $colorGlucosa = "#fffbe0"; 
             }
         }
 
-        // (Opcional) Calcular promedio simple
         $stmtAvg = $pdo->prepare("SELECT AVG(nivel_glucosa) as promedio FROM registros_glucosa WHERE usuario_id = ?");
         $stmtAvg->execute([$_SESSION['usuario_id']]);
         $avg = $stmtAvg->fetch(PDO::FETCH_ASSOC);
@@ -51,7 +44,6 @@
         }
 
     } catch (Exception $e) {
-        // Si falla la BD, no rompemos la página, solo mostramos vacíos
         error_log("Error BD: " . $e->getMessage());
     }
 ?>
@@ -77,7 +69,6 @@
         </div>
 
         <div class="status-cards-container">
-            
             <div class="status-card">
                 <div class="status-icon-container" style="background-color: <?php echo $colorGlucosa; ?>;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-droplet w-6 h-6" aria-hidden="true" style="color: rgb(0, 102, 178);"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"></path></svg>

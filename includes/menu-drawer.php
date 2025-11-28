@@ -1,5 +1,5 @@
 <?php
-    // Validación para evitar errores si la variable no está definida
+    // Validación para evitar errores si la variable no está definida en la página
     if (!isset($paginaActual)) {
         $paginaActual = '';
     }
@@ -71,7 +71,7 @@
         </li>
 
         <li>
-            <a href="galeria.php" class="menu-drawer-link"> 
+            <a href="#" class="menu-drawer-link"> 
                 <span class="menu-drawer-link__icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
                 </span>
@@ -118,17 +118,31 @@
             </a>
         </li>
 
-        <li>
-            <a href="login.php" class="menu-drawer-link <?php echo ($paginaActual == 'login') ? 'active' : ''; ?>"> 
-                <span class="menu-drawer-link__icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                </span>
-                <span class="menu-drawer-link__text">
-                    <span class="menu-drawer-link__title">Acceso Usuarios</span>
-                    <span class="menu-drawer-link__subtitle">Iniciar sesión</span>
-                </span>
-            </a>
-        </li>
+        <?php if (isset($_SESSION['usuario_id'])): ?>
+            <li>
+                <a href="logout.php" class="menu-drawer-link"> 
+                    <span class="menu-drawer-link__icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    </span>
+                    <span class="menu-drawer-link__text">
+                        <span class="menu-drawer-link__title">Cerrar Sesión</span>
+                        <span class="menu-drawer-link__subtitle">Salir de tu cuenta</span>
+                    </span>
+                </a>
+            </li>
+        <?php else: ?>
+            <li>
+                <a href="login.php" class="menu-drawer-link <?php echo ($paginaActual == 'login') ? 'active' : ''; ?>"> 
+                    <span class="menu-drawer-link__icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    </span>
+                    <span class="menu-drawer-link__text">
+                        <span class="menu-drawer-link__title">Acceso Usuarios</span>
+                        <span class="menu-drawer-link__subtitle">Iniciar sesión</span>
+                    </span>
+                </a>
+            </li>
+        <?php endif; ?>
     </ul>
 
     <div class="menu-drawer-footer">

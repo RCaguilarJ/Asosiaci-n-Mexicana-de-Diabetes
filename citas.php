@@ -1,6 +1,6 @@
 <?php
     session_start();
-    require 'includes/db.php'; // Conexión a la Base de Datos
+    require 'includes/db.php'; // Conexión
 
     // 1. EL "CADENERO": Verificar si el usuario está logueado
     if (!isset($_SESSION['usuario_id'])) {
@@ -11,15 +11,14 @@
     $paginaActual = 'citas';
     $tituloDeLaPagina = "Agendar Cita - Asoc. Mexicana de Diabetes"; 
 
-    // 2. CONSULTAR CITAS DEL USUARIO (Backend)
+    // 2. CONSULTAR CITAS (Backend)
     $citasUsuario = [];
     try {
-        // Traemos las citas futuras, ordenadas por fecha más próxima
         $stmt = $pdo->prepare("SELECT * FROM citas WHERE usuario_id = ? AND fecha_cita >= CURDATE() ORDER BY fecha_cita ASC, hora_cita ASC");
         $stmt->execute([$_SESSION['usuario_id']]);
         $citasUsuario = $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch (Exception $e) {
-        // En caso de error, $citasUsuario se queda vacío
+        // Manejo silencioso
     }
 ?>
 <!DOCTYPE html>
@@ -67,7 +66,6 @@
                             </div>
                             
                             <?php 
-                                // Lógica simple para el color del estado
                                 $claseEstado = 'status-pending';
                                 if($cita['estado'] == 'Confirmada') $claseEstado = 'status-confirmed';
                             ?>
@@ -95,7 +93,6 @@
             <?php endif; ?>
 
         </div>
-
 
         <form id="form-citas" class="card-form mt-30">
             <legend class="card-form-legend">
