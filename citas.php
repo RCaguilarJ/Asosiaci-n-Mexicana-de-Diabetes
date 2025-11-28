@@ -1,6 +1,26 @@
 <?php
+    session_start();
+    require 'includes/db.php'; // Conexión a la Base de Datos
+
+    // 1. EL "CADENERO": Verificar si el usuario está logueado
+    if (!isset($_SESSION['usuario_id'])) {
+        header('Location: login.php');
+        exit;
+    }
+
     $paginaActual = 'citas';
     $tituloDeLaPagina = "Agendar Cita - Asoc. Mexicana de Diabetes"; 
+
+    // 2. CONSULTAR CITAS DEL USUARIO (Backend)
+    $citasUsuario = [];
+    try {
+        // Traemos las citas futuras, ordenadas por fecha más próxima
+        $stmt = $pdo->prepare("SELECT * FROM citas WHERE usuario_id = ? AND fecha_cita >= CURDATE() ORDER BY fecha_cita ASC, hora_cita ASC");
+        $stmt->execute([$_SESSION['usuario_id']]);
+        $citasUsuario = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+        // En caso de error, $citasUsuario se queda vacío
+    }
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -28,55 +48,51 @@
         
         <div class="appointments-list">
             
-            <div class="appointment-card">
-                <div class="appointment-header">
-                    <div>
-                        <h4 class="doctor-name">Dra. María González</h4>
-                        <span class="doctor-specialty">Endocrinología</span>
+            <?php if (empty($citasUsuario)): ?>
+                <div class="appointment-card" style="border-left-color: #ccc;">
+                    <div class="appointment-header">
+                        <div>
+                            <h4 class="doctor-name">No tienes citas próximas</h4>
+                            <span class="doctor-specialty">Utiliza el formulario de abajo para agendar una.</span>
+                        </div>
                     </div>
-                    <span class="status-badge status-confirmed">Confirmada</span>
                 </div>
-                
-                <ul class="appointment-details">
-                    <li>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                        viernes, 14 de noviembre de 2025
-                    </li>
-                    <li>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                        10:00 AM
-                    </li>
-                    <li>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                        Consultorio 301
-                    </li>
-                </ul>
-            </div>
-
-            <div class="appointment-card">
-                <div class="appointment-header">
-                    <div>
-                        <h4 class="doctor-name">Dr. Carlos Ramírez</h4>
-                        <span class="doctor-specialty">Nutrición</span>
+            <?php else: ?>
+                <?php foreach($citasUsuario as $cita): ?>
+                    <div class="appointment-card">
+                        <div class="appointment-header">
+                            <div>
+                                <h4 class="doctor-name">Cita Médica</h4>
+                                <span class="doctor-specialty"><?php echo htmlspecialchars($cita['especialidad']); ?></span>
+                            </div>
+                            
+                            <?php 
+                                // Lógica simple para el color del estado
+                                $claseEstado = 'status-pending';
+                                if($cita['estado'] == 'Confirmada') $claseEstado = 'status-confirmed';
+                            ?>
+                            <span class="status-badge <?php echo $claseEstado; ?>">
+                                <?php echo htmlspecialchars($cita['estado']); ?>
+                            </span>
+                        </div>
+                        
+                        <ul class="appointment-details">
+                            <li>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                <?php echo date("d/m/Y", strtotime($cita['fecha_cita'])); ?>
+                            </li>
+                            <li>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                <?php echo date("h:i A", strtotime($cita['hora_cita'])); ?>
+                            </li>
+                            <li>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                Consultorio General
+                            </li>
+                        </ul>
                     </div>
-                    <span class="status-badge status-pending">Pendiente</span>
-                </div>
-                
-                <ul class="appointment-details">
-                    <li>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                        viernes, 21 de noviembre de 2025
-                    </li>
-                    <li>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                        3:00 PM
-                    </li>
-                    <li>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                        Consultorio 205
-                    </li>
-                </ul>
-            </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
 
         </div>
 
@@ -89,7 +105,7 @@
 
             <div class="form-group">
                 <label for="nombre">Nombre Completo</label>
-                <input type="text" id="nombre" class="form-control" placeholder="Juan Pérez García" required>
+                <input type="text" id="nombre" class="form-control" placeholder="Juan Pérez García" value="<?php echo isset($_SESSION['usuario_nombre']) ? $_SESSION['usuario_nombre'] : ''; ?>" required>
             </div>
 
             <div class="form-grid-2">
@@ -107,11 +123,11 @@
                 <label for="especialidad">Especialidad</label>
                 <select id="especialidad" class="form-control" required>
                     <option value="" disabled selected>Selecciona una especialidad</option>
-                    <option value="medicina_general">Medicina General</option>
-                    <option value="nutricion">Nutrición</option>
-                    <option value="endocrinologia">Endocrinología</option>
-                    <option value="podologia">Podología</option>
-                    <option value="psicologia">Psicología</option>
+                    <option value="Medicina General">Medicina General</option>
+                    <option value="Nutrición">Nutrición</option>
+                    <option value="Endocrinología">Endocrinología</option>
+                    <option value="Podología">Podología</option>
+                    <option value="Psicología">Psicología</option>
                 </select>
             </div>
 

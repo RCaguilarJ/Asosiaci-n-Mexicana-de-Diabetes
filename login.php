@@ -1,6 +1,61 @@
 <?php
+    session_start(); // Iniciar sesión de PHP
+    require 'includes/db.php'; // Conexión a la BD
+
     $paginaActual = 'login';
     $tituloDeLaPagina = "Acceso Usuarios - Asoc. Mexicana de Diabetes"; 
+    $mensaje = '';
+
+    // LÓGICA DE LOGIN Y REGISTRO
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        
+        // --- CASO 1: REGISTRO (CREAR CUENTA) ---
+        if (isset($_POST['accion']) && $_POST['accion'] === 'registro') {
+            $nombre = trim($_POST['nombre']);
+            $email = trim($_POST['email']);
+            $password = $_POST['password'];
+
+            if (!empty($email) && !empty($password)) {
+                // Verificar si el correo ya existe
+                $stmt = $pdo->prepare("SELECT id FROM usuarios WHERE email = ?");
+                $stmt->execute([$email]);
+                
+                if ($stmt->rowCount() > 0) {
+                    $mensaje = "Este correo ya está registrado.";
+                } else {
+                    // Encriptar contraseña y guardar
+                    $hash = password_hash($password, PASSWORD_DEFAULT);
+                    $stmt = $pdo->prepare("INSERT INTO usuarios (nombre, email, password) VALUES (?, ?, ?)");
+                    
+                    if ($stmt->execute([$nombre, $email, $hash])) {
+                        $mensaje = "¡Cuenta creada! Ahora puedes iniciar sesión.";
+                    } else {
+                        $mensaje = "Error al registrar.";
+                    }
+                }
+            }
+        }
+
+        // --- CASO 2: LOGIN (INICIAR SESIÓN) ---
+        if (isset($_POST['accion']) && $_POST['accion'] === 'login') {
+            $email = trim($_POST['email']);
+            $password = $_POST['password'];
+
+            $stmt = $pdo->prepare("SELECT id, nombre, password FROM usuarios WHERE email = ?");
+            $stmt->execute([$email]);
+            $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($usuario && password_verify($password, $usuario['password'])) {
+                // ¡Login exitoso! Guardamos datos en sesión
+                $_SESSION['usuario_id'] = $usuario['id'];
+                $_SESSION['usuario_nombre'] = $usuario['nombre'];
+                header("Location: index.php"); // Redirigir al inicio
+                exit;
+            } else {
+                $mensaje = "Correo o contraseña incorrectos.";
+            }
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -18,100 +73,88 @@
         </div>
         <div class="page-header-text">
             <h1>Acceso Usuarios</h1>
-            <p>Inicia sesión en tu cuenta</p>
+            <p>Gestiona tu cuenta</p>
         </div>
     </header>
 
     <main class="contenedor">
 
-        <h3 class="section-subtitle">Beneficios de tu Cuenta</h3>
-        
-        <div class="benefits-container">
-            <div class="benefit-card">
-                <div class="benefit-icon benefit-icon--blue">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                </div>
-                <div class="benefit-text">
-                    <h4>Perfil Personalizado</h4>
-                    <p>Guarda tu información médica de forma segura</p>
-                </div>
+        <?php if(!empty($mensaje)): ?>
+            <div style="background: #fff3cd; color: #856404; padding: 10px; border-radius: 5px; margin-bottom: 20px; text-align: center;">
+                <?php echo $mensaje; ?>
             </div>
+        <?php endif; ?>
 
-            <div class="benefit-card">
-                <div class="benefit-icon benefit-icon--green">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                </div>
-                <div class="benefit-text">
-                    <h4>Datos Seguros</h4>
-                    <p>Tu información está protegida y encriptada</p>
-                </div>
-            </div>
-
-            <div class="benefit-card">
-                <div class="benefit-icon benefit-icon--cyan">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
-                </div>
-                <div class="benefit-text">
-                    <h4>Notificaciones</h4>
-                    <p>Recibe recordatorios y actualizaciones importantes</p>
-                </div>
-            </div>
-        </div>
-
-        <form id="login-form" class="card-form mt-30">
+        <form id="form-login" method="POST" class="card-form mt-30">
+            <input type="hidden" name="accion" value="login">
+            <legend class="card-form-legend"><span>Iniciar Sesión</span></legend>
             
             <div class="form-group">
-                <label for="login-email">Correo Electrónico</label>
-                <div class="input-icon-wrapper">
-                    <svg class="input-icon-left" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
-                    <input type="email" id="login-email" class="form-control pl-icon" placeholder="tu@correo.com" required>
-                </div>
+                <label>Correo Electrónico</label>
+                <input type="email" name="email" class="form-control" required>
             </div>
 
             <div class="form-group">
-                <label for="login-password">Contraseña</label>
-                <div class="input-icon-wrapper">
-                    <svg class="input-icon-left" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                    
-                    <input type="password" id="login-password" class="form-control pl-icon" placeholder="••••••••" required>
-                    
-                    <span class="toggle-password" id="toggle-password">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                    </span>
-                </div>
+                <label>Contraseña</label>
+                <input type="password" name="password" class="form-control" required>
             </div>
-
-            <a href="#" class="forgot-link">¿Olvidaste tu contraseña?</a>
 
             <button type="submit" class="btn-calculadora mt-20">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
-                <span>Iniciar Sesión</span>
+                <span>Entrar</span>
             </button>
 
-            <div class="form-divider">
-                <span>O</span>
-            </div>
+            <div class="form-divider"><span>O</span></div>
 
-            <button type="button" id="btn-crear-cuenta" class="btn-calculadora btn-outline-green">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+            <button type="button" onclick="mostrarRegistro()" class="btn-calculadora btn-outline-green">
                 <span>Crear Nueva Cuenta</span>
             </button>
-
         </form>
 
-        <section class="security-banner">
-            <div class="security-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        <form id="form-registro" method="POST" class="card-form mt-30" style="display: none;">
+            <input type="hidden" name="accion" value="registro">
+            <legend class="card-form-legend"><span>Crear Cuenta</span></legend>
+            
+            <div class="form-group">
+                <label>Nombre Completo</label>
+                <input type="text" name="nombre" class="form-control" required>
             </div>
-            <div class="security-text">
-                <h4>Seguridad y Privacidad</h4>
-                <p>Tus datos están protegidos con encriptación de nivel bancario. Nunca compartiremos tu información sin tu consentimiento.</p>
+
+            <div class="form-group">
+                <label>Correo Electrónico</label>
+                <input type="email" name="email" class="form-control" required>
             </div>
-        </section>
+
+            <div class="form-group">
+                <label>Contraseña</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn-calculadora mt-20" style="background-color: var(--color-secundario-verde);">
+                <span>Registrarse</span>
+            </button>
+
+            <div class="form-divider"><span>O</span></div>
+
+            <button type="button" onclick="mostrarLogin()" class="btn-calculadora btn-outline-green">
+                <span>Ya tengo cuenta</span>
+            </button>
+        </form>
 
     </main>
 
     <?php include 'includes/footer.php'; ?>
     <script src="assets/js/app.js"></script> 
+
+    <script>
+        // Pequeño script para alternar formularios
+        function mostrarRegistro() {
+            document.getElementById('form-login').style.display = 'none';
+            document.getElementById('form-registro').style.display = 'block';
+        }
+        function mostrarLogin() {
+            document.getElementById('form-registro').style.display = 'none';
+            document.getElementById('form-login').style.display = 'block';
+        }
+    </script>
 </body>
 </html>
