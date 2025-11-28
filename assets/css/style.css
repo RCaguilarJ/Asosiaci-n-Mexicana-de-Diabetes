@@ -769,6 +769,387 @@ body.body-noscroll .navegacion-principal {
     background-color: var(--color-primario-azul-fondo);
 }
 /* ====================================
+<<<<<<< HEAD
+=======
+   15. ESTILOS PÁGINA EVENTOS
+   ==================================== */
+
+/* Encabezado de página verde */
+.page-header--green {
+    background: var(--color-secundario-verde);
+}
+
+/* Contenedor de estadísticas */
+.event-stats-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: -20px; /* Sube las tarjetas sobre el banner */
+    position: relative;
+    z-index: 2;
+}
+.stat-card {
+    background: var(--color-blanco);
+    border-radius: var(--radio-borde-pequeno);
+    box-shadow: var(--sombra-tarjeta);
+    padding: 15px;
+    text-align: center;
+    flex: 1; /* Ocupa 1/3 del espacio */
+    border: 1px solid var(--color-borde-suave);
+}
+.stat-card strong {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--color-primario-azul-borde);
+    display: block;
+}
+.stat-card span {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-texto-gris);
+}
+
+/* Título de la sección "Próximos Eventos" */
+.event-list-section h2 {
+    margin-top: 25px; /* Espacio después de las estadísticas */
+}
+
+/* Lista de tarjetas de evento */
+.event-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.event-card {
+    background: var(--color-blanco);
+    border-radius: var(--radio-borde-grande);
+    box-shadow: var(--sombra-tarjeta);
+    border: 1px solid var(--color-borde-suave);
+    overflow: hidden; /* Para que la imagen no rompa los bordes */
+}
+.event-card-image {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+}
+.event-card-content {
+    padding: 20px;
+}
+
+/* Etiquetas de categoría */
+.event-tag {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+.event-tag--educativo {
+    background-color: var(--color-primario-azul-fondo);
+    color: var(--color-primario-azul-borde);
+}
+.event-tag--actividad {
+    background-color: var(--color-eventos-fondo);
+    color: var(--color-eventos-borde);
+}
+.event-tag--conferencia {
+    background-color: #f0e6ff; /* Color morado/lila (ejemplo) */
+    color: #8446ff;
+}
+
+.event-card h3 {
+    font-size: 20px;
+    color: var(--color-texto-oscuro);
+    margin-bottom: 8px;
+}
+.event-card p {
+    font-size: 14px;
+    color: var(--color-texto-gris);
+    line-height: 1.5;
+}
+
+/* Detalles del evento (fecha, hora, lugar) */
+.event-details {
+    list-style: none;
+    margin: 20px 0;
+    padding: 0;
+}
+.event-details li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    color: var(--color-texto-gris);
+    font-size: 14px;
+    font-weight: 500;
+}
+.event-details li svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    /* El color se debe definir en el SVG */
+}
+
+/* Barra de Progreso */
+.event-progress {
+    margin-bottom: 20px;
+}
+.event-progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-texto-gris);
+    margin-bottom: 6px;
+}
+.event-progress-bar {
+    background-color: #e0e0e0; /* Fondo gris de la barra */
+    border-radius: 50px;
+    height: 8px;
+    overflow: hidden;
+}
+.event-progress-fill {
+    background-color: var(--color-primario-azul-borde); /* Relleno azul */
+    height: 100%;
+    border-radius: 50px;
+}
+
+/* Botones de Evento */
+.btn-evento {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: var(--radio-borde-pequeno);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+.btn-evento svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Botón Verde (Registrarse) */
+.btn-evento--registrar {
+    background-color: var(--color-secundario-verde);
+    color: var(--color-blanco);
+    border: 2px solid var(--color-secundario-verde);
+}
+.btn-evento--registrar:hover {
+    background-color: #218838; /* Verde más oscuro */
+}
+
+/* Botón Gris (Ya Registrado) */
+.btn-evento--registrado {
+    background-color: transparent;
+    border: 2px solid var(--color-borde-suave);
+    color: var(--color-texto-gris);
+    cursor: not-allowed;
+}
+.btn-evento--registrado svg {
+    /* El color se hereda (gris) */
+}
+/* ====================================
+   16. ESTILOS PÁGINA CONTACTO
+   ==================================== */
+
+/* Grid de Info (2x2) */
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: -20px; /* Sube las tarjetas sobre el banner */
+    position: relative;
+    z-index: 2;
+}
+
+.info-card {
+    background: var(--color-blanco);
+    border: 1px solid var(--color-borde-suave);
+    border-radius: var(--radio-borde-grande);
+    box-shadow: var(--sombra-tarjeta);
+    padding: 20px;
+    text-align: center;
+}
+.info-card svg {
+    margin: 0 auto 10px auto;
+    /* El color se debe definir en el SVG */
+    width: 28px;
+    height: 28px;
+}
+.info-card h3 {
+    font-size: 16px;
+    margin-bottom: 5px;
+    color: var(--color-texto-oscuro);
+}
+.info-card a, 
+.info-card p {
+    font-size: 14px;
+    color: var(--color-texto-gris);
+    line-height: 1.4;
+    text-decoration: none;
+    word-break: break-word; /* Para emails largos */
+    display: block;
+}
+
+/* Sección de Redes Sociales */
+.social-section {
+    margin-top: 30px;
+}
+.social-section h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--color-primario-azul-borde);
+    margin-bottom: 15px;
+}
+.social-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+}
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    border-radius: var(--radio-borde-pequeno);
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    border: 1px solid;
+    transition: all 0.2s ease;
+}
+.social-btn svg {
+    width: 20px;
+    height: 20px;
+}
+/* Colores de cada botón */
+.social-btn--facebook {
+    background-color: #eaf2ff;
+    border-color: #b3d1ff;
+    color: #3b5998;
+}
+.social-btn--facebook:hover {
+    background-color: #3b5998;
+    color: white;
+}
+.social-btn--instagram {
+    background-color: #fff0f5;
+    border-color: #ffcce0;
+    color: #c13584;
+}
+.social-btn--instagram:hover {
+    background-color: #c13584;
+    color: white;
+}
+.social-btn--whatsapp {
+    background-color: #eaf6ea;
+    border-color: #b3ddb3;
+    color: #25D366;
+}
+.social-btn--whatsapp:hover {
+    background-color: #25D366;
+    color: white;
+}
+
+/* Grid del formulario para Email/Teléfono */
+.contact-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+/* Estilo para el <textarea> */
+.form-control[rows] {
+    min-height: 120px;
+    resize: vertical; /* Permite al usuario cambiar el tamaño verticalmente */
+}
+
+/* Tarjeta de Mapa */
+.map-card {
+    background-color: var(--color-primario-azul-fondo);
+    border: 1px solid var(--color-primario-azul-borde);
+    border-radius: var(--radio-borde-grande);
+    padding: 25px;
+    text-align: center;
+    margin-top: 20px;
+}
+.map-card svg {
+    margin: 0 auto 10px auto;
+    /* El color debe venir del SVG */
+    width: 32px;
+    height: 32px;
+}
+.map-card h3 {
+    font-size: 18px;
+    color: var(--color-primario-azul-borde);
+}
+.map-card p {
+    font-size: 14px;
+    color: var(--color-texto-gris);
+    margin-bottom: 15px;
+}
+.btn-maps {
+    display: inline-block;
+    background-color: var(--color-primario-azul-borde);
+    color: var(--color-blanco);
+    padding: 10px 25px;
+    font-size: 14px;
+    font-weight: 700;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+.btn-maps:hover {
+    background-color: #0056b3;
+}
+
+/* Tarjeta de Emergencias */
+.emergency-card {
+    background-color: #d9534f; /* Rojo */
+    border-radius: var(--radio-borde-grande);
+    padding: 25px;
+    text-align: center;
+    margin-top: 20px;
+    color: var(--color-blanco);
+}
+.emergency-card svg {
+    margin: 0 auto 10px auto;
+    stroke: var(--color-blanco);
+    width: 32px;
+    height: 32px;
+}
+.emergency-card h3 {
+    font-size: 18px;
+    color: var(--color-blanco);
+}
+.emergency-card p {
+    font-size: 14px;
+    color: var(--color-blanco);
+    opacity: 0.9;
+    margin-bottom: 15px;
+}
+.btn-emergency {
+    display: inline-block;
+    background-color: var(--color-blanco);
+    color: #d9534f; /* Texto rojo */
+    padding: 12px 30px;
+    font-size: 18px;
+    font-weight: 700;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+.btn-emergency:hover {
+    transform: scale(1.05);
+}
+/* ====================================
+>>>>>>> 155173323973398c758b2591b130be699d1d2f98
    17. ESTILOS PÁGINA AGENDAR CITA
    ==================================== */
 
@@ -1078,6 +1459,7 @@ body.body-noscroll .navegacion-principal {
     line-height: 1.4;
 }
 /* ====================================
+<<<<<<< HEAD
    16. ESTILOS PÁGINA CONTACTO
    ==================================== */
 
@@ -1272,6 +1654,8 @@ body.body-noscroll .navegacion-principal {
     transform: scale(1.05);
 }
 /* ====================================
+=======
+>>>>>>> 155173323973398c758b2591b130be699d1d2f98
    19. ESTILOS PÁGINA BLOG
    ==================================== */
 
@@ -1280,6 +1664,7 @@ body.body-noscroll .navegacion-principal {
 .p-20 { padding: 20px; }
 .overflow-hidden { overflow: hidden; }
 
+<<<<<<< HEAD
 /* --- Hero Blog --- */
 .blog-hero {
     background: linear-gradient(120deg, #0188d5, #00b7c8);
@@ -1460,12 +1845,66 @@ body.body-noscroll .navegacion-principal {
 .featured-image-container {
     width: 100%;
     height: 240px;
+=======
+/* --- Filtro de Categorías (Scroll Horizontal) --- */
+.category-scroll-container {
+    background-color: var(--color-blanco);
+    border-bottom: 1px solid var(--color-borde-suave);
+    /* Lo pegamos al header azul moviéndolo hacia arriba */
+    margin-top: -30px; 
+    position: relative;
+    z-index: 2;
+    /* Redondeo solo abajo */
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    padding: 15px 0;
+}
+
+.category-filter {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto; /* Habilita scroll horizontal */
+    padding: 0 5%; /* Padding lateral alineado al contenedor */
+    white-space: nowrap; /* Evita que los botones bajen de línea */
+    /* Ocultar barra de scroll en navegadores modernos */
+    scrollbar-width: none; 
+    -ms-overflow-style: none;
+}
+.category-filter::-webkit-scrollbar { display: none; }
+
+.cat-btn {
+    background-color: var(--color-blanco);
+    border: 1px solid var(--color-secundario-verde); /* Borde verde */
+    color: var(--color-secundario-verde);
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cat-btn.active {
+    background-color: var(--color-primario-azul-borde); /* Azul activo */
+    color: var(--color-blanco);
+    border-color: var(--color-primario-azul-borde);
+}
+
+/* --- Tarjeta Destacada --- */
+.featured-post {
+    margin-top: 20px;
+}
+.featured-image-container {
+    width: 100%;
+    height: 200px; /* Altura fija para la imagen */
+>>>>>>> 155173323973398c758b2591b130be699d1d2f98
 }
 .featured-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
+<<<<<<< HEAD
 .featured-content {
     padding: 26px;
 }
@@ -1548,11 +1987,51 @@ body.body-noscroll .navegacion-principal {
 .blog-recent-section .section-header {
     margin-bottom: 10px;
 }
+=======
+.tags-container {
+    margin-bottom: 10px;
+}
+.event-tag--destacado {
+    background-color: #fff8e1; /* Amarillo claro */
+    color: #ff8f00; /* Naranja */
+    border: 1px solid #ffecb3;
+    margin-left: 5px;
+}
+
+.featured-content h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: var(--color-texto-oscuro);
+}
+.featured-content p {
+    font-size: 14px;
+    color: var(--color-texto-gris);
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+/* Metadata (Autor, Tiempo, Fecha) */
+.post-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #999;
+}
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* --- Artículos Recientes (Horizontal) --- */
+>>>>>>> 155173323973398c758b2591b130be699d1d2f98
 .blog-recent-list {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
+<<<<<<< HEAD
 .blog-card {
     display: flex;
     gap: 18px;
@@ -1567,10 +2046,24 @@ body.body-noscroll .navegacion-principal {
     flex-shrink: 0;
 }
 .blog-card__image img {
+=======
+
+.blog-card-horizontal {
+    display: flex; /* Flexbox para poner imagen a la izq */
+    height: 100%; /* Asegura altura consistente */
+}
+
+.horizontal-img-container {
+    width: 120px; /* Ancho fijo de la imagen */
+    flex-shrink: 0; /* Evita que se encoja */
+}
+.horizontal-img-container img {
+>>>>>>> 155173323973398c758b2591b130be699d1d2f98
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
+<<<<<<< HEAD
 .blog-card__body {
     display: flex;
     flex-direction: column;
@@ -1626,10 +2119,92 @@ body.body-noscroll .navegacion-principal {
     font-size: 16px;
     font-weight: 700;
     border-radius: 999px;
+=======
+
+.horizontal-content {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Etiquetas Específicas */
+.event-tag--actividad-blue {
+    background-color: #e0f7fa; /* Cyan claro */
+    color: #006064; /* Cyan oscuro */
+}
+.event-tag--tecnologia {
+    background-color: #e3f2fd; /* Azul muy claro */
+    color: #1565c0; /* Azul fuerte */
+}
+.event-tag--bienestar {
+    background-color: #e8f5e9; /* Verde muy claro */
+    color: #2e7d32; /* Verde fuerte */
+}
+
+.horizontal-content h4 {
+    font-size: 16px;
+    margin: 5px 0;
+    line-height: 1.3;
+    color: var(--color-texto-oscuro);
+}
+.horizontal-content p {
+    font-size: 12px;
+    color: var(--color-texto-gris);
+    margin-bottom: 10px;
+    /* Limitar a 2 líneas */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.post-meta-simple {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #999;
+}
+.post-meta-simple span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* --- Banner Suscripción (Verde) --- */
+.newsletter-card {
+    background: linear-gradient(135deg, #28a745, #218838); /* Gradiente verde */
+    border-radius: var(--radio-borde-grande);
+    padding: 30px 20px;
+    text-align: center;
+    color: var(--color-blanco);
+}
+.newsletter-icon {
+    margin-bottom: 10px;
+}
+.newsletter-card h3 {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+.newsletter-card p {
+    font-size: 14px;
+    opacity: 0.9;
+    margin-bottom: 20px;
+}
+.btn-suscribir {
+    background-color: var(--color-blanco);
+    color: #28a745; /* Texto verde */
+    border: none;
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 50px;
+>>>>>>> 155173323973398c758b2591b130be699d1d2f98
     cursor: pointer;
     transition: transform 0.2s ease;
 }
 .btn-suscribir:hover {
+<<<<<<< HEAD
     transform: scale(1.04);
     box-shadow: 0 8px 18px rgba(0,0,0,0.15);
 }
@@ -1665,3 +2240,8 @@ body.body-noscroll .navegacion-principal {
         padding: 20px;
     }
 }
+=======
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+>>>>>>> 155173323973398c758b2591b130be699d1d2f98
