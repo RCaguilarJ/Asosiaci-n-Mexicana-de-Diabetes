@@ -1,16 +1,30 @@
 <?php
-// includes/db.php
+// includes/db.php modificado para conexión remota segura
 
-$host = 'localhost';
-// CORREGIDO: El nombre real de tu base de datos según tu imagen
+// IP pública  base de datos central
+$host = '162.240.37.227'; 
 $dbname = 'diabetes_db'; 
-$username = 'root'; 
-$password = ''; 
+$username = 'usuario_remoto'; 
+$password = 'tuc0ntras3ñaSegura!'; 
+
+// Configuración SSL (Necesaria para conexiones remotas seguras)
+$ssl_ca = '/ruta/segura/al/certificado/ca-cert.pem'; 
 
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $options = [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        // Habilitar encriptación SSL
+        PDO::MYSQL_ATTR_SSL_CA => $ssl_ca, 
+        // Desactiva verificar nombre si usas IP directa (según tu certificado)
+        PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false, 
+    ];
+
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password, $options);
+
 } catch (PDOException $e) {
-    die("Error de conexión: " . $e->getMessage());
+    // En producción, no muestres el error detallado al usuario
+    error_log("Error de conexión: " . $e->getMessage());
+    die("Error de conexión al sistema.");
 }
 ?>
