@@ -1,4 +1,7 @@
 <?php
+    // VERIFICAR SESIÓN - El usuario debe estar logueado para acceder
+    require 'includes/check-session.php';
+    
     $paginaActual = 'blog';
     $tituloDeLaPagina = "Blog Educativo - Asoc. Mexicana de Diabetes"; 
     $feedUrl = 'https://diabetesjalisco.org/feed/';

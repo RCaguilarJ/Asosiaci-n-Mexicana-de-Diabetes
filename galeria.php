@@ -1,4 +1,7 @@
 <?php
+    // VERIFICAR SESIÓN - El usuario debe estar logueado para acceder
+    require 'includes/check-session.php';
+    
     $paginaActual = 'galeria'; // Recuerda actualizar esto en menu-drawer.php si quieres que se ilumine
     $tituloDeLaPagina = "Galería de Videos - Asoc. Mexicana de Diabetes"; 
 

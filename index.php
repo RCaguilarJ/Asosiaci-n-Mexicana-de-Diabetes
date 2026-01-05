@@ -1,8 +1,8 @@
 <?php
     session_start(); // 1. INICIAR SESIÓN (SIEMPRE PRIMERO)
 
-    // 2. EL "CADENERO": Verificar si el usuario está logueado
-    if (!isset($_SESSION['usuario_id'])) {
+    // 2. EL "CADENERO": Verificar si el usuario está logueado o es invitado
+    if (!isset($_SESSION['usuario_id']) && !isset($_SESSION['es_invitado'])) {
         header('Location: login.php');
         exit;
     }
@@ -18,16 +18,17 @@
     $promedioSemanal = "--";
     $colorGlucosa = "#e0f0ff"; 
 
-    // 4. CONSULTAR DATOS
-    try {
-        $stmt = $pdo->prepare("SELECT * FROM registros_glucosa WHERE usuario_id = ? ORDER BY fecha_registro DESC LIMIT 1");
-        $stmt->execute([$_SESSION['usuario_id']]);
-        $ultimoRegistro = $stmt->fetch(PDO::FETCH_ASSOC);
+    // 4. CONSULTAR DATOS (Solo si no es invitado)
+    if (isset($_SESSION['usuario_id'])) {
+        try {
+            $stmt = $pdo->prepare("SELECT * FROM registros_glucosa WHERE usuario_id = ? ORDER BY fecha_registro DESC LIMIT 1");
+            $stmt->execute([$_SESSION['usuario_id']]);
+            $ultimoRegistro = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($ultimoRegistro) {
-            $nivelGlucosa = $ultimoRegistro['nivel_glucosa'] . " mg/dL";
-            $fechaRegistro = new DateTime($ultimoRegistro['fecha_registro']);
-            $ultimaMedicion = $fechaRegistro->format('d/m/Y h:i A');
+            if ($ultimoRegistro) {
+                $nivelGlucosa = $ultimoRegistro['nivel_glucosa'] . " mg/dL";
+                $fechaRegistro = new DateTime($ultimoRegistro['fecha_registro']);
+                $ultimaMedicion = $fechaRegistro->format('d/m/Y h:i A');
 
             if ($ultimoRegistro['nivel_glucosa'] > 180) {
                 $colorGlucosa = "#ffe0e0"; 
@@ -36,15 +37,16 @@
             }
         }
 
-        $stmtAvg = $pdo->prepare("SELECT AVG(nivel_glucosa) as promedio FROM registros_glucosa WHERE usuario_id = ?");
-        $stmtAvg->execute([$_SESSION['usuario_id']]);
-        $avg = $stmtAvg->fetch(PDO::FETCH_ASSOC);
-        if ($avg && $avg['promedio']) {
-            $promedioSemanal = round($avg['promedio']) . " mg/dL";
-        }
+            $stmtAvg = $pdo->prepare("SELECT AVG(nivel_glucosa) as promedio FROM registros_glucosa WHERE usuario_id = ?");
+            $stmtAvg->execute([$_SESSION['usuario_id']]);
+            $avg = $stmtAvg->fetch(PDO::FETCH_ASSOC);
+            if ($avg && $avg['promedio']) {
+                $promedioSemanal = round($avg['promedio']) . " mg/dL";
+            }
 
-    } catch (Exception $e) {
-        error_log("Error BD: " . $e->getMessage());
+        } catch (Exception $e) {
+            error_log("Error BD: " . $e->getMessage());
+        }
     }
 ?>
 <!DOCTYPE html>
@@ -105,6 +107,9 @@
     </section>
 
     <main class="contenedor">
+
+        <?php include 'includes/check-guest-banner.php'; ?>
+
         <section class="reminders-section">
             <div class="card-base card-reminder">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-alert w-5 h-5 mt-0.5" aria-hidden="true" style="color: rgb(245, 158, 11);"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg>

@@ -1,4 +1,7 @@
 <?php
+    // VERIFICAR SESIÓN - El usuario debe estar logueado para acceder
+    require 'includes/check-session.php';
+    
     // 1. Definimos la página actual y el título
     $paginaActual = 'calculadora';
     $tituloDeLaPagina = "Calculadora - Asoc. Mexicana de Diabetes"; 
@@ -34,6 +37,8 @@
     </header>
 
     <main class="contenedor">
+
+        <?php include 'includes/check-guest-banner.php'; ?>
     
         <form id="form-calculadora" class="calculadora-form">
 

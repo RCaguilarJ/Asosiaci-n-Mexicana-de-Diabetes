@@ -1,0 +1,154 @@
+✅ OPCIÓN DE INVITADO IMPLEMENTADA
+
+═══════════════════════════════════════════════════════════════════
+
+📝 CAMBIOS REALIZADOS:
+
+1️⃣ LOGIN.PHP
+   ─────────
+   ✓ Modificada la verificación para permitir invitados
+   ✓ Añadida nueva acción "invitado"
+   ✓ Nuevo botón "Ingresar como Invitado" en la interfaz
+   ✓ El botón crea una sesión especial para invitados
+
+2️⃣ INCLUDES/CHECK-SESSION.PHP
+   ──────────────────────────
+   ✓ Modificada la verificación para permitir:
+     • Usuarios logueados (con usuario_id)
+     • Invitados (con es_invitado = true)
+   ✓ Ambos tipos de usuarios pueden acceder a las páginas
+
+3️⃣ INCLUDES/CHECK-GUEST-BANNER.PHP (NUEVO)
+   ──────────────────────────────────────
+   ✓ Archivo para mostrar banner cuando es invitado
+   ✓ Indica que está en modo prueba
+   ✓ Alerta sobre que no se guardarán datos
+   ✓ Botón para iniciar sesión o crear cuenta
+
+4️⃣ GUARDAR_CALCULO.PHP
+   ───────────────────
+   ✓ Verificación mejorada
+   ✓ Rechaza guardar si es invitado
+   ✓ Mensaje específico para invitados
+
+5️⃣ GUARDAR_CITA.PHP
+   ────────────────
+   ✓ Verificación mejorada
+   ✓ Rechaza guardar si es invitado
+   ✓ Mensaje específico para invitados
+
+6️⃣ INDEX.PHP
+   ─────────
+   ✓ Permite acceso a invitados
+   ✓ No intenta cargar datos de BD si es invitado
+   ✓ Mostrar banner de invitado
+   ✓ Los datos por defecto se muestran al invitado
+
+7️⃣ CALCULADORA.PHP
+   ────────────────
+   ✓ Incluye banner de invitado
+   ✓ Los invitados pueden ver la calculadora
+   ✓ Recibirán mensaje al intentar guardar
+
+8️⃣ CITAS.PHP
+   ────────
+   ✓ Usa check-session.php para validación
+   ✓ Incluye banner de invitado
+   ✓ No intenta cargar datos si es invitado
+   ✓ Recibirán mensaje al intentar guardar
+
+═══════════════════════════════════════════════════════════════════
+
+🔄 FLUJO PARA INVITADOS:
+
+1. Usuario hace click en "Ingresar como Invitado"
+   ↓
+2. Se crea sesión con:
+   • $_SESSION['es_invitado'] = true
+   • $_SESSION['usuario_nombre'] = 'Invitado'
+   • $_SESSION['usuario_id'] = null (sin BD)
+   ↓
+3. Redirecciona a index.php
+   ↓
+4. En cada página, ve un BANNER GRIS indicando:
+   "Modo Invitado - Estás viendo una versión de prueba. 
+    Los datos que generes aquí NO serán guardados."
+   ↓
+5. El invitado puede:
+   ✓ Ver toda la plataforma
+   ✓ Usar la calculadora
+   ✓ Ver el formulario de citas
+   ✓ Explorar todos los recursos
+   ↓
+6. Cuando intenta guardar datos:
+   ✗ Recibe mensaje: "Los invitados no pueden guardar datos. 
+     Por favor, inicia sesión o crea una cuenta."
+   ↓
+7. Invitado puede hacer click en el banner para:
+   ✓ Iniciar sesión
+   ✓ Crear una nueva cuenta
+
+
+═══════════════════════════════════════════════════════════════════
+
+💾 VARIABLES DE SESIÓN:
+
+Usuario Registrado:
+  • $_SESSION['usuario_id']     → ID en la BD
+  • $_SESSION['usuario_nombre'] → Nombre real
+  • $_SESSION['usuario_email']  → Correo
+
+Invitado:
+  • $_SESSION['es_invitado']    → true
+  • $_SESSION['usuario_nombre'] → 'Invitado'
+  • $_SESSION['usuario_id']     → null
+
+
+═══════════════════════════════════════════════════════════════════
+
+🎯 PERMISOS:
+
+               │ USUARIO  │ INVITADO
+───────────────┼──────────┼──────────
+Ver Dashboard  │    ✓     │    ✓
+Ver Calc.      │    ✓     │    ✓
+Ver Citas      │    ✓     │    ✓
+Ver Galería    │    ✓     │    ✓
+Ver Blog       │    ✓     │    ✓
+Guardar Cálc.  │    ✓     │    ✗
+Guardar Cita   │    ✓     │    ✗
+Cambiar Pass   │    ✓     │    ✗
+Ver Historial  │    ✓     │    ✗
+
+
+═══════════════════════════════════════════════════════════════════
+
+✨ CARACTERÍSTICAS DEL BANNER:
+
+✓ Color gris oscuro (modo lectura)
+✓ Ícono de información
+✓ Texto claro y directo
+✓ Enlace para iniciar sesión
+✓ Aparece automáticamente si es invitado
+✓ Se muestra en:
+  - Index (Dashboard)
+  - Calculadora
+  - Citas
+
+
+═══════════════════════════════════════════════════════════════════
+
+🔐 SEGURIDAD:
+
+✓ Los invitados NO pueden guardar datos
+✓ Los invitados NO tienen ID de usuario en BD
+✓ Los datos no se asocian a invitados
+✓ Logout automático cuando cierra el navegador
+✓ No hay riesgo de datos anónimos en la BD
+
+
+═══════════════════════════════════════════════════════════════════
+
+                        ✅ LISTO PARA USAR ✅
+
+═══════════════════════════════════════════════════════════════════

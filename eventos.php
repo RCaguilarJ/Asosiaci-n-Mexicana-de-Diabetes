@@ -1,4 +1,7 @@
 <?php
+    // VERIFICAR SESIÓN - El usuario debe estar logueado para acceder
+    require 'includes/check-session.php';
+    
     // 1. Definimos la página actual y el título
     $paginaActual = 'eventos';
     $tituloDeLaPagina = "Eventos - Asoc. Mexicana de Diabetes"; 

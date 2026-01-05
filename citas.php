@@ -1,24 +1,21 @@
 <?php
-    session_start();
+    // VERIFICAR SESIÓN - El usuario debe estar logueado o ser invitado
+    require 'includes/check-session.php';
     require 'includes/db.php'; // Conexión
-
-    // 1. EL "CADENERO": Verificar si el usuario está logueado
-    if (!isset($_SESSION['usuario_id'])) {
-        header('Location: login.php');
-        exit;
-    }
 
     $paginaActual = 'citas';
     $tituloDeLaPagina = "Agendar Cita - Asoc. Mexicana de Diabetes"; 
 
-    // 2. CONSULTAR CITAS (Backend)
+    // 2. CONSULTAR CITAS (Backend) - Solo si no es invitado
     $citasUsuario = [];
-    try {
-        $stmt = $pdo->prepare("SELECT * FROM citas WHERE usuario_id = ? AND fecha_cita >= CURDATE() ORDER BY fecha_cita ASC, hora_cita ASC");
-        $stmt->execute([$_SESSION['usuario_id']]);
-        $citasUsuario = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } catch (Exception $e) {
-        // Manejo silencioso
+    if (isset($_SESSION['usuario_id'])) {
+        try {
+            $stmt = $pdo->prepare("SELECT * FROM citas WHERE usuario_id = ? AND fecha_cita >= CURDATE() ORDER BY fecha_cita ASC, hora_cita ASC");
+            $stmt->execute([$_SESSION['usuario_id']]);
+            $citasUsuario = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            // Manejo silencioso
+        }
     }
 ?>
 <!DOCTYPE html>
@@ -42,6 +39,8 @@
     </header>
 
     <main class="contenedor">
+
+        <?php include 'includes/check-guest-banner.php'; ?>
 
         <h3 class="section-title">Próximas Citas</h3>
         

@@ -3,9 +3,13 @@
 session_start();
 require 'includes/db.php';
 
-// 1. Verificar si el usuario está logueado
+// 1. Verificar si el usuario está logueado (NO INVITADO)
 if (!isset($_SESSION['usuario_id'])) {
-    echo json_encode(['success' => false, 'message' => 'No hay sesión iniciada']);
+    if (isset($_SESSION['es_invitado']) && $_SESSION['es_invitado']) {
+        echo json_encode(['success' => false, 'message' => 'Los invitados no pueden guardar datos. Por favor, inicia sesión o crea una cuenta.']);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'No hay sesión iniciada']);
+    }
     exit;
 }
 
