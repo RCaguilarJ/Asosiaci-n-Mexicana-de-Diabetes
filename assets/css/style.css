@@ -2011,3 +2011,43 @@ body.body-noscroll .navegacion-principal {
 .btn-ver-video:hover {
     background-color: #0056b3;
 }
+
+/* ====================================
+   21. BOTÓN SCROLL-TO-TOP
+   ==================================== */
+.scroll-to-top-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background-color: var(--color-primario-azul-borde);
+    color: var(--color-blanco);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+}
+
+.scroll-to-top-btn.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.scroll-to-top-btn:hover {
+    background-color: #0056b3; /* Un azul un poco más oscuro */
+}
+
+.scroll-to-top-btn svg {
+    width: 24px;
+    height: 24px;
+}

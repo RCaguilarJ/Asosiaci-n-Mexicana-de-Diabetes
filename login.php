@@ -1,12 +1,12 @@
 <?php
     session_start(); // Iniciar sesión de PHP
-    require 'includes/db.php'; // Conexión a la BD
+    require 'includes/db.php'; // Conexión a la BD (Asegúrate de haber actualizado este archivo con la conexión remota)
 
     // Si ya está logueado, redirigir al index
-    if (isset($_SESSION['usuario_id']) || isset($_SESSION['es_invitado'])) {
+    /* if (isset($_SESSION['usuario_id']) || isset($_SESSION['es_invitado'])) {
         header('Location: index.php');
         exit;
-    }
+    } */
 
     $paginaActual = 'login';
     $tituloDeLaPagina = "Acceso Usuarios - Asoc. Mexicana de Diabetes"; 
@@ -16,10 +16,12 @@
     // LÓGICA DE LOGIN Y REGISTRO
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
-        // --- CASO 1: REGISTRO (CREAR CUENTA) ---
+        // --- CASO 1: REGISTRO (CREAR CUENTA Y SINCRONIZAR) ---
         if (isset($_POST['accion']) && $_POST['accion'] === 'registro') {
             $nombre = trim($_POST['nombre']);
             $email = trim($_POST['email']);
+            // Convertimos la CURP a mayúsculas para evitar problemas de duplicados
+            $curp = isset($_POST['curp']) ? strtoupper(trim($_POST['curp'])) : ''; 
             $password = $_POST['password'];
             $confirmPassword = $_POST['confirm_password'] ?? '';
 
@@ -33,6 +35,10 @@
             } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $mensaje = "El correo electrónico no es válido.";
                 $tipoMensaje = 'error';
+            } elseif (empty($curp) || strlen($curp) < 10) { 
+                // Validación básica de CURP (puedes hacerla más estricta si deseas)
+                $mensaje = "La CURP es requerida para tu expediente médico.";
+                $tipoMensaje = 'error';
             } elseif (empty($password)) {
                 $mensaje = "La contraseña es requerida.";
                 $tipoMensaje = 'error';
@@ -43,7 +49,7 @@
                 $mensaje = "Las contraseñas no coinciden.";
                 $tipoMensaje = 'error';
             } else {
-                // Verificar si el correo ya existe
+                // Verificar si el correo ya existe (en local)
                 $stmt = $pdo->prepare("SELECT id FROM usuarios WHERE email = ?");
                 $stmt->execute([$email]);
                 
@@ -51,21 +57,86 @@
                     $mensaje = "Este correo ya está registrado. Intenta con otro.";
                     $tipoMensaje = 'error';
                 } else {
+                    // --- INICIO DEL PROCESO DE REGISTRO DUAL ---
                     try {
-                        // Encriptar contraseña y guardar
+                        // 1. Iniciar transacción local
+                        $pdo->beginTransaction();
+
+                        // Encriptar contraseña
                         $hash = password_hash($password, PASSWORD_DEFAULT);
-                        $stmt = $pdo->prepare("INSERT INTO usuarios (nombre, email, password) VALUES (?, ?, ?)");
                         
-                        if ($stmt->execute([$nombre, $email, $hash])) {
-                            $mensaje = "✓ ¡Cuenta creada exitosamente! Ya puedes iniciar sesión con tus credenciales.";
-                            $tipoMensaje = 'exito';
-                        } else {
-                            $mensaje = "Error al registrar. Intenta más tarde.";
-                            $tipoMensaje = 'error';
+                        // Guardar en LOCAL (Web Asociación)
+                        // (Nota: Si tu tabla 'usuarios' local no tiene columna curp, no la incluimos aquí)
+                        $stmt = $pdo->prepare("INSERT INTO usuarios (nombre, email, password) VALUES (?, ?, ?)");
+                        $stmt->execute([$nombre, $email, $hash]);
+                        
+                        // Confirmar guardado local
+                        $pdo->commit();
+
+                        // 2. INTENTAR GUARDAR EN REMOTO (Sistema Médico)
+                        // Usamos la función definida en includes/db.php
+                        if (function_exists('getRemoteConnection')) {
+                            $pdoRemote = getRemoteConnection();
+
+                            if ($pdoRemote) {
+                                try {
+                                    $fechaActual = date('Y-m-d H:i:s');
+                                    
+                                    // Insertar en la tabla 'pacientes' del sistema médico
+                                    // Los campos deben coincidir con tu archivo sistema_gestion_medica.sql
+                                    $sqlRemote = "INSERT INTO pacientes (
+                                        nombre, 
+                                        email, 
+                                        curp, 
+                                        createdAt, 
+                                        updatedAt, 
+                                        estatus, 
+                                        primeraVez, 
+                                        tipoDiabetes, 
+                                        riesgo
+                                    ) VALUES (
+                                        :nombre, 
+                                        :email, 
+                                        :curp, 
+                                        :creado, 
+                                        :actualizado, 
+                                        'Activo', 
+                                        1, 
+                                        'Otro', 
+                                        'Bajo'
+                                    )";
+
+                                    $stmtRemote = $pdoRemote->prepare($sqlRemote);
+                                    $stmtRemote->execute([
+                                        ':nombre' => $nombre,
+                                        ':email' => $email,
+                                        ':curp' => $curp,
+                                        ':creado' => $fechaActual,
+                                        ':actualizado' => $fechaActual
+                                    ]);
+                                    
+                                    // Si llegamos aquí, se guardó en ambos lados
+                                    
+                                } catch (PDOException $eRemote) {
+                                    // Si falla el remoto (ej. CURP duplicada en sistema médico), 
+                                    // NO borramos el usuario local, pero avisamos en el log interna del servidor.
+                                    error_log("Error sincronización Sistema Médico: " . $eRemote->getMessage());
+                                    // Opcional: Podrías mostrar una advertencia al usuario, pero es mejor decir "éxito" si ya tiene cuenta.
+                                }
+                            }
                         }
+
+                        $mensaje = "✓ ¡Cuenta creada exitosamente! Tu expediente médico ha sido iniciado.";
+                        $tipoMensaje = 'exito';
+
                     } catch (Exception $e) {
-                        $mensaje = "Error en la base de datos. Intenta más tarde.";
+                        // Si falla la base de datos LOCAL, revertimos todo
+                        if ($pdo->inTransaction()) {
+                            $pdo->rollBack();
+                        }
+                        $mensaje = "Error en la base de datos local. Intenta más tarde.";
                         $tipoMensaje = 'error';
+                        error_log("Error Registro Local: " . $e->getMessage());
                     }
                 }
             }
@@ -125,7 +196,7 @@
         </div>
         <div class="page-header-text">
             <h1>Acceso Usuarios</h1>
-            <p>Gestiona tu cuenta</p>
+            <p>Gestiona tu cuenta y expediente</p>
         </div>
     </header>
 
@@ -166,7 +237,7 @@
                 <label>Contraseña</label>
                 <div class="password-wrapper">
                     <input type="password" name="password" class="form-control password-input" required>
-                    <button type="button" class="toggle-password-btn" onclick="togglePassword(this)" title="Mostrar/Ocultar contraseña">
+                    <button type="button" class="toggle-password-btn" title="Mostrar/Ocultar contraseña">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                     </button>
                 </div>
@@ -188,7 +259,7 @@
 
             <div class="form-divider"><span>O</span></div>
 
-            <button type="button" onclick="mostrarRegistro()" class="btn-calculadora btn-outline-green">
+            <button type="button" class="btn-calculadora btn-outline-green btn-mostrar-registro">
                 <span>Crear Nueva Cuenta</span>
             </button>
         </form>
@@ -199,19 +270,25 @@
             
             <div class="form-group">
                 <label>Nombre Completo</label>
-                <input type="text" name="nombre" class="form-control" required>
+                <input type="text" name="nombre" class="form-control" required placeholder="Ej. Juan Pérez">
             </div>
 
             <div class="form-group">
                 <label>Correo Electrónico</label>
-                <input type="email" name="email" class="form-control" required>
+                <input type="email" name="email" class="form-control" required placeholder="correo@ejemplo.com">
+            </div>
+
+            <div class="form-group">
+                <label>CURP <small>(Obligatorio para expediente médico)</small></label>
+                <input type="text" name="curp" class="form-control" required minlength="10" maxlength="18" placeholder="Ingresa tu CURP" style="text-transform: uppercase;">
+                <small style="color: #666; font-size: 0.85em;">Tus datos serán sincronizados con el sistema médico.</small>
             </div>
 
             <div class="form-group password-group">
                 <label>Contraseña</label>
                 <div class="password-wrapper">
                     <input type="password" name="password" class="form-control password-input" required minlength="6" placeholder="Mínimo 6 caracteres">
-                    <button type="button" class="toggle-password-btn" onclick="togglePassword(this)" title="Mostrar/Ocultar contraseña">
+                    <button type="button" class="toggle-password-btn" title="Mostrar/Ocultar contraseña">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                     </button>
                 </div>
@@ -221,19 +298,19 @@
                 <label>Confirmar Contraseña</label>
                 <div class="password-wrapper">
                     <input type="password" name="confirm_password" class="form-control password-input" required minlength="6" placeholder="Repite tu contraseña">
-                    <button type="button" class="toggle-password-btn" onclick="togglePassword(this)" title="Mostrar/Ocultar contraseña">
+                    <button type="button" class="toggle-password-btn" title="Mostrar/Ocultar contraseña">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                     </button>
                 </div>
             </div>
 
             <button type="submit" class="btn-calculadora mt-20" style="background-color: var(--color-secundario-verde);">
-                <span>Registrarse</span>
+                <span>Registrarse y Crear Expediente</span>
             </button>
 
             <div class="form-divider"><span>O</span></div>
 
-            <button type="button" onclick="mostrarLogin()" class="btn-calculadora btn-outline-green">
+            <button type="button" class="btn-calculadora btn-outline-green btn-mostrar-login">
                 <span>Ya tengo cuenta</span>
             </button>
         </form>
@@ -241,31 +318,7 @@
     </main>
 
     <?php include 'includes/footer.php'; ?>
-    <script src="assets/js/app.js"></script> 
-
-    <script>
-        // Alternar formularios de login/registro
-        function mostrarRegistro() {
-            document.getElementById('form-login').style.display = 'none';
-            document.getElementById('form-registro').style.display = 'block';
-        }
-        function mostrarLogin() {
-            document.getElementById('form-registro').style.display = 'none';
-            document.getElementById('form-login').style.display = 'block';
-        }
-
-        // Mostrar/Ocultar contraseña
-        function togglePassword(btn) {
-            event.preventDefault();
-            const passwordWrapper = btn.closest('.password-wrapper');
-            const passwordInput = passwordWrapper.querySelector('.password-input');
-            const isPassword = passwordInput.type === 'password';
-            
-            passwordInput.type = isPassword ? 'text' : 'password';
-            
-            // Cambiar opacidad del ícono para indicar estado
-            btn.style.opacity = isPassword ? '1' : '0.5';
-        }
-    </script>
+    <script src="assets/js/app.js" defer></script> 
+    <script src="assets/js/login.js" defer></script> 
 </body>
 </html>

@@ -1,3 +1,4 @@
+<?php require_once 'security-headers.php'; ?>
 <?php
     //session_start();
     // Si no se ha definido un título, ponemos uno por defecto
@@ -5,10 +6,14 @@
         // ACTUALIZADO:
         $tituloDeLaPagina = "Asociación Mexicana de Diabetes"; 
     }
+    if(!isset($metaDescription)) {
+        $metaDescription = "La Asociación Mexicana de Diabetes en Jalisco es una organización sin fines de lucro dedicada a la educación, prevención y manejo de la diabetes.";
+    }
 ?>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="<?php echo htmlspecialchars($metaDescription); ?>">
     
     <title><?php echo $tituloDeLaPagina; // Título dinámico ?></title>
     

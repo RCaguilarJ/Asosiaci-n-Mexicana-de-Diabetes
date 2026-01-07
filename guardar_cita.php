@@ -1,46 +1,117 @@
 <?php
-// guardar_cita.php
 session_start();
 require 'includes/db.php';
 
-// 1. Verificar si el usuario está logueado (NO INVITADO)
+// Verificar si el usuario está logueado
 if (!isset($_SESSION['usuario_id'])) {
-    if (isset($_SESSION['es_invitado']) && $_SESSION['es_invitado']) {
-        echo json_encode(['success' => false, 'message' => 'Los invitados no pueden agendar citas. Por favor, inicia sesión o crea una cuenta.']);
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Debes iniciar sesión para agendar una cita.']);
-    }
+    header("Location: login.php");
     exit;
 }
 
-// 2. Recibir los datos (JSON)
-$input = json_decode(file_get_contents('php://input'), true);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $usuario_id_local = $_SESSION['usuario_id'];
+    $email_usuario = $_SESSION['usuario_email']; // Necesitamos el email para buscarlo en el remoto
+    
+    // Recibir datos del formulario
+    $fecha = $_POST['fecha'];
+    $hora = $_POST['hora'];
+    $tipo_cita = $_POST['tipo_cita']; // Ej: General, Nutrición...
+    $descripcion = trim($_POST['descripcion']);
+    
+    // Combinar fecha y hora para formato DATETIME (YYYY-MM-DD HH:MM:SS)
+    $fechaHora = $fecha . ' ' . $hora . ':00';
 
-if ($input) {
     try {
-        // Datos del usuario y del formulario
-        $usuario_id = $_SESSION['usuario_id'];
-        $nombre = $input['nombre'];
-        $email = $input['email'];
-        $telefono = $input['telefono'];
-        $especialidad = $input['especialidad'];
-        $fecha = $input['fecha'];
-        $hora = $input['hora'];
-        $notas = $input['notas'];
+        // ---------------------------------------------------------
+        // 1. GUARDAR EN LOCAL (Web Asociación)
+        // ---------------------------------------------------------
+        $pdo->beginTransaction();
 
-        // 3. Insertar en la base de datos
-        $stmt = $pdo->prepare("INSERT INTO citas (usuario_id, nombre_paciente, email, telefono, especialidad, fecha_cita, hora_cita, notas) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $pdo->prepare("INSERT INTO citas (usuario_id, fecha_cita, tipo_cita, descripcion, estado) VALUES (?, ?, ?, ?, 'pendiente')");
+        $stmt->execute([$usuario_id_local, $fechaHora, $tipo_cita, $descripcion]);
         
-        if ($stmt->execute([$usuario_id, $nombre, $email, $telefono, $especialidad, $fecha, $hora, $notas])) {
-            echo json_encode(['success' => true, 'message' => 'Cita agendada correctamente.']);
-        } else {
-            echo json_encode(['success' => false, 'message' => 'Error al guardar la cita en la base de datos.']);
+        $pdo->commit();
+
+        // ---------------------------------------------------------
+        // 2. GUARDAR EN REMOTO (Sistema Médico)
+        // ---------------------------------------------------------
+        $pdoRemote = getRemoteConnection();
+
+        if ($pdoRemote) {
+            try {
+                // A. Buscar el ID del paciente en el sistema remoto usando su email
+                // (Porque el ID local "1" puede ser el ID "50" en el sistema remoto)
+                $stmtBusqueda = $pdoRemote->prepare("SELECT id FROM pacientes WHERE email = :email LIMIT 1");
+                $stmtBusqueda->execute([':email' => $email_usuario]);
+                $pacienteRemoto = $stmtBusqueda->fetch(PDO::FETCH_ASSOC);
+
+                if ($pacienteRemoto) {
+                    $idPacienteRemoto = $pacienteRemoto['id'];
+                    
+                    // B. Definir un Médico por defecto
+                    // En tu sistema remoto, el ID 14 es el "Doctor". Usaremos ese por defecto.
+                    // Si tu formulario web permitiera elegir doctor, usaríamos esa variable.
+                    $idMedicoDefault = 14; 
+                    
+                    $fechaActual = date('Y-m-d H:i:s');
+                    
+                    // C. Insertar la cita en la tabla 'cita' del sistema remoto
+                    $sqlRemote = "INSERT INTO cita (
+                        fechaHora, 
+                        motivo, 
+                        notas, 
+                        estado, 
+                        pacienteId, 
+                        medicoId, 
+                        createdAt, 
+                        updatedAt
+                    ) VALUES (
+                        :fechaHora, 
+                        :motivo, 
+                        :notas, 
+                        'Pendiente', 
+                        :pacienteId, 
+                        :medicoId, 
+                        :creado, 
+                        :actualizado
+                    )";
+
+                    $stmtRemote = $pdoRemote->prepare($sqlRemote);
+                    $stmtRemote->execute([
+                        ':fechaHora' => $fechaHora,
+                        ':motivo' => $tipo_cita,         // Usamos el tipo de cita como motivo corto
+                        ':notas' => $descripcion,        // La descripción va en notas
+                        ':pacienteId' => $idPacienteRemoto,
+                        ':medicoId' => $idMedicoDefault,
+                        ':creado' => $fechaActual,
+                        ':actualizado' => $fechaActual
+                    ]);
+                } else {
+                    // El usuario existe en web pero no en sistema médico (quizás se registró antes de la integración)
+                    // Opcional: Podrías intentar crearlo aquí, pero por seguridad solo logueamos el error.
+                    error_log("No se encontró al paciente $email_usuario en el sistema remoto al agendar cita.");
+                }
+
+            } catch (Exception $eRemote) {
+                // Si falla la conexión remota, no le decimos al usuario para no asustarlo,
+                // ya que su cita sí se guardó en local.
+                error_log("Error sincronizando cita remota: " . $eRemote->getMessage());
+            }
         }
 
+        // Redirigir con éxito
+        header("Location: citas.php?mensaje=registrado");
+        exit;
+
     } catch (Exception $e) {
-        echo json_encode(['success' => false, 'message' => 'Error del servidor: ' . $e->getMessage()]);
+        if ($pdo->inTransaction()) {
+            $pdo->rollBack();
+        }
+        die("Error al guardar la cita: " . $e->getMessage());
     }
 } else {
-    echo json_encode(['success' => false, 'message' => 'No se recibieron datos.']);
+    // Si intentan entrar directo sin POST
+    header("Location: citas.php");
+    exit;
 }
 ?>

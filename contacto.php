@@ -63,13 +63,13 @@
         <section class="social-section">
             <h2>Síguenos en Redes Sociales</h2>
             <div class="social-links">
-                <a href="#" class="social-btn social-btn--facebook">
+                <a href="#" class="social-btn social-btn--facebook" aria-label="Síguenos en Facebook">
                     <span>Facebook</span>
                 </a>
-                <a href="#" class="social-btn social-btn--instagram">
+                <a href="#" class="social-btn social-btn--instagram" aria-label="Síguenos en Instagram">
                     <span>Instagram</span>
                 </a>
-                <a href="#" class="social-btn social-btn--whatsapp">
+                <a href="#" class="social-btn social-btn--whatsapp" aria-label="Contáctanos por WhatsApp">
                     <span>WhatsApp</span>
                 </a>
             </div>
