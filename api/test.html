@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba de API - Integración Sistema Médico</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+        .result {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 10px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .success {
+            border-color: #28a745;
+            background-color: #d4edda;
+        }
+        .error {
+            border-color: #dc3545;
+            background-color: #f8d7da;
+        }
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔗 Prueba de API - Integración Sistema Médico</h1>
+    
+    <div class="test-container">
+        <h2>1. Gestión de Pacientes</h2>
+        <button class="test-button" onclick="testGetAllPacientes()">📊 Obtener Todos los Pacientes</button>
+        <button class="test-button" onclick="testGetPacienteDetalle()">👤 Detalle Paciente (ID: 1)</button>
+        <button class="test-button" onclick="testGetRegistrosGlucosa()">🩸 Registros Glucosa (ID: 1)</button>
+        <div id="result-pacientes" class="result" style="display: none;"></div>
+    </div>
+
+    <div class="test-container">
+        <h2>2. Reportes y Estadísticas</h2>
+        <button class="test-button" onclick="testGetDashboard()">📈 Dashboard Médico</button>
+        <button class="test-button" onclick="testGetPacienteStats()">📊 Stats Paciente (ID: 1)</button>
+        <button class="test-button" onclick="testGetTendencias()">📉 Tendencias Generales</button>
+        <div id="result-reportes" class="result" style="display: none;"></div>
+    </div>
+
+    <div class="test-container">
+        <h2>3. Gestión de Citas</h2>
+        <button class="test-button" onclick="testGetCitasPaciente()">📅 Citas Paciente (ID: 1)</button>
+        <button class="test-button" onclick="testGetAllCitas()">📅 Todas las Citas</button>
+        <div id="result-citas" class="result" style="display: none;"></div>
+    </div>
+
+    <script>
+        const API_BASE = './api';
+
+        async function makeRequest(endpoint, resultId) {
+            const resultDiv = document.getElementById(resultId);
+            resultDiv.style.display = 'block';
+            resultDiv.textContent = 'Cargando...';
+            resultDiv.className = 'result';
+
+            try {
+                const response = await fetch(`${API_BASE}/${endpoint}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = `✅ Éxito:\n${JSON.stringify(data, null, 2)}`;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = `❌ Error:\n${JSON.stringify(data, null, 2)}`;
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Error de conexión:\n${error.message}`;
+            }
+        }
+
+        // Funciones de prueba para Pacientes
+        function testGetAllPacientes() {
+            makeRequest('pacientes.php?endpoint=pacientes', 'result-pacientes');
+        }
+
+        function testGetPacienteDetalle() {
+            makeRequest('pacientes.php?endpoint=paciente&id=1', 'result-pacientes');
+        }
+
+        function testGetRegistrosGlucosa() {
+            makeRequest('pacientes.php?endpoint=glucosa&paciente_id=1&limite=10', 'result-pacientes');
+        }
+
+        // Funciones de prueba para Reportes
+        function testGetDashboard() {
+            makeRequest('reportes.php?endpoint=dashboard', 'result-reportes');
+        }
+
+        function testGetPacienteStats() {
+            makeRequest('reportes.php?endpoint=paciente-estadisticas&paciente_id=1&dias=30', 'result-reportes');
+        }
+
+        function testGetTendencias() {
+            makeRequest('reportes.php?endpoint=tendencias', 'result-reportes');
+        }
+
+        // Funciones de prueba para Citas
+        function testGetCitasPaciente() {
+            makeRequest('pacientes.php?endpoint=citas&paciente_id=1', 'result-citas');
+        }
+
+        function testGetAllCitas() {
+            makeRequest('pacientes.php?endpoint=citas', 'result-citas');
+        }
+
+        // Función para probar todas las APIs automáticamente
+        async function testAll() {
+            const tests = [
+                { name: 'Pacientes', func: testGetAllPacientes },
+                { name: 'Detalle Paciente', func: testGetPacienteDetalle },
+                { name: 'Dashboard', func: testGetDashboard },
+                { name: 'Citas', func: testGetAllCitas }
+            ];
+
+            for (const test of tests) {
+                console.log(`Ejecutando: ${test.name}`);
+                await new Promise(resolve => {
+                    test.func();
+                    setTimeout(resolve, 2000);
+                });
+            }
+        }
+    </script>
+
+    <div class="test-container">
+        <h2>🔄 Prueba Automática</h2>
+        <button class="test-button" onclick="testAll()" style="background: #28a745;">
+            ▶️ Ejecutar Todas las Pruebas
+        </button>
+        <p><strong>Instrucciones:</strong></p>
+        <ol>
+            <li>Asegúrate de que tu servidor web esté funcionando</li>
+            <li>Verifica que tengas datos de prueba en tu base de datos</li>
+            <li>Haz clic en los botones para probar cada endpoint</li>
+            <li>Los resultados aparecerán en verde si son exitosos</li>
+        </ol>
+    </div>
+
+    <div class="test-container">
+        <h2>📋 Información de Integración</h2>
+        <p><strong>Para integrar con tu sistema médico React:</strong></p>
+        <ol>
+            <li>Copia el archivo <code>diabetesApi.js</code> en tu proyecto React</li>
+            <li>Instala cualquier dependencia necesaria</li>
+            <li>Ajusta la URL base en el servicio API</li>
+            <li>Importa y usa los hooks personalizados</li>
+            <li>Agrega los componentes a tu dashboard médico</li>
+        </ol>
+        
+        <p><strong>URLs de los endpoints:</strong></p>
+        <ul>
+            <li><code>GET /api/pacientes.php?endpoint=pacientes</code> - Lista de pacientes</li>
+            <li><code>GET /api/pacientes.php?endpoint=paciente&id={id}</code> - Detalle del paciente</li>
+            <li><code>GET /api/reportes.php?endpoint=dashboard</code> - Dashboard médico</li>
+            <li><code>GET /api/pacientes.php?endpoint=citas</code> - Gestión de citas</li>
+        </ul>
+    </div>
+</body>
+</html>

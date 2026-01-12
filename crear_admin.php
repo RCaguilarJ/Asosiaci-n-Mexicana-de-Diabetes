@@ -18,15 +18,15 @@ try {
     
     if ($stmtCheck->rowCount() > 0) {
         // CASO A: El usuario ya existe -> Actualizamos su contraseña
-        $stmt = $pdo->prepare("UPDATE usuarios SET password = ?, nombre = ? WHERE email = ?");
-        $stmt->execute([$passwordHash, $nombre, $email]);
+        $stmt = $pdo->prepare("UPDATE usuarios SET password = ?, nombre = ?, rol = ? WHERE email = ?");
+        $stmt->execute([$passwordHash, $nombre, 'ADMIN', $email]);
         echo "<div style='font-family:sans-serif; color: green; padding: 20px; border: 2px solid green; border-radius: 10px; max-width: 600px; margin: 20px auto;'>";
         echo "<h1> Usuario Actualizado</h1>";
         echo "<p>Se ha restablecido la contraseña para el usuario existente.</p>";
     } else {
         // CASO B: El usuario no existe -> Lo creamos desde cero
-        $stmt = $pdo->prepare("INSERT INTO usuarios (nombre, email, password) VALUES (?, ?, ?)");
-        $stmt->execute([$nombre, $email, $passwordHash]);
+        $stmt = $pdo->prepare("INSERT INTO usuarios (nombre, email, password, rol) VALUES (?, ?, ?, ?)");
+        $stmt->execute([$nombre, $email, $passwordHash, 'ADMIN']);
         echo "<div style='font-family:sans-serif; color: blue; padding: 20px; border: 2px solid blue; border-radius: 10px; max-width: 600px; margin: 20px auto;'>";
         echo "<h1> Usuario Creado</h1>";
         echo "<p>Se ha creado un nuevo usuario administrador.</p>";

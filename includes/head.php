@@ -24,8 +24,27 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
     <script>
-        if (window.screen.width >= 768) {
+        // Función para verificar si es dispositivo de escritorio
+        function esDispositivoEscritorio() {
+            // Verificar múltiples indicadores
+            const ancho = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+            const esMovil = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            const esTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            
+            // Es escritorio si: ancho >= 1024px Y NO es móvil Y NO tiene touch
+            return ancho >= 1024 && !esMovil && !esTouchDevice;
+        }
+        
+        // Verificar inmediatamente
+        if (esDispositivoEscritorio()) {
             window.location.href = 'https://diabetesjalisco.org/';
         }
+        
+        // También verificar después de que la página se cargue completamente
+        window.addEventListener('load', function() {
+            if (esDispositivoEscritorio()) {
+                window.location.href = 'https://diabetesjalisco.org/';
+            }
+        });
     </script>
 </head>

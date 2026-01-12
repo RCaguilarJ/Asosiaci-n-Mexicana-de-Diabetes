@@ -71,7 +71,7 @@
         </li>
 
         <li>
-            <a href="#" class="menu-drawer-link"> 
+            <a href="galeria.php" class="menu-drawer-link <?php echo ($paginaActual == 'galeria') ? 'active' : ''; ?>"> 
                 <span class="menu-drawer-link__icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
                 </span>
@@ -83,7 +83,7 @@
         </li>
 
         <li>
-            <a href="#" class="menu-drawer-link"> 
+            <a href="perfil.php" class="menu-drawer-link <?php echo ($paginaActual == 'perfil') ? 'active' : ''; ?>"> 
                 <span class="menu-drawer-link__icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
                 </span>

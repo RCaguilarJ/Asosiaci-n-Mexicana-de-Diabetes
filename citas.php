@@ -93,7 +93,7 @@
 
         </div>
 
-        <form id="form-citas" class="card-form mt-30">
+        <form id="form-citas" class="card-form mt-30" method="POST" action="guardar_cita.php">
             <legend class="card-form-legend">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                 <span>Nueva Cita</span>
@@ -101,23 +101,23 @@
 
             <div class="form-group">
                 <label for="nombre">Nombre Completo</label>
-                <input type="text" id="nombre" class="form-control" placeholder="Juan Pérez García" value="<?php echo isset($_SESSION['usuario_nombre']) ? $_SESSION['usuario_nombre'] : ''; ?>" required>
+                <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Juan Pérez García" value="<?php echo isset($_SESSION['usuario_nombre']) ? $_SESSION['usuario_nombre'] : ''; ?>" required>
             </div>
 
             <div class="form-grid-2">
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" class="form-control" placeholder="correo@ejemplo.com">
+                    <input type="email" id="email" name="email" class="form-control" placeholder="correo@ejemplo.com">
                 </div>
                 <div class="form-group">
                     <label for="telefono">Teléfono</label>
-                    <input type="tel" id="telefono" class="form-control" placeholder="33 1234 5678" required>
+                    <input type="tel" id="telefono" name="telefono" class="form-control" placeholder="33 1234 5678" required>
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="especialidad">Especialidad</label>
-                <select id="especialidad" class="form-control" required>
+                <select id="especialidad" name="especialidad" class="form-control" required>
                     <option value="" disabled selected>Selecciona una especialidad</option>
                     <option value="Medicina General">Medicina General</option>
                     <option value="Nutrición">Nutrición</option>
@@ -130,11 +130,11 @@
             <div class="form-grid-2">
                 <div class="form-group">
                     <label for="fecha">Fecha</label>
-                    <input type="date" id="fecha" class="form-control" required>
+                    <input type="date" id="fecha" name="fecha" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label for="hora">Hora</label>
-                    <select id="hora" class="form-control" required>
+                    <select id="hora" name="hora" class="form-control" required>
                         <option value="" disabled selected>Hora</option>
                         <option value="09:00">09:00 AM</option>
                         <option value="10:00">10:00 AM</option>
@@ -148,7 +148,7 @@
 
             <div class="form-group">
                 <label for="notas">Notas Adicionales (Opcional)</label>
-                <textarea id="notas" class="form-control" rows="3" placeholder="Describe el motivo de tu consulta..."></textarea>
+                <textarea id="notas" name="descripcion" class="form-control" rows="3" placeholder="Describe el motivo de tu consulta..."></textarea>
             </div>
 
             <button type="submit" class="btn-calculadora">
