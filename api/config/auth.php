@@ -1,12 +1,5 @@
 <?php
-// api/config/auth.php
-// TOKEN DE API para autorizar llamadas desde la plataforma médica.
-// Preferible: establecer `API_SHARED_TOKEN` como variable de entorno del sistema
-// (por ejemplo con `setx API_SHARED_TOKEN "<secreto>"`) y no dejar secretos en el repo.
 
-// Load local .env for development (if present) so API endpoints can read the same
-// values as the rest of the app during local testing. In production you should
-// set real environment variables instead and remove .env from the server.
 if (file_exists(__DIR__ . '/../../includes/load_env.php')) {
     require_once __DIR__ . '/../../includes/load_env.php';
 }

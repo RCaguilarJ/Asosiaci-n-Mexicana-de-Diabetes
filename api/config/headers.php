@@ -1,64 +1,52 @@
 <?php
 // api/config/headers.php
-// Common headers and auth bootstrap for API endpoints.
+// Configuración centralizada de cabeceras, CORS y autenticación para la API.
 
-// Load local .env for development if present
+// 1. Cargar variables de entorno si existen (para desarrollo local)
 if (file_exists(__DIR__ . '/../../includes/load_env.php')) {
     require_once __DIR__ . '/../../includes/load_env.php';
 }
 
-// Basic CORS + JSON headers
-header('Content-Type: application/json; charset=utf-8');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, PUT, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization');
-
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(204);
-    exit;
-}
-
-// Load token auth helper (defines check_api_token()) if available
-if (file_exists(__DIR__ . '/auth.php')) {
-    require_once __DIR__ . '/auth.php';
-    // Enforce token for non-GET requests
-    if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
-        if (!check_api_token()) {
-            http_response_code(401);
-            echo json_encode(['error' => 'Unauthorized']);
-            exit;
-        }
-    }
-}
-
-?>
-<?php
-/**
- * Configuración de headers para API REST
- * Permite comunicación entre plataforma de pacientes y sistema médico
- */
-
-// Configurar headers CORS para permitir comunicación con la plataforma médica
-header("Access-Control-Allow-Origin: http://localhost:5173"); // Puerto típico de Vite
+// 2. Configuración de CORS (Permitir peticiones desde tu Frontend)
+// En producción, cambia '*' por tu dominio real, ej: 'https://mi-app-diabetes.com'
+header("Access-Control-Allow-Origin: *"); 
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
 header("Content-Type: application/json; charset=UTF-8");
 
-// Manejar preflight requests
+// 3. Manejar peticiones OPTIONS (Preflight)
+// Cuando el navegador pregunta "¿puedo conectarme?", respondemos sí y terminamos.
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
 }
 
-// Función para enviar respuesta JSON estandarizada
+// 4. Seguridad: Verificar Token de API (si existe el archivo auth.php)
+// Esto protege tus endpoints de accesos no autorizados (excepto GET si así lo deseas)
+if (file_exists(__DIR__ . '/auth.php')) {
+    require_once __DIR__ . '/auth.php';
+    
+    // Si quieres forzar token para todo (incluso GET), quita la condición 'if'
+    // Si quieres que GET sea público (ej. leer blog) y POST privado, déjalo así:
+    if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+        if (function_exists('check_api_token') && !check_api_token()) {
+            http_response_code(401); // No autorizado
+            echo json_encode(['success' => false, 'error' => 'Unauthorized: Invalid or missing Token']);
+            exit;
+        }
+    }
+}
+
+// 5. Funciones Helper para respuestas consistentes
+
 function sendJsonResponse($data, $statusCode = 200, $message = null) {
     http_response_code($statusCode);
     
     $response = [
-        'success' => $statusCode < 400,
-        'data' => $data,
+        'success' => $statusCode >= 200 && $statusCode < 300,
+        'status_code' => $statusCode,
         'timestamp' => date('Y-m-d H:i:s'),
-        'status_code' => $statusCode
+        'data' => $data
     ];
     
     if ($message) {
@@ -69,12 +57,12 @@ function sendJsonResponse($data, $statusCode = 200, $message = null) {
     exit();
 }
 
-// Función para manejar errores
 function sendErrorResponse($message, $statusCode = 400, $details = null) {
-    $data = ['error' => $message];
+    $response = ['error' => $message];
     if ($details) {
-        $data['details'] = $details;
+        $response['details'] = $details;
     }
-    sendJsonResponse($data, $statusCode, $message);
+    // Usamos false para indicar fallo en la estructura lógica, aunque sendJsonResponse maneja el booleano
+    sendJsonResponse($response, $statusCode, $message);
 }
 ?>
