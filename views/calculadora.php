@@ -1,6 +1,6 @@
 <?php
     // VERIFICAR SESIÓN - El usuario debe estar logueado para acceder
-    require 'includes/check-session.php';
+    require '../includes/security/check-session.php';
     
     // 1. Definimos la página actual y el título
     $paginaActual = 'calculadora';
@@ -11,19 +11,19 @@
 
 <?php 
     // 2. Incluimos el <head>
-    include 'includes/head.php'; 
+    include '../includes/layout/head.php'; 
 ?>
 
 <body>
 
     <?php 
         // 3. Incluimos el menú deslizante
-        include 'includes/menu-drawer.php'; 
+        include '../includes/layout/menu-drawer.php'; 
     ?>
 
     <?php 
         // 4. Incluimos el header (barra superior)
-        include 'includes/header.php'; 
+        include '../includes/layout/header.php'; 
     ?>
 
     <header class="page-header">
@@ -34,11 +34,16 @@
             <h1>Calculadora</h1>
             <p>Calcula tu dosis de insulina</p>
         </div>
+        <div class="page-header-action">
+            <a href="../views/index.php" class="btn-back" style="color: white; text-decoration: none; padding: 8px; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"></path><path d="M12 19l-7-7 7-7"></path></svg>
+            </a>
+        </div>
     </header>
 
     <main class="contenedor">
 
-        <?php include 'includes/check-guest-banner.php'; ?>
+        <?php include '../includes/check-guest-banner.php'; ?>
     
         <form id="form-calculadora" class="calculadora-form">
 
@@ -101,13 +106,23 @@
                 <div class="card-resultados">
                     
                     <div class="resultado-item">
-                        <span class="resultado-label">Interpretación:</span>
-                        <span id="resultado-interpretacion" class="resultado-valor"></span>
+                        <span class="resultado-label">IMC:</span>
+                        <span id="resultado-imc" class="resultado-valor">-- kg/m²</span>
                     </div>
 
                     <div class="resultado-item">
-                        <span class="resultado-label">Dosis de insulina sugerida:</span>
-                        <span id="resultado-dosis" class="resultado-valor resultado-valor--dosis"></span>
+                        <span class="resultado-label">Dosis de corrección:</span>
+                        <span id="resultado-dosis-correccion" class="resultado-valor">-- unidades</span>
+                    </div>
+
+                    <div class="resultado-item">
+                        <span class="resultado-label">Dosis por carbohidratos:</span>
+                        <span id="resultado-dosis-carbs" class="resultado-valor">-- unidades</span>
+                    </div>
+
+                    <div class="resultado-item">
+                        <span class="resultado-label">Dosis total sugerida:</span>
+                        <span id="resultado-dosis-total" class="resultado-valor resultado-valor--dosis">-- unidades</span>
                     </div>
 
                     <div class="alert-status">
@@ -115,7 +130,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-alert w-5 h-5 mt-0.5" aria-hidden="true" style="color: #f59e0b;"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg>
                         </div>
                         <div class="alert-text">
-                            <p id="resultado-mensaje"></p>
+                            <p id="estado-glucosa">Los resultados son orientativos. Consulte con su médico.</p>
                         </div>
                     </div>
 
@@ -141,9 +156,9 @@
     </main>
     <?php 
         // 5. Incluimos el pie de página
-        include 'includes/footer.php'; 
+        include '../includes/layout/footer.php'; 
     ?>
 
-    <script src="assets/js/app.js"></script> 
+    <script src="/asosiacionMexicanaDeDiabetes/assets/js/app.js"></script> 
 </body>
 </html>

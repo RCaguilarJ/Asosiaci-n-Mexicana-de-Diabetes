@@ -59,8 +59,11 @@ if (!$pacienteId || !$fechaHora) {
 try {
   // Usamos PDO ($db) si está disponible. Ajusta si tu includes/db.php usa mysqli ($conn) u otro nombre.
   if (!empty($db) && $db instanceof PDO) {
-    $stmt = $db->prepare("INSERT INTO citas (paciente_id, fecha_hora, motivo, medico_id, notas, especialidad, estado, created_at) VALUES (?, ?, ?, ?, ?, ?, 'Pendiente', NOW())");
-    $stmt->execute([$pacienteId, $fechaHora, $motivo, $medicoId, $notas, $especialidad]);
+    $stmt = $db->prepare("INSERT INTO citas (usuario_id, fecha_cita, hora_cita, especialidad, estado, fecha_registro) VALUES (?, ?, ?, ?, 'pendiente', NOW())");
+    $fechaArray = explode(' ', $fechaHora);
+    $fecha = $fechaArray[0];
+    $hora = isset($fechaArray[1]) ? $fechaArray[1] : '00:00:00';
+    $stmt->execute([$pacienteId, $fecha, $hora, $especialidad]);
     $citaId = $db->lastInsertId();
 
     // Mapear especialidad -> rol objetivo
@@ -72,10 +75,15 @@ try {
       'PSICOLOGIA' => 'PSICOLOGO'
     ];
     $targetRole = $map[$especialidad] ?? 'DOCTOR';
-    $mensaje = "Nueva cita (ID {$citaId}) para especialidad {$especialidad} - Fecha: {$fechaHora}";
+    $mensaje = "Nueva cita (ID {$citaId}) para especialidad {$especialidad} - Fecha: {$fecha} {$hora}";
 
-    $nstmt = $db->prepare("INSERT INTO notifications (titulo, mensaje, tipo, rol_destino, referencia_tipo, referencia_id, leido, creado_en) VALUES (?, ?, 'cita', ?, 'cita', ?, 0, NOW())");
-    $nstmt->execute([$mensaje, $mensaje, $targetRole, $citaId]);
+    // Crear notificación solo si existe la tabla notifications
+    try {
+      $nstmt = $db->prepare("INSERT INTO notifications (titulo, mensaje, tipo, rol_destino, referencia_tipo, referencia_id, leido, creado_en) VALUES (?, ?, 'cita', ?, 'cita', ?, 0, NOW())");
+      $nstmt->execute([$mensaje, $mensaje, $targetRole, $citaId]);
+    } catch (Exception $notifEx) {
+      error_log('Warning: no se pudo crear notificación: ' . $notifEx->getMessage());
+    }
 
     // --- Intentar escribir copia en la BD central `sistema_gestion_medica` ---
     try {
@@ -90,8 +98,12 @@ try {
       $citaId2 = $db2->lastInsertId();
 
       $mensaje2 = "Nueva cita (ID {$citaId2}) para especialidad {$especialidad} - Fecha: {$fechaHora}";
-      $n2 = $db2->prepare("INSERT INTO notifications (titulo, mensaje, tipo, rol_destino, referencia_tipo, referencia_id, leido, creado_en) VALUES (?, ?, 'cita', ?, 'cita', ?, 0, NOW())");
-      $n2->execute([$mensaje2, $mensaje2, $targetRole, $citaId2]);
+      try {
+        $n2 = $db2->prepare("INSERT INTO notifications (titulo, mensaje, tipo, rol_destino, referencia_tipo, referencia_id, leido, creado_en) VALUES (?, ?, 'cita', ?, 'cita', ?, 0, NOW())");
+        $n2->execute([$mensaje2, $mensaje2, $targetRole, $citaId2]);
+      } catch (Exception $notifEx2) {
+        error_log('Warning: no se pudo crear notificación remota: ' . $notifEx2->getMessage());
+      }
     } catch (Exception $e) {
       error_log('Warning: no se pudo insertar copia en sistema_gestion_medica: ' . $e->getMessage());
     }
@@ -102,7 +114,11 @@ try {
 
   // Fallback para mysqli (si tu includes/db.php define $conn)
   if (!empty($conn)) {
-    $sql = "INSERT INTO citas (paciente_id, fecha_hora, motivo, medico_id, notas, especialidad, estado, created_at) VALUES ('" . $conn->real_escape_string($pacienteId) . "', '" . $conn->real_escape_string($fechaHora) . "', '" . $conn->real_escape_string($motivo) . "', '" . $conn->real_escape_string($medicoId) . "', '" . $conn->real_escape_string($notas) . "', '" . $conn->real_escape_string($especialidad) . "', 'Pendiente', NOW())";
+    $fechaArray = explode(' ', $fechaHora);
+    $fecha = $conn->real_escape_string($fechaArray[0]);
+    $hora = $conn->real_escape_string(isset($fechaArray[1]) ? $fechaArray[1] : '00:00:00');
+    
+    $sql = "INSERT INTO citas (usuario_id, fecha_cita, hora_cita, especialidad, estado, fecha_registro) VALUES ('" . $conn->real_escape_string($pacienteId) . "', '" . $fecha . "', '" . $hora . "', '" . $conn->real_escape_string($especialidad) . "', 'pendiente', NOW())";
     if ($conn->query($sql) === TRUE) {
       $citaId = $conn->insert_id;
       $map = [
@@ -113,9 +129,13 @@ try {
         'PSICOLOGIA' => 'PSICOLOGO'
       ];
       $targetRole = $map[$especialidad] ?? 'DOCTOR';
-      $mensaje = "Nueva cita (ID {$citaId}) para especialidad {$especialidad} - Fecha: {$fechaHora}";
-      $ins = "INSERT INTO notifications (titulo, mensaje, tipo, rol_destino, referencia_tipo, referencia_id, leido, creado_en) VALUES ('" . $conn->real_escape_string($mensaje) . "', '" . $conn->real_escape_string($mensaje) . "', 'cita', '" . $conn->real_escape_string($targetRole) . "', 'cita', {$citaId}, 0, NOW())";
-      $conn->query($ins);
+      $mensaje = "Nueva cita (ID {$citaId}) para especialidad {$especialidad} - Fecha: {$fecha} {$hora}";
+      try {
+        $ins = "INSERT INTO notifications (titulo, mensaje, tipo, rol_destino, referencia_tipo, referencia_id, leido, creado_en) VALUES ('" . $conn->real_escape_string($mensaje) . "', '" . $conn->real_escape_string($mensaje) . "', 'cita', '" . $conn->real_escape_string($targetRole) . "', 'cita', {$citaId}, 0, NOW())";
+        $conn->query($ins);
+      } catch (Exception $notifEx) {
+        error_log('Warning: no se pudo crear notificación mysqli: ' . $notifEx->getMessage());
+      }
 
       // --- Intentar escribir copia en la BD central `sistema_gestion_medica` usando mysqli ---
       try {

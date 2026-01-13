@@ -7,7 +7,7 @@ if (file_exists(__DIR__ . '/load_env.php')) {
 }
 // Ajusta únicamente estas variables según la base que use el sitio:
 $host   = getenv('DB_HOST') ?: 'localhost';
-$dbname = getenv('DB_NAME') ?: 'diabetes_db';
+$dbname = getenv('DB_NAME') ?: 'sistema_gestion_medica';
 
 // Use credentials from environment when possible. Configure DB_USER/DB_PASS
 // in the system environment or via Apache/WAMP env vars. This avoids committing
@@ -59,13 +59,7 @@ function db_close() {
   if ($conn instanceof mysqli) { $conn->close(); }
 }
 
-/**
- * getRemoteConnection
- * Devuelve un PDO conectado a la base de datos remota (sistema médico).
- * Lee las credenciales desde variables de entorno para evitar secretos en el repo.
- * Variables esperadas:
- *  REMOTE_DB_HOST, REMOTE_DB_NAME, REMOTE_DB_USER, REMOTE_DB_PASS
- */
+
 function getRemoteConnection() {
   // Prefer REMOTE_DB_* variables; si no existen, hacer fallback a DB_* (local)
   $host = getenv('REMOTE_DB_HOST') ?: getenv('DB_HOST') ?: null;

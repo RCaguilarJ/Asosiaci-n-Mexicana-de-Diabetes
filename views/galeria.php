@@ -1,6 +1,6 @@
 <?php
     // VERIFICAR SESIÓN - El usuario debe estar logueado para acceder
-    require 'includes/check-session.php';
+    require '../includes/security/check-session.php';
     
     $paginaActual = 'galeria'; // Recuerda actualizar esto en menu-drawer.php si quieres que se ilumine
     $tituloDeLaPagina = "Galería de Videos - Asoc. Mexicana de Diabetes"; 
@@ -61,12 +61,12 @@
 <!DOCTYPE html>
 <html lang="es">
 
-<?php include 'includes/head.php'; ?>
+<?php include '../includes/layout/head.php'; ?>
 
 <body>
 
-    <?php include 'includes/menu-drawer.php'; ?>
-    <?php include 'includes/header.php'; ?>
+    <?php include '../includes/layout/menu-drawer.php'; ?>
+    <?php include '../includes/layout/header.php'; ?>
 
     <header class="page-header page-header--cyan">
         <div class="page-header-icon">
@@ -75,6 +75,11 @@
         <div class="page-header-text">
             <h1>Galería de Videos</h1>
             <p>Contenido educativo sobre diabetes</p>
+        </div>
+        <div class="page-header-action">
+            <a href="../views/index.php" class="btn-back" style="color: white; text-decoration: none; padding: 8px; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"></path><path d="M12 19l-7-7 7-7"></path></svg>
+            </a>
         </div>
     </header>
 
@@ -141,7 +146,7 @@
 
     </main>
 
-    <?php include 'includes/footer.php'; ?>
-    <script src="assets/js/app.js"></script> 
+    <?php include '../includes/layout/footer.php'; ?>
+    <script src="/asosiacionMexicanaDeDiabetes/assets/js/app.js"></script> 
 </body>
 </html>

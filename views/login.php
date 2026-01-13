@@ -1,6 +1,7 @@
 <?php
     session_start();
-    require 'includes/db.php';
+    require '../includes/db.php';
+    require '../includes/sync_helper.php';
 
     $paginaActual = 'login';
     $tituloDeLaPagina = "Acceso Usuarios - Asoc. Mexicana de Diabetes"; 
@@ -86,7 +87,26 @@
                     $stmt = $pdo->prepare("INSERT INTO usuarios (nombre, email, password, rol) VALUES (?, ?, ?, ?)");
                     
                     if ($stmt->execute([$nombre, $email, $hash, 'PACIENTE'])) {
-                        $mensaje = "¡Cuenta creada con éxito! Por favor inicia sesión.";
+                        $usuarioId = $pdo->lastInsertId();
+                        
+                        // Sincronizar con el sistema de gestión médica
+                        try {
+                            $pacienteId = sincronizarPacienteEnSistemaGestion([
+                                'nombre' => $nombre,
+                                'email' => $email,
+                                'telefono' => '', // Se puede actualizar después en el perfil
+                                'usuario_id_app' => $usuarioId
+                            ]);
+                            
+                            $mensaje = $pacienteId ? 
+                                "¡Cuenta creada con éxito y registrada en el sistema médico! Por favor inicia sesión." :
+                                "¡Cuenta creada con éxito! Por favor inicia sesión.";
+                        } catch (Exception $e) {
+                            $mensaje = "¡Cuenta creada con éxito! Por favor inicia sesión.";
+                            // Log del error de sincronización sin mostrar al usuario
+                            error_log("Error sincronizando paciente: " . $e->getMessage());
+                        }
+                        
                         $tipoMensaje = 'exito';
                     } else {
                         $mensaje = "Error al guardar en la base de datos.";
@@ -111,10 +131,10 @@
 ?>
 <!DOCTYPE html>
 <html lang="es">
-<?php include 'includes/head.php'; ?>
+<?php include '../includes/layout/head.php'; ?>
 <body>
-    <?php include 'includes/menu-drawer.php'; ?>
-    <?php include 'includes/header.php'; ?>
+    <?php include '../includes/layout/menu-drawer.php'; ?>
+    <?php include '../includes/layout/header.php'; ?>
 
     <header class="page-header">
         <div class="page-header-icon">
@@ -212,8 +232,8 @@
 
     </main>
 
-    <?php include 'includes/footer.php'; ?>
+    <?php include '../includes/layout/footer.php'; ?>
     
-    <script src="assets/js/login.js"></script>
+    <script src="/asosiacionMexicanaDeDiabetes/assets/js/login.js"></script>
 </body>
 </html>

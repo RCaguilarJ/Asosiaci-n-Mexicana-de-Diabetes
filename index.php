@@ -1,10 +1,14 @@
+<!DOCTYPE html>
+<script>
+window.addEventListener('unhandledrejection', function(event) {
+    if (event.reason && event.reason.message && 
+        event.reason.message.includes('message channel closed')) {
+        event.preventDefault(); // Suprimir error de extensión
+    }
+});
+</script>
+
 <?php
-// index.php (En la raíz del proyecto)
-
-// Opción A: Mandar al Login
-// header("Location: views/login.php");
-
-// Opción B: Mandar al Dashboard (Index de views)
 header("Location: views/index.php");
 exit;
 ?>

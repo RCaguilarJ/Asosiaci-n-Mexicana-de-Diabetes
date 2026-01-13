@@ -8,7 +8,7 @@
         </button>
 
         <div class="logo">
-            <img src="assets/img/logo" alt="Logo de la Asociación Mexicana de Diabetes">
+            <img src="/asosiacionMexicanaDeDiabetes/assets/img/logo.png" alt="Logo de la Asociación Mexicana de Diabetes">
         </div>
     </div>
 

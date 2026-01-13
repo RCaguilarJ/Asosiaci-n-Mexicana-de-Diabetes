@@ -1,6 +1,6 @@
 <?php
     // VERIFICAR SESIÓN - El usuario debe estar logueado para acceder
-    require 'includes/check-session.php';
+    require '../includes/security/check-session.php';
     
     // 1. Definimos la página actual y el título
     $paginaActual = 'contacto';
@@ -11,19 +11,19 @@
 
 <?php 
     // 2. Incluimos el <head>
-    include 'includes/head.php'; 
+    include '../includes/layout/head.php'; 
 ?>
 
 <body>
 
     <?php 
         // 3. Incluimos el menú deslizante
-        include 'includes/menu-drawer.php'; 
+        include '../includes/layout/menu-drawer.php'; 
     ?>
 
     <?php 
         // 4. Incluimos el header (barra superior)
-        include 'includes/header.php'; 
+        include '../includes/layout/header.php'; 
     ?>
 
     <header class="page-header">
@@ -33,6 +33,11 @@
         <div class="page-header-text">
             <h1>Contacto</h1>
             <p>Estamos aquí para ayudarte</p>
+        </div>
+        <div class="page-header-action">
+            <a href="../views/index.php" class="btn-back" style="color: white; text-decoration: none; padding: 8px; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"></path><path d="M12 19l-7-7 7-7"></path></svg>
+            </a>
         </div>
     </header>
 
@@ -126,9 +131,9 @@
     </main>
     <?php 
         // 5. Incluimos el pie de página
-        include 'includes/footer.php'; 
+        include '../includes/layout/footer.php'; 
     ?>
 
-    <script src="assets/js/app.js"></script> 
+    <script src="/asosiacionMexicanaDeDiabetes/assets/js/app.js"></script> 
 </body>
 </html>
