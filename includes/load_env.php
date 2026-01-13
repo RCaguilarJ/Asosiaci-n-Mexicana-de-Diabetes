@@ -12,7 +12,7 @@ function loadEnvFile($path) {
     $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     
     foreach ($lines as $line) {
-        // Skip if line is null or empty after trimming
+        // Skip if line is null or empty before trimming
         if ($line === null || $line === '') {
             continue;
         }
