@@ -25,7 +25,7 @@ ALTER TABLE citas ADD INDEX IF NOT EXISTS idx_usuario_estado (usuario_id, estado
 -- Opcional: Tabla para sincronización de datos entre sistemas
 CREATE TABLE IF NOT EXISTS sync_queue (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    tabla_origen VARCHAR(50) NOT NULL,
+    tabla_origen VARCHAR(50S) NOT NULL,
     registro_id INT NOT NULL,
     accion ENUM('INSERT', 'UPDATE', 'DELETE') NOT NULL,
     datos JSON,
