@@ -10,6 +10,7 @@ class ApiSistemaGestionHelper {
     
     private $baseUrl;
     private $secret;
+    private static $syncQueueTableExists = null; // Cache para verificación de tabla
     
     public function __construct() {
         // Temporalmente usar endpoint local hasta que se configure el sistema real
@@ -203,21 +204,46 @@ class ApiSistemaGestionHelper {
     }
     
     /**
-     * Registra operación exitosa en sync_queue
+     * Verifica si la tabla sync_queue existe (con caché)
      */
-    private function registrarExito($operacion, $referencia, $datos = null) {
+    private function verificarTablaSyncQueue() {
+        // Si ya verificamos anteriormente, usar el valor cacheado
+        if (self::$syncQueueTableExists !== null) {
+            return self::$syncQueueTableExists;
+        }
+        
         try {
             require_once __DIR__ . '/db.php';
             global $pdo;
             
-            // Verificar si la tabla sync_queue existe antes de insertar
             $stmt = $pdo->query("SHOW TABLES LIKE 'sync_queue'");
             $tableExists = $stmt->fetch();
             
-            if (!$tableExists) {
+            // Cachear el resultado
+            self::$syncQueueTableExists = (bool)$tableExists;
+            
+            return self::$syncQueueTableExists;
+        } catch (Exception $e) {
+            error_log("Error verificando tabla sync_queue: " . $e->getMessage());
+            // En caso de error, asumir que no existe para evitar errores posteriores
+            self::$syncQueueTableExists = false;
+            return false;
+        }
+    }
+    
+    /**
+     * Registra operación exitosa en sync_queue
+     */
+    private function registrarExito($operacion, $referencia, $datos = null) {
+        try {
+            // Verificar si la tabla sync_queue existe antes de insertar (con caché)
+            if (!$this->verificarTablaSyncQueue()) {
                 error_log("ADVERTENCIA: Tabla sync_queue no existe. Operación '$operacion' no registrada. Ejecute migrations/create_sync_queue_table.php");
                 return;
             }
+            
+            require_once __DIR__ . '/db.php';
+            global $pdo;
             
             $stmt = $pdo->prepare("
                 INSERT INTO sync_queue (operacion, estado, referencia_id, datos_json, fecha_creacion) 
@@ -241,17 +267,14 @@ class ApiSistemaGestionHelper {
      */
     private function registrarError($operacion, $httpCode, $error, $datos = null) {
         try {
-            require_once __DIR__ . '/db.php';
-            global $pdo;
-            
-            // Verificar si la tabla sync_queue existe antes de insertar
-            $stmt = $pdo->query("SHOW TABLES LIKE 'sync_queue'");
-            $tableExists = $stmt->fetch();
-            
-            if (!$tableExists) {
+            // Verificar si la tabla sync_queue existe antes de insertar (con caché)
+            if (!$this->verificarTablaSyncQueue()) {
                 error_log("ADVERTENCIA: Tabla sync_queue no existe. Error en operación '$operacion' no registrado. Ejecute migrations/create_sync_queue_table.php");
                 return;
             }
+            
+            require_once __DIR__ . '/db.php';
+            global $pdo;
             
             $stmt = $pdo->prepare("
                 INSERT INTO sync_queue (operacion, estado, error_mensaje, datos_json, fecha_creacion) 
@@ -277,17 +300,14 @@ class ApiSistemaGestionHelper {
      */
     public function obtenerEstadisticasSync() {
         try {
-            require_once __DIR__ . '/db.php';
-            global $pdo;
-            
-            // Verificar si la tabla sync_queue existe antes de consultar
-            $stmt = $pdo->query("SHOW TABLES LIKE 'sync_queue'");
-            $tableExists = $stmt->fetch();
-            
-            if (!$tableExists) {
+            // Verificar si la tabla sync_queue existe antes de consultar (con caché)
+            if (!$this->verificarTablaSyncQueue()) {
                 error_log("INFORMACIÓN: Tabla sync_queue no existe. No hay estadísticas disponibles. Ejecute migrations/create_sync_queue_table.php");
                 return [];
             }
+            
+            require_once __DIR__ . '/db.php';
+            global $pdo;
             
             $stmt = $pdo->query("
                 SELECT 
