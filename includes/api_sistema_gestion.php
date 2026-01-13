@@ -210,6 +210,15 @@ class ApiSistemaGestionHelper {
             require_once __DIR__ . '/db.php';
             global $pdo;
             
+            // Verificar si la tabla sync_queue existe antes de insertar
+            $stmt = $pdo->query("SHOW TABLES LIKE 'sync_queue'");
+            $tableExists = $stmt->fetch();
+            
+            if (!$tableExists) {
+                error_log("ADVERTENCIA: Tabla sync_queue no existe. Operación '$operacion' no registrada. Ejecute migrations/create_sync_queue_table.php");
+                return;
+            }
+            
             $stmt = $pdo->prepare("
                 INSERT INTO sync_queue (operacion, estado, referencia_id, datos_json, fecha_creacion) 
                 VALUES (?, 'completado', ?, ?, NOW())
@@ -223,6 +232,7 @@ class ApiSistemaGestionHelper {
             
         } catch (Exception $e) {
             error_log("Error registrando éxito en sync_queue: " . $e->getMessage());
+            // No lanzar excepción para evitar que falle el proceso principal
         }
     }
     
@@ -233,6 +243,15 @@ class ApiSistemaGestionHelper {
         try {
             require_once __DIR__ . '/db.php';
             global $pdo;
+            
+            // Verificar si la tabla sync_queue existe antes de insertar
+            $stmt = $pdo->query("SHOW TABLES LIKE 'sync_queue'");
+            $tableExists = $stmt->fetch();
+            
+            if (!$tableExists) {
+                error_log("ADVERTENCIA: Tabla sync_queue no existe. Error en operación '$operacion' no registrado. Ejecute migrations/create_sync_queue_table.php");
+                return;
+            }
             
             $stmt = $pdo->prepare("
                 INSERT INTO sync_queue (operacion, estado, error_mensaje, datos_json, fecha_creacion) 
@@ -249,6 +268,7 @@ class ApiSistemaGestionHelper {
             
         } catch (Exception $e) {
             error_log("Error registrando error en sync_queue: " . $e->getMessage());
+            // No lanzar excepción para evitar que falle el proceso principal
         }
     }
     
@@ -259,6 +279,15 @@ class ApiSistemaGestionHelper {
         try {
             require_once __DIR__ . '/db.php';
             global $pdo;
+            
+            // Verificar si la tabla sync_queue existe antes de consultar
+            $stmt = $pdo->query("SHOW TABLES LIKE 'sync_queue'");
+            $tableExists = $stmt->fetch();
+            
+            if (!$tableExists) {
+                error_log("INFORMACIÓN: Tabla sync_queue no existe. No hay estadísticas disponibles. Ejecute migrations/create_sync_queue_table.php");
+                return [];
+            }
             
             $stmt = $pdo->query("
                 SELECT 
