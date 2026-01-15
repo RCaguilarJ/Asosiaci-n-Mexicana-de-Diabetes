@@ -20,7 +20,7 @@ function loadEnvFile($path) {
         }
         
         // Buscar formato KEY=value
-        if (strpos($lSine, '=') !== false) {
+        if (strpos($line, '=') !== false) {
             list($key, $value) = explode('=', $line, 2);
             $key = trim($key);
             $value = trim($value);

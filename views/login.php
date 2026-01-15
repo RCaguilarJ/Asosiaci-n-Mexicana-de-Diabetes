@@ -3,6 +3,10 @@
     require '../includes/db.php';
     require '../includes/sync_helper.php';
 
+    if (!isset($pdo) || !($pdo instanceof PDO)) {
+        throw new RuntimeException('Conexión a la base de datos no disponible.');
+    }
+
     $paginaActual = 'login';
     $tituloDeLaPagina = "Acceso Usuarios - Asoc. Mexicana de Diabetes"; 
     $mensaje = '';

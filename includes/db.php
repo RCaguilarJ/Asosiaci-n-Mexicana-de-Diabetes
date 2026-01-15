@@ -1,88 +1,79 @@
 <?php
-// includes/db.php
-// Load local .env when present (for developer machines). This does not override
-// system environment variables and is ignored in production when no .env file exists.
-if (file_exists(__DIR__ . '/load_env.php')) {
-  require_once __DIR__ . '/load_env.php';
-}
-// Ajusta únicamente estas variables según la base que use el sitio:
-$host   = getenv('DB_HOST') ?: 'localhost';
-$dbname = getenv('DB_NAME') ?: 'sistema_gestion_medica';
-
-// Use credentials from environment when possible. Configure DB_USER/DB_PASS
-// in the system environment or via Apache/WAMP env vars. This avoids committing
-// production credentials to the repo. Defaults keep compatibility with WAMP.
-$user   = getenv('DB_USER') ?: 'root';
-$pass   = getenv('DB_PASS') ?: '';                    // contraseña vacía en tu entorno WAMP
-
-// Opciones PDO recomendadas
-$pdoOptions = [
-  PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-  PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-  PDO::ATTR_EMULATE_PREPARES => false,
-];
-
-$pdo = null;  // Alias PDO esperado por el código existente
-$db = null;   // PDO instance (interna)
-$conn = null; // mysqli instance (si disponible)
+// NO DEBE HABER NADA ANTES DE ESTA LÍNEA (ni espacios, ni BOM)
 
 try {
-  // Intentamos conexión PDO (preferible)
-  $dsn = "mysql:host={$host};dbname={$dbname};charset=utf8mb4";
-  $db = new PDO($dsn, $user, $pass, $pdoOptions);
-  // Mantener compatibilidad: exponer la conexión PDO como `$pdo`
-  $pdo = $db;
-
-  // Creamos también una conexión mysqli ligera para compatibilidad con código que use $conn
-  $conn = new mysqli($host, $user, $pass, $dbname);
-  if ($conn->connect_error) {
-    // No bloqueante: dejamos $db funcional y registramos el error
-    error_log('MySQLi connect warning: ' . $conn->connect_error);
-  }
+    $host = getenv('DB_HOST') ?: 'localhost';
+    $dbname = getenv('DB_NAME') ?: 'sistema_gestion_medica';
+    $username = getenv('DB_USER') ?: 'root';
+    $password = getenv('DB_PASS') ?: '';
+    
+    $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
+    
+    $pdo = new PDO($dsn, $username, $password, [
+        PDO:: ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES => false,
+        PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4"
+    ]);
+    
 } catch (PDOException $e) {
-  // Si PDO falla, intentamos mysqli como respaldo
-  error_log('PDO connection failed: ' . $e->getMessage());
-  $db = null;
-  $pdo = null;
-  $conn = new mysqli($host, $user, $pass, $dbname);
-  if ($conn->connect_error) {
-    error_log('MySQLi connection failed: ' . $conn->connect_error);
-    // No podemos continuar si ninguna conexión funciona
-    die('Error de conexión a la base de datos. Revisa logs.');
-  }
+    error_log("Error de conexión DB: " . $e->getMessage());
+    
+    // Si se está llamando desde API, devolver JSON
+    if (php_sapi_name() !== 'cli' && strpos($_SERVER['REQUEST_URI'] ?? '', 'api/') !== false) {
+        header('Content-Type: application/json');
+        http_response_code(500);
+        echo json_encode([
+            'success' => false,
+            'message' => 'Error de conexión a base de datos'
+        ]);
+        exit;
+    }
+    
+    throw $e;
 }
 
-// Short helper to close connections if needed
-function db_close() {
-  global $db, $conn;
-  if ($db instanceof PDO) { $db = null; }
-  if ($conn instanceof mysqli) { $conn->close(); }
-}
-
-
+/**
+ * Crea (y reutiliza) una conexión PDO hacia la base remota del sistema médico.
+ * Devuelve null cuando no hay credenciales configuradas o la conexión falla.
+ */
 function getRemoteConnection() {
-  // Prefer REMOTE_DB_* variables; si no existen, hacer fallback a DB_* (local)
-  $host = getenv('REMOTE_DB_HOST') ?: getenv('DB_HOST') ?: null;
-  $dbname = getenv('REMOTE_DB_NAME') ?: getenv('DB_NAME') ?: null;
-  $user = getenv('REMOTE_DB_USER') ?: getenv('DB_USER') ?: null;
-  $pass = getenv('REMOTE_DB_PASS') ?: getenv('DB_PASS') ?: null;
+    static $remotePdo = null;
+    static $attempted = false;
 
-  if (!$host || !$dbname || !$user) {
-    error_log('getRemoteConnection: faltan variables de entorno para la conexión remota (REMOTE_DB_* o DB_*)');
-    return null;
-  }
+    if ($remotePdo instanceof PDO) {
+        return $remotePdo;
+    }
 
-  $pdoOptions = [
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES => false,
-  ];
+    if ($attempted) {
+        return null;
+    }
 
-  try {
-    $dsn = "mysql:host={$host};dbname={$dbname};charset=utf8mb4";
-    return new PDO($dsn, $user, $pass, $pdoOptions);
-  } catch (PDOException $e) {
-    error_log('getRemoteConnection error: ' . $e->getMessage());
-    return null;
-  }
+    $attempted = true;
+
+    $host = getenv('REMOTE_DB_HOST');
+    $dbname = getenv('REMOTE_DB_NAME');
+    $username = getenv('REMOTE_DB_USER');
+    $password = getenv('REMOTE_DB_PASS') ?: '';
+
+    if (!$host || !$dbname || !$username) {
+        error_log('getRemoteConnection: credenciales remotas incompletas');
+        return null;
+    }
+
+    try {
+        $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
+        $remotePdo = new PDO($dsn, $username, $password, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES => false,
+            PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4"
+        ]);
+
+        return $remotePdo;
+
+    } catch (PDOException $e) {
+        error_log('getRemoteConnection error: ' . $e->getMessage());
+        return null;
+    }
 }

@@ -1,0 +1,228 @@
+[2026-01-13 16:56: 58] Error PDO
+Contexto: {
+    "mensaje": "SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ': telefono, ?, : fecha_cita, ?, 'pendiente')' at line 4",
+    "codigo": "42000",
+    "archivo": "C:\\wamp64\\www\\asosiacionMexicanaDeDiabetes\\actions\\guardar_cita.php",
+    "linea": 184,
+    "post_data": {
+        "nombre": "Carlos Aguilar",
+        "email": "carlagular800@gmail.com",
+        "telefono": "3751111294",
+        "especialidad": "NUTRI",
+        "fecha": "2026-01-22",
+        "hora": "10:00",
+        "descripcion": "chequeo"
+    }
+}
+--------------------------------------------------------------------------------
+[2026-01-13 16:57: 29] Error PDO
+Contexto: {
+    "mensaje": "SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ': telefono, ?, : fecha_cita, ?, 'pendiente')' at line 4",
+    "codigo": "42000",
+    "archivo": "C:\\wamp64\\www\\asosiacionMexicanaDeDiabetes\\actions\\guardar_cita.php",
+    "linea": 184,
+    "post_data": {
+        "nombre": "Carlos Aguilar",
+        "email": "carlagular800@gmail.com",
+        "telefono": "3751111294",
+        "especialidad": "NUTRI",
+        "fecha": "2026-01-22",
+        "hora": "10:00",
+        "descripcion": "chequeo"
+    }
+}
+--------------------------------------------------------------------------------
+[2026-01-13 17:32: 31] Error PDO
+Contexto: {
+    "mensaje": "SQLSTATE[42S22]: Column not found: 1054 Unknown column 'medico_id' in 'field list'",
+    "codigo": "42S22",
+    "archivo": "C:\\wamp64\\www\\asosiacionMexicanaDeDiabetes\\actions\\guardar_cita.php",
+    "linea": 189,
+    "post_data": {
+        "nombre": "Carlos Aguilar",
+        "email": "carlagular800@gmail.com",
+        "telefono": "3751111294",
+        "especialidad": "NUTRI",
+        "fecha": "2026-01-22",
+        "hora": "10:00",
+        "descripcion": "check"
+    }
+}
+--------------------------------------------------------------------------------
+[2026-01-13 17:32: 37] Error PDO
+Contexto: {
+    "mensaje": "SQLSTATE[42S22]: Column not found: 1054 Unknown column 'medico_id' in 'field list'",
+    "codigo": "42S22",
+    "archivo": "C:\\wamp64\\www\\asosiacionMexicanaDeDiabetes\\actions\\guardar_cita.php",
+    "linea": 189,
+    "post_data": {
+        "nombre": "Carlos Aguilar",
+        "email": "carlagular800@gmail.com",
+        "telefono": "3751111294",
+        "especialidad": "NUTRI",
+        "fecha": "2026-01-22",
+        "hora": "10:00",
+        "descripcion": "check"
+    }
+}
+--------------------------------------------------------------------------------
+[2026-01-13 17:57:05] Error de base de datos
+Contexto: {
+    "mensaje": "SQLSTATE[42S22]: Column not found: 1054 Unknown column 'nombre' in 'field list'",
+    "codigo": "42S22",
+    "post_data": {
+        "nombre": "Carlos Aguilar",
+        "email": "carlagular800@gmail.com",
+        "telefono": "3751111294",
+        "especialidad": "ENDOCRINO",
+        "fecha": "2026-01-30",
+        "hora": "16:00",
+        "descripcion": "checck"
+    }
+}
+Usuario: 5
+--------------------------------------------------------------------------------
+[2026-01-13 17:57:05] Error de base de datos
+Contexto: {
+    "mensaje": "SQLSTATE[42S22]: Column not found: 1054 Unknown column 'nombre' in 'field list'",
+    "codigo": "42S22",
+    "post_data": {
+        "nombre": "Carlos Aguilar",
+        "email": "carlagular800@gmail.com",
+        "telefono": "3751111294",
+        "especialidad": "ENDOCRINO",
+        "fecha": "2026-01-30",
+        "hora": "16:00",
+        "descripcion": "checck"
+    }
+}
+Usuario: 5
+--------------------------------------------------------------------------------
+[2026-01-13 17:58:09] Error de base de datos
+Contexto: {
+    "mensaje": "SQLSTATE[42S22]: Column not found: 1054 Unknown column 'nombre' in 'field list'",
+    "codigo": "42S22",
+    "post_data": {
+        "nombre": "Carlos Aguilar",
+        "email": "carlagular800@gmail.com",
+        "telefono": "3751111294",
+        "especialidad": "ENDOCRINO",
+        "fecha": "2026-01-30",
+        "hora": "16:00",
+        "descripcion": "checck"
+    }
+}
+Usuario: 5
+--------------------------------------------------------------------------------
+[2026-01-13 17:58:09] Error de base de datos
+Contexto: {
+    "mensaje": "SQLSTATE[42S22]: Column not found: 1054 Unknown column 'nombre' in 'field list'",
+    "codigo": "42S22",
+    "post_data": {
+        "nombre": "Carlos Aguilar",
+        "email": "carlagular800@gmail.com",
+        "telefono": "3751111294",
+        "especialidad": "ENDOCRINO",
+        "fecha": "2026-01-30",
+        "hora": "16:00",
+        "descripcion": "checck"
+    }
+}
+Usuario: 5
+--------------------------------------------------------------------------------
+[2026-01-13 18:13:00] Error de base de datos
+Contexto: {
+    "mensaje": "SQLSTATE[42S02]: Base table or view not found: 1146 Table 'sistema_gestion_medica.citas' doesn't exist",
+    "codigo": "42S02",
+    "post_data": {
+        "nombre": "Carlos Aguilar",
+        "email": "carlagular800@gmail.com",
+        "telefono": "3751111294",
+        "especialidad": "NUTRI",
+        "fecha": "2026-01-27",
+        "hora": "10:00",
+        "descripcion": "AegRWHRWH"
+    }
+}
+Usuario: 5
+--------------------------------------------------------------------------------
+[2026-01-13 18:13:00] Error de base de datos
+Contexto: {
+    "mensaje": "SQLSTATE[42S02]: Base table or view not found: 1146 Table 'sistema_gestion_medica.citas' doesn't exist",
+    "codigo": "42S02",
+    "post_data": {
+        "nombre": "Carlos Aguilar",
+        "email": "carlagular800@gmail.com",
+        "telefono": "3751111294",
+        "especialidad": "NUTRI",
+        "fecha": "2026-01-27",
+        "hora": "10:00",
+        "descripcion": "AegRWHRWH"
+    }
+}
+Usuario: 5
+--------------------------------------------------------------------------------
+[2026-01-13 18:27:04] Error de base de datos
+Contexto: {
+    "mensaje": "SQLSTATE[42S02]: Base table or view not found: 1146 Table 'sistema_gestion_medica.citas' doesn't exist",
+    "codigo": "42S02",
+    "post_data": {
+        "nombre": "Carlos Aguilar",
+        "email": "carlagular800@gmail.com",
+        "telefono": "3751111294",
+        "especialidad": "NUTRI",
+        "fecha": "2026-01-30",
+        "hora": "16:00",
+        "descripcion": "dwegwae"
+    }
+}
+Usuario: 5
+--------------------------------------------------------------------------------
+[2026-01-13 18:27:04] Error de base de datos
+Contexto: {
+    "mensaje": "SQLSTATE[42S02]: Base table or view not found: 1146 Table 'sistema_gestion_medica.citas' doesn't exist",
+    "codigo": "42S02",
+    "post_data": {
+        "nombre": "Carlos Aguilar",
+        "email": "carlagular800@gmail.com",
+        "telefono": "3751111294",
+        "especialidad": "NUTRI",
+        "fecha": "2026-01-30",
+        "hora": "16:00",
+        "descripcion": "dwegwae"
+    }
+}
+Usuario: 5
+--------------------------------------------------------------------------------
+[2026-01-13 18:31:40] Error de base de datos
+Contexto: {
+    "mensaje": "SQLSTATE[42S02]: Base table or view not found: 1146 Table 'sistema_gestion_medica.citas' doesn't exist",
+    "codigo": "42S02",
+    "post_data": {
+        "nombre": "Carlos Aguilar",
+        "email": "carlagular800@gmail.com",
+        "telefono": "3751111294",
+        "especialidad": "NUTRI",
+        "fecha": "2026-01-30",
+        "hora": "16:00",
+        "descripcion": "dwegwae"
+    }
+}
+Usuario: 5
+--------------------------------------------------------------------------------
+[2026-01-13 18:31:40] Error de base de datos
+Contexto: {
+    "mensaje": "SQLSTATE[42S02]: Base table or view not found: 1146 Table 'sistema_gestion_medica.citas' doesn't exist",
+    "codigo": "42S02",
+    "post_data": {
+        "nombre": "Carlos Aguilar",
+        "email": "carlagular800@gmail.com",
+        "telefono": "3751111294",
+        "especialidad": "NUTRI",
+        "fecha": "2026-01-30",
+        "hora": "16:00",
+        "descripcion": "dwegwae"
+    }
+}
+Usuario: 5
+--------------------------------------------------------------------------------

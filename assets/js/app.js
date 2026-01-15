@@ -36,6 +36,61 @@ document.addEventListener('DOMContentLoaded', function() {
     const menuOverlay = document.querySelector('.menu-overlay');
     const offcanvasMenu = document.querySelector('.offcanvas-menu');
     const body = document.body;
+    const desktopBreakpoint = 1024;
+    const desktopRedirectUrl = 'https://diabetesjalisco.org/';
+    const desktopHost = new URL(desktopRedirectUrl).hostname;
+    const appPathPrefix = '/asosiacionMexicanaDeDiabetes';
+    const defaultAppUrl = `${window.location.origin}${appPathPrefix}/index.php`;
+    let redirecting = false;
+
+    const isInApp = () => window.location.pathname.startsWith(appPathPrefix);
+    const isOnDesktopSite = () => window.location.hostname === desktopHost;
+    const setLastAppUrl = (url) => {
+        try {
+            sessionStorage.setItem('amdLastAppUrl', url);
+        } catch (err) {
+            // storage unavailable (private mode or disabled)
+        }
+    };
+    const getLastAppUrl = () => {
+        try {
+            return sessionStorage.getItem('amdLastAppUrl');
+        } catch (err) {
+            return null;
+        }
+    };
+
+    if (isInApp()) {
+        setLastAppUrl(window.location.href);
+    }
+
+    const handleResponsiveRedirect = () => {
+        if (redirecting) return;
+
+        const width = window.innerWidth || document.documentElement.clientWidth || screen.width || 0;
+
+        if (width >= desktopBreakpoint) {
+            if (isInApp() && !isOnDesktopSite()) {
+                redirecting = true;
+                setLastAppUrl(window.location.href);
+                window.location.href = desktopRedirectUrl;
+            }
+            return;
+        }
+
+        if (!isInApp()) {
+            const fallbackUrl = getLastAppUrl() || defaultAppUrl;
+            if (fallbackUrl && window.location.href !== fallbackUrl) {
+                redirecting = true;
+                window.location.href = fallbackUrl;
+            }
+        } else {
+            setLastAppUrl(window.location.href);
+        }
+    };
+
+    handleResponsiveRedirect();
+    window.addEventListener('resize', handleResponsiveRedirect);
 
     // Función para abrir el menú
     function abrirMenu() {
