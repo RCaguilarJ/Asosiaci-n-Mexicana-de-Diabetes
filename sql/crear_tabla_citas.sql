@@ -16,4 +16,4 @@ CREATE TABLE IF NOT EXISTS citas (
 );
 
 -- Si ya existe la tabla de usuarios, podemos añadir una foreign key
--- ALTER TABLE citas ADD CONSTRAINT fk_cita_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE;
+-- ALTER TABLE citas ADD CONSTRAINT fk_cita_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE;S

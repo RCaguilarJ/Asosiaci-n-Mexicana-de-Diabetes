@@ -15,4 +15,4 @@ CREATE TABLE IF NOT EXISTS sync_queue (
 
 -- Indices adicionales para optimización
 ALTER TABLE sync_queue ADD INDEX idx_referencia (referencia_id);
-ALTER TABLE sync_queue ADD INDEX idx_estado_fecha (estado, fecha_creacion);
+ALTER TABLE sync_queue ADD INDEX idx_estado_fecha (estado, fecha_creacion);S
