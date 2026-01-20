@@ -19,6 +19,16 @@
             $stmt = $pdo->prepare("SELECT * FROM citas WHERE usuario_id = ? AND fecha_cita >= NOW() ORDER BY fecha_cita ASC");
             $stmt->execute([$_SESSION['usuario_id']]);
             $citasUsuario = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // Evitar duplicados por misma cita (usuario/medico/fecha/especialidad)
+            $citasUnicas = [];
+            foreach ($citasUsuario as $cita) {
+                $clave = ($cita['usuario_id'] ?? '') . '|' . ($cita['medico_id'] ?? '') . '|' . ($cita['fecha_cita'] ?? '') . '|' . ($cita['especialidad'] ?? '');
+                if (!isset($citasUnicas[$clave])) {
+                    $citasUnicas[$clave] = $cita;
+                }
+            }
+            $citasUsuario = array_values($citasUnicas);
             
             // Historial rotativo (últimas 5 citas)
             $historialCitas = obtenerHistorialCitas($_SESSION['usuario_id']);
@@ -80,11 +90,12 @@
                                 <span class="doctor-specialty"><?php echo htmlspecialchars($cita['especialidad']); ?></span>
                             </div>
                             <?php 
-                                $claseEstado = 'status-pending';
-                                if($cita['estado'] == 'Confirmada') $claseEstado = 'status-confirmed';
+                                $estadoNormalizado = strtolower($cita['estado'] ?? 'pendiente');
+                                $claseEstado = $estadoNormalizado === 'confirmada' ? 'status-confirmed' : 'status-pending';
+                                $estadoLabel = ucfirst($estadoNormalizado);
                             ?>
                             <span class="status-badge <?php echo $claseEstado; ?>">
-                                <?php echo htmlspecialchars($cita['estado']); ?>
+                                <?php echo htmlspecialchars($estadoLabel); ?>
                             </span>
                         </div>
                         <ul class="appointment-details">
@@ -102,7 +113,7 @@
             <?php endif; ?>
         </div>
 
-        <form id="form-citas" class="card-form mt-30" method="POST" action="../actions/guardar_cita.php">
+        <form id="form-citas" class="card-form mt-30" autocomplete="off">
             <legend class="card-form-legend">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                 <span>Nueva Cita</span>

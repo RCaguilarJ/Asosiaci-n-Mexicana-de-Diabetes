@@ -65,11 +65,11 @@ try {
     
     // 4. VERIFICAR DISPONIBILIDAD LOCAL (Opcional, evita duplicados en BD local)
     $fechaHora = $fecha . ' ' . $hora . ':00';
-    $stmtCheck = $pdo->prepare("SELECT COUNT(*) FROM citas WHERE fecha_cita = ? AND estado != 'cancelada'");
-    $stmtCheck->execute([$fechaHora]);
-    if ($stmtCheck->fetchColumn() > 3) { // Límite arbitrario de ejemplo
+    $stmtCheck = $pdo->prepare("SELECT id FROM citas WHERE usuario_id = ? AND medico_id = ? AND fecha_cita = ? AND estado != 'cancelada' LIMIT 1");
+    $stmtCheck->execute([$usuario_id, $medico_id, $fechaHora]);
+    if ($stmtCheck->fetchColumn()) {
         http_response_code(409);
-        echo json_encode(['error' => 'Horario no disponible']);
+        echo json_encode(['error' => 'Ya tienes una cita en ese horario con ese especialista.']);
         exit;
     }
     
@@ -104,21 +104,20 @@ try {
             // Preparamos los datos EXACTAMENTE como los necesita Node.js
             // para crear el paciente y asignarlo al doctor.
             $datosCitaAPI = [
-                // Datos de la Cita
-                'usuarioId' => $usuario_id,   // ID del usuario
-                'medicoId' => $medico_id,     // ID del Doctor (¡CRUCIAL PARA EL FILTRO!)
+                // Datos requeridos por la API
+                'pacienteId' => $usuario_id,   // ID del usuario
+                'medicoId' => $medico_id,      // ID del Doctor
+                'fechaHora' => $fechaHora,     // Fecha y hora completa
+                'motivo' => $descripcion,      // Motivo de la cita
+
+                // Datos adicionales
                 'especialidad' => $especialidad,
                 'fecha' => $fecha,
                 'hora' => $hora,
-                'motivo' => $descripcion,
-                
-                // Datos del Paciente (Para crear expediente automáticamente)
                 'nombrePaciente' => $nombre,
                 'emailPaciente' => $email,
                 'telefonoPaciente' => $telefono,
-                // Generamos una CURP temporal si no existe (Node.js la requiere obligatoria)
-                'curpPaciente' => 'TEMP-' . $usuario_id . '-' . date('ymd'), 
-                
+                'curpPaciente' => 'TEMP-' . $usuario_id . '-' . date('ymd'),
                 'origen' => 'portal_paciente_php',
                 'cita_local_id' => $citaId
             ];
@@ -131,6 +130,11 @@ try {
             if ($resultadoAPI['success']) {
                 $mensaje .= ' y enviada al especialista.';
                 $citaRemotaId = $resultadoAPI['cita']['id'] ?? null;
+                $estadoRemoto = strtolower($resultadoAPI['cita']['estado'] ?? '');
+                if ($estadoRemoto) {
+                    $stmtEstado = $pdo->prepare("UPDATE citas SET estado = ? WHERE id = ?");
+                    $stmtEstado->execute([$estadoRemoto, $citaId]);
+                }
             } else {
                 // Si falla Node.js, avisamos pero no detenemos el proceso local
                 $mensaje .= ' (Sincronización pendiente).';
@@ -161,4 +165,3 @@ try {
     http_response_code(500);
     echo json_encode(['error' => 'Error interno del servidor: ' . $e->getMessage()]);
 }
-?>

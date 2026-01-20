@@ -58,13 +58,13 @@ if (!$pacienteId || !$fechaHora) {
 
 try {
   // Usamos PDO ($db) si está disponible. Ajusta si tu includes/db.php usa mysqli ($conn) u otro nombre.
-  if (!empty($db) && $db instanceof PDO) {
-    $stmt = $db->prepare("INSERT INTO citas (usuario_id, fecha_cita, hora_cita, especialidad, estado, fecha_registro) VALUES (?, ?, ?, ?, 'pendiente', NOW())");
+  if (!empty($pdo) && $pdo instanceof PDO) {
+    $stmt = $pdo->prepare("INSERT INTO citas (usuario_id, fecha_cita, hora_cita, especialidad, estado, fecha_registro) VALUES (?, ?, ?, ?, 'pendiente', NOW())");
     $fechaArray = explode(' ', $fechaHora);
     $fecha = $fechaArray[0];
     $hora = isset($fechaArray[1]) ? $fechaArray[1] : '00:00:00';
     $stmt->execute([$pacienteId, $fecha, $hora, $especialidad]);
-    $citaId = $db->lastInsertId();
+    $citaId = $pdo->lastInsertId();
 
     // Mapear especialidad -> rol objetivo
     $map = [
@@ -79,7 +79,7 @@ try {
 
     // Crear notificación solo si existe la tabla notifications
     try {
-      $nstmt = $db->prepare("INSERT INTO notifications (titulo, mensaje, tipo, rol_destino, referencia_tipo, referencia_id, leido, creado_en) VALUES (?, ?, 'cita', ?, 'cita', ?, 0, NOW())");
+      $nstmt = $pdo->prepare("INSERT INTO notifications (titulo, mensaje, tipo, rol_destino, referencia_tipo, referencia_id, leido, creado_en) VALUES (?, ?, 'cita', ?, 'cita', ?, 0, NOW())");
       $nstmt->execute([$mensaje, $mensaje, $targetRole, $citaId]);
     } catch (Exception $notifEx) {
       error_log('Warning: no se pudo crear notificación: ' . $notifEx->getMessage());
@@ -90,11 +90,14 @@ try {
       $dsn2 = 'mysql:host=127.0.0.1;dbname=sistema_gestion_medica;charset=utf8mb4';
       $user2 = 'root'; // ajustar si tu instalación usa otro usuario
       $pass2 = '';     // ajustar si tu root tiene contraseña
-      $db2 = new PDO($dsn2, $user2, $pass2, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+      $db2 = getRemoteConnection();
+      if (!$db2) {
+        throw new Exception('No se pudo conectar a la BD remota');
+      }
 
       // Insertar en tabla `cita` (sintaxis para esa BD). Ajustar nombres de columnas si difieren.
-      $stmt2 = $db2->prepare("INSERT INTO cita (paciente_id, fecha_hora, motivo, medico_id, notas, especialidad, estado, created_at) VALUES (?, ?, ?, ?, ?, ?, 'Pendiente', NOW())");
-      $stmt2->execute([$pacienteId, $fechaHora, $motivo, $medicoId, $notas, $especialidad]);
+      $stmt2 = $db2->prepare("INSERT INTO citas (paciente_id, medico_id, fecha_hora, tipo_cita, motivo, estado, fecha_creacion, origen) VALUES (?, ?, ?, ?, ?, ?, NOW(), 'app_diabetes')");
+      $stmt2->execute([$pacienteId, $medicoId, $fechaHora, $especialidad, $motivo, 'pendiente']);
       $citaId2 = $db2->lastInsertId();
 
       $mensaje2 = "Nueva cita (ID {$citaId2}) para especialidad {$especialidad} - Fecha: {$fechaHora}";
@@ -120,7 +123,7 @@ try {
     
     $sql = "INSERT INTO citas (usuario_id, fecha_cita, hora_cita, especialidad, estado, fecha_registro) VALUES ('" . $conn->real_escape_string($pacienteId) . "', '" . $fecha . "', '" . $hora . "', '" . $conn->real_escape_string($especialidad) . "', 'pendiente', NOW())";
     if ($conn->query($sql) === TRUE) {
-      $citaId = $conn->insert_id;
+      $citaId = (is_object($conn) && property_exists($conn, 'insert_id')) ? $conn->insert_id : null;
       $map = [
         'GENERAL' => 'DOCTOR',
         'ENDOCRINOLOGIA' => 'ENDOCRINOLOGO',
@@ -141,8 +144,8 @@ try {
       try {
         $db2 = new mysqli('127.0.0.1', 'root', '', 'sistema_gestion_medica');
         if ($db2->connect_errno) throw new Exception('MySQL connect error: ' . $db2->connect_error);
-        $sql2 = sprintf("INSERT INTO cita (paciente_id, fecha_hora, motivo, medico_id, notas, especialidad, estado, created_at) VALUES ('%s','%s','%s','%s','%s','%s','Pendiente', NOW())",
-          $db2->real_escape_string($pacienteId), $db2->real_escape_string($fechaHora), $db2->real_escape_string($motivo), $db2->real_escape_string($medicoId), $db2->real_escape_string($notas), $db2->real_escape_string($especialidad)
+        $sql2 = sprintf("INSERT INTO citas (paciente_id, medico_id, fecha_hora, tipo_cita, motivo, estado, fecha_creacion, origen) VALUES ('%s','%s','%s','%s','%s','pendiente', NOW(), 'app_diabetes')",
+          $db2->real_escape_string($pacienteId), $db2->real_escape_string($medicoId), $db2->real_escape_string($fechaHora), $db2->real_escape_string($especialidad), $db2->real_escape_string($motivo)
         );
         $db2->query($sql2);
         $citaId2 = $db2->insert_id;
@@ -159,7 +162,8 @@ try {
       echo json_encode(['success' => true, 'citaId' => $citaId]);
       exit;
     } else {
-      throw new Exception('Error al insertar cita: ' . $conn->error);
+      $errorMsg = is_object($conn) && property_exists($conn, 'error') ? $conn->error : 'desconocido';
+      throw new Exception("Error al insertar cita: {$errorMsg}");
     }
   }
 

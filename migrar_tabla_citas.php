@@ -256,12 +256,12 @@ try {
     echo "<h2>🎉 ¡MIGRACIÓN COMPLETADA EXITOSAMENTE!</h2>";
     echo "<h3>📊 Resumen: </h3>";
     echo "<ul style='font-size: 16px; line-height: 2;'>";
-    echo "<li>✅ <strong>Columnas agregadas:</strong> nombre, email, telefono, fecha_actualizacion</li>";
-    echo "<li>✅ <strong>Engine:</strong> InnoDB (antes MyISAM)</li>";
-    echo "<li>✅ <strong>Charset:</strong> utf8mb4</li>";
-    echo "<li>✅ <strong>Índices:</strong> Optimizados</li>";
-    echo "<li>✅ <strong>Backup guardado:</strong> $backupName</li>";
-    echo "<li>✅ <strong>Registros actuales:</strong> $totalFinal</li>";
+    echo "<li> <strong>Columnas agregadas:</strong> nombre, email, telefono, fecha_actualizacion</li>";
+    echo "<li> <strong>Engine:</strong> InnoDB (antes MyISAM)</li>";
+    echo "<li><strong>Charset:</strong> utf8mb4</li>";
+    echo "<li><strong>Índices:</strong> Optimizados</li>";
+    echo "<li> <strong>Backup guardado:</strong> $backupName</li>";
+    echo "<li> <strong>Registros actuales:</strong> $totalFinal</li>";
     echo "</ul>";
     
     echo "<h3>🎯 Siguiente Paso: </h3>";
