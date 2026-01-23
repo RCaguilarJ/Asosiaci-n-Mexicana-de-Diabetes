@@ -49,7 +49,15 @@
             }
 
             // 2. Obtener PRÓXIMA CITA
-            $stmtC = $pdo->prepare("SELECT fecha_cita, especialidad FROM citas WHERE usuario_id = ? AND fecha_cita >= NOW() AND estado = 'pendiente' ORDER BY fecha_cita ASC LIMIT 1");
+            $stmtC = $pdo->prepare("
+                SELECT fecha_cita, especialidad
+                FROM citas
+                WHERE usuario_id = ?
+                  AND fecha_cita >= NOW()
+                  AND LOWER(estado) IN ('pendiente', 'confirmada')
+                ORDER BY fecha_cita ASC
+                LIMIT 1
+            ");
             $stmtC->execute([$userId]);
             $cita = $stmtC->fetch(PDO::FETCH_ASSOC);
 
