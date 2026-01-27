@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/../base_path.php'; ?>
 <header class="site-header">
     <div class="header-contenido">
         
@@ -8,7 +9,7 @@
         </button>
 
         <div class="logo">
-            <img src="/asosiacionMexicanaDeDiabetes/assets/img/logo.png" alt="Logo de la Asociación Mexicana de Diabetes">
+            <img src="<?php echo $basePath; ?>/assets/img/logo.png" alt="Logo de la Asociación Mexicana de Diabetes">
         </div>
     </div>
 

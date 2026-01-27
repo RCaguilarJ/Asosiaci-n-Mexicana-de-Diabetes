@@ -1,6 +1,6 @@
 <?php
 // integration_php/api_create_contact.php
-require_once __DIR__ . '/../asosiacionMexicanaDeDiabetes/includes/db.php';
+require_once __DIR__ . '/../includes/db.php';
 header('Content-Type: application/json; charset=utf-8');
 
 $input = json_decode(file_get_contents('php://input'), true);

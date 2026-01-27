@@ -170,7 +170,7 @@ REMOTE_DB_PASS=
 
 1. **Ejecutar Script de Pruebas:**
    ```
-   http://localhost/asosiacionMexicanaDeDiabetes/test_sync.php
+   http://localhost/test_sync.php
    ```
 
 2. **Verificar Registro:**

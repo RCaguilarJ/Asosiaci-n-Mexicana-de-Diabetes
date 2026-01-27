@@ -178,7 +178,7 @@ header('Content-Type: text/html; charset=utf-8');
                 log('📡 Cargando especialidades desde API...');
                 loadingSpinner.style.display = 'block';
                 
-                const response = await fetch('/asosiacionMexicanaDeDiabetes/api/get_especialistas.php', {
+                const response = await fetch('/api/get_especialistas.php', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
@@ -266,7 +266,7 @@ header('Content-Type: text/html; charset=utf-8');
                 medicoGroup.style.display = 'block';
                 selectMedico.innerHTML = '<option value="" disabled selected>Cargando especialistas...</option>';
                 
-                const response = await fetch(`/asosiacionMexicanaDeDiabetes/api/get_especialistas.php?role=${encodeURIComponent(role)}`, {
+                const response = await fetch(`/api/get_especialistas.php?role=${encodeURIComponent(role)}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'

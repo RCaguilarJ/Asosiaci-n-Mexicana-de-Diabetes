@@ -1,4 +1,5 @@
 <?php
+    require_once __DIR__ . '/../base_path.php';
     if (!isset($paginaActual)) { $paginaActual = ''; }
 ?>
 <div class="menu-overlay"></div>
@@ -6,7 +7,7 @@
 <nav class="offcanvas-menu">
     <div class="menu-drawer-header">
         <div class="menu-drawer-logo">
-            <img src="/asosiacionMexicanaDeDiabetes/assets/img/logo.png" alt="Logo AMD Jalisco">
+            <img src="<?php echo $basePath; ?>/assets/img/logo.png" alt="Logo AMD Jalisco">
             <span>
                 <strong>AMD Jalisco</strong>
                 <small>Menú Principal</small>
@@ -17,7 +18,7 @@
 
     <ul class="menu-drawer-nav">
         <li>
-            <a href="/asosiacionMexicanaDeDiabetes/views/index.php" class="menu-drawer-link <?php echo ($paginaActual == 'inicio') ? 'active' : ''; ?>">
+            <a href="<?php echo $basePath; ?>/views/index.php" class="menu-drawer-link <?php echo ($paginaActual == 'inicio') ? 'active' : ''; ?>">
                 <span class="menu-drawer-link__icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
@@ -31,7 +32,7 @@
             </a>
         </li>
         <li>
-            <a href="/asosiacionMexicanaDeDiabetes/views/calculadora.php" class="menu-drawer-link <?php echo ($paginaActual == 'calculadora') ? 'active' : ''; ?>">
+            <a href="<?php echo $basePath; ?>/views/calculadora.php" class="menu-drawer-link <?php echo ($paginaActual == 'calculadora') ? 'active' : ''; ?>">
                 <span class="menu-drawer-link__icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect width="16" height="20" x="4" y="2" rx="2"/>
@@ -53,7 +54,7 @@
             </a>
         </li>
         <li>
-            <a href="/asosiacionMexicanaDeDiabetes/views/eventos.php" class="menu-drawer-link <?php echo ($paginaActual == 'eventos') ? 'active' : ''; ?>">
+            <a href="<?php echo $basePath; ?>/views/eventos.php" class="menu-drawer-link <?php echo ($paginaActual == 'eventos') ? 'active' : ''; ?>">
                 <span class="menu-drawer-link__icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
@@ -69,7 +70,7 @@
             </a>
         </li>
         <li>
-            <a href="/asosiacionMexicanaDeDiabetes/views/blog.php" class="menu-drawer-link <?php echo ($paginaActual == 'blog') ? 'active' : ''; ?>">
+            <a href="<?php echo $basePath; ?>/views/blog.php" class="menu-drawer-link <?php echo ($paginaActual == 'blog') ? 'active' : ''; ?>">
                 <span class="menu-drawer-link__icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
@@ -83,7 +84,7 @@
             </a>
         </li>
         <li>
-            <a href="/asosiacionMexicanaDeDiabetes/views/galeria.php" class="menu-drawer-link <?php echo ($paginaActual == 'galeria') ? 'active' : ''; ?>">
+            <a href="<?php echo $basePath; ?>/views/galeria.php" class="menu-drawer-link <?php echo ($paginaActual == 'galeria') ? 'active' : ''; ?>">
                 <span class="menu-drawer-link__icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <polygon points="23 7 16 12 23 17 23 7"/>
@@ -113,7 +114,7 @@
             </a>
         </li>
         <li>
-            <a href="/asosiacionMexicanaDeDiabetes/views/citas.php" class="menu-drawer-link <?php echo ($paginaActual == 'citas') ? 'active' : ''; ?>">
+            <a href="<?php echo $basePath; ?>/views/citas.php" class="menu-drawer-link <?php echo ($paginaActual == 'citas') ? 'active' : ''; ?>">
                 <span class="menu-drawer-link__icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10"/>
@@ -127,7 +128,7 @@
             </a>
         </li>
         <li>
-            <a href="/asosiacionMexicanaDeDiabetes/views/contacto.php" class="menu-drawer-link <?php echo ($paginaActual == 'contacto') ? 'active' : ''; ?>">
+            <a href="<?php echo $basePath; ?>/views/contacto.php" class="menu-drawer-link <?php echo ($paginaActual == 'contacto') ? 'active' : ''; ?>">
                 <span class="menu-drawer-link__icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
@@ -141,7 +142,7 @@
         </li>
         <?php if (isset($_SESSION['usuario_id'])): ?>
             <li>
-                <a href="/asosiacionMexicanaDeDiabetes/actions/logout.php" class="menu-drawer-link menu-drawer-link--logout">
+                <a href="<?php echo $basePath; ?>/actions/logout.php" class="menu-drawer-link menu-drawer-link--logout">
                     <span class="menu-drawer-link__icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
@@ -157,7 +158,7 @@
             </li>
         <?php else: ?>
             <li>
-                <a href="/asosiacionMexicanaDeDiabetes/views/login.php" class="menu-drawer-link <?php echo ($paginaActual == 'login') ? 'active' : ''; ?> menu-drawer-link--login">
+                <a href="<?php echo $basePath; ?>/views/login.php" class="menu-drawer-link <?php echo ($paginaActual == 'login') ? 'active' : ''; ?> menu-drawer-link--login">
                     <span class="menu-drawer-link__icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>

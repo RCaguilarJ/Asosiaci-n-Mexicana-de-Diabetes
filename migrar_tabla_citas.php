@@ -84,7 +84,7 @@ try {
     
     if (empty($faltantes)) {
         echo "<div class='success'><h3>✅ ¡Tabla ya actualizada! </h3><p>No se requiere migración.</p></div>";
-        echo "<div><a href='/asosiacionMexicanaDeDiabetes/views/citas.php' class='btn'>📝 Ir al Formulario</a></div>";
+        echo "<div><a href='/views/citas.php' class='btn'>📝 Ir al Formulario</a></div>";
         echo "</div></body></html>";
         exit;
     }
@@ -268,7 +268,7 @@ try {
     echo "<p style='font-size: 18px;'>El formulario de citas ahora funcionará correctamente.</p>";
     
     echo "<div style='text-align: center; margin-top: 30px;'>";
-    echo "<a href='/asosiacionMexicanaDeDiabetes/views/citas.php' class='btn' style='font-size: 18px;'>🚀 PROBAR FORMULARIO DE CITAS</a>";
+    echo "<a href='/views/citas.php' class='btn' style='font-size: 18px;'>🚀 PROBAR FORMULARIO DE CITAS</a>";
     echo "</div>";
     echo "</div>";
     

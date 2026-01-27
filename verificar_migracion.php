@@ -113,7 +113,7 @@ try {
     // 5. Test de la API local
     echo "<h2>5. Test Endpoint Local</h2>";
     
-    $url = "http://" . $_SERVER['HTTP_HOST'] . "/asosiacionMexicanaDeDiabetes/api/get_especialistas.php";
+    $url = "http://" . $_SERVER['HTTP_HOST'] . "/api/get_especialistas.php";
     
     echo "<p><strong>URL:</strong> <a href='$url' target='_blank'>$url</a></p>";
     

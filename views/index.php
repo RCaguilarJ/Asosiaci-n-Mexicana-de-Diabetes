@@ -31,9 +31,9 @@
                 $ultimaGlucosa = $calculoReciente['glucosa'];
                 $dosisCalculada = $calculoReciente['dosis_total'] . ' u';
                 // Color según nivel (simple)
-                if($ultimaGlucosa > 180) $estadoGlucosaColor = '#dc3545'; // Rojo
-                else if($ultimaGlucosa < 70) $estadoGlucosaColor = '#ffc107'; // Amarillo
-                else $estadoGlucosaColor = '#28a745'; // Verde
+                if($ultimaGlucosa > 180) $estadoGlucosaColor = '#dc3545'; 
+                else if($ultimaGlucosa < 70) $estadoGlucosaColor = '#ffc107'; 
+                else $estadoGlucosaColor = '#28a745';
             } else {
                 // Fallback: buscar en registros_glucosa si no hay cálculos
                 $stmtGOld = $pdo->prepare("SELECT nivel_glucosa FROM registros_glucosa WHERE usuario_id = ? ORDER BY fecha_registro DESC LIMIT 1");
@@ -125,7 +125,7 @@
                         <span class="status-value" style="font-size: 14px; color: #666;"><?php echo $proximaCitaTexto; ?></span>
                         <?php if(!$esInvitado): ?>
                             <small style="display:block; margin-top: 4px;">
-                                <a href="../citas.php" style="color: #7b1fa2; text-decoration: none; font-weight: 500;">
+                                <a href="<?php echo $basePath; ?>/citas.php" style="color: #7b1fa2; text-decoration: none; font-weight: 500;">
                                     + Agendar cita
                                 </a>
                             </small>
@@ -144,25 +144,25 @@
         <section class="quick-actions">
             <h2>Acciones Rápidas</h2>
             <div class="actions-grid">
-                <a href="../calculadora.php" class="action-button action-button--blue">
+                <a href="<?php echo $basePath; ?>/calculadora.php" class="action-button action-button--blue">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"></rect><line x1="8" x2="16" y1="6" y2="6"></line><line x1="16" x2="16" y1="14" y2="18"></line><path d="M16 10h.01"></path><path d="M12 10h.01"></path><path d="M8 10h.01"></path><path d="M12 14h.01"></path><path d="M8 14h.01"></path><path d="M12 18h.01"></path><path d="M8 18h.01"></path></svg>
                     <span>Calculadora</span>
                 </a>
                 <?php if(!$esInvitado): ?>
-                <a href="../citas.php" class="action-button" style="color:#7b1fa2; border-color:#7b1fa2; background:#f3e5f5;">
+                <a href="<?php echo $basePath; ?>/citas.php" class="action-button" style="color:#7b1fa2; border-color:#7b1fa2; background:#f3e5f5;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                     <span>Agendar Cita</span>
                 </a>
                 <?php endif; ?>
-                <a href="../eventos.php" class="action-button action-button--eventos">
+                <a href="<?php echo $basePath; ?>/eventos.php" class="action-button action-button--eventos">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                     <span>Eventos</span>
                 </a>
-                <a href="../blog.php" class="action-button" style="color:#0097d8; border-color:#0097d8; background:#e0f7fa;">
+                <a href="<?php echo $basePath; ?>/blog.php" class="action-button" style="color:#0097d8; border-color:#0097d8; background:#e0f7fa;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
                     <span>Blog</span>
                 </a>
-                <a href="../contacto.php" class="action-button action-button--contacto">
+                <a href="<?php echo $basePath; ?>/contacto.php" class="action-button action-button--contacto">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                     <span>Contacto</span>
                 </a>
@@ -173,11 +173,11 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2z"></path><path d="M3 3h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"></path><path d="M14 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2z"></path><path d="M14 3h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"></path></svg>
             <h3>Tip Saludable del Día</h3>
             <p>Sustituir los jugos de fruta por la fruta entera te ayuda a consumir más fibra y controlar mejor tu nivel de glucosa.</p>
-            <a href="../blog.php" class="btn-ver-mas">Leer más consejos</a>
+            <a href="<?php echo $basePath; ?>/blog.php" class="btn-ver-mas">Leer más consejos</a>
         </section>
 
     </main>
     <?php include '../includes/layout/footer.php'; ?>
-    <script src="/asosiacionMexicanaDeDiabetes/assets/js/app.js"></script> 
+    <script src="<?php echo $basePath; ?>/assets/js/app.js"></script> 
 </body>
 </html>

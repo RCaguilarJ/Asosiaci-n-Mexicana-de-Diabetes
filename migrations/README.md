@@ -16,12 +16,12 @@ Las migraciones son scripts que modifican la estructura de la base de datos de f
 
 1. Navega a la URL de la migración:
    ```
-   http://localhost/asosiacionMexicanaDeDiabetes/migrations/[nombre-archivo].php
+   http://localhost/migrations/[nombre-archivo].php
    ```
 
 2. Ejemplo:
    ```
-   http://localhost/asosiacionMexicanaDeDiabetes/migrations/create_sync_queue_table.php
+   http://localhost/migrations/create_sync_queue_table.php
    ```
 
 3. El script mostrará:

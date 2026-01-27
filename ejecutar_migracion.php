@@ -163,7 +163,7 @@ try {
     echo "<div class='section'>";
     echo "<h2>4. 🌐 Test Endpoint Web</h2>";
     
-    $url = "http://" . $_SERVER['HTTP_HOST'] . "/asosiacionMexicanaDeDiabetes/api/get_especialistas.php";
+    $url = "http://" . $_SERVER['HTTP_HOST'] . "/api/get_especialistas.php";
     
     echo "<p class='info'>Probando: <code>$url</code></p>";
     

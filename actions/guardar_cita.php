@@ -125,7 +125,7 @@ try {
             // Enviamos los datos a Node.js
             $resultadoAPI = $api->crearCita($datosCitaAPI);
             
-            $mensaje = 'Cita agendada exitosamente';
+            $mensaje = 'Su cita fue registrada exitosamente';
             
             if ($resultadoAPI['success']) {
                 $mensaje .= ' y enviada al especialista.';

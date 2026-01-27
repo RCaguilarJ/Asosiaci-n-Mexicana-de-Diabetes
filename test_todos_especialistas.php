@@ -161,7 +161,7 @@ try {
     echo "<p class='info'>Verificando endpoint de especialistas...</p>";
     
     // Test del endpoint get_especialistas
-    $url = "http://" . $_SERVER['HTTP_HOST'] . "/asosiacionMexicanaDeDiabetes/api/get_especialistas.php";
+    $url = "http://" . $_SERVER['HTTP_HOST'] . "/api/get_especialistas.php";
     
     $context = stream_context_create([
         'http' => [

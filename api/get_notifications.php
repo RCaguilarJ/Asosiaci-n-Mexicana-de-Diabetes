@@ -1,6 +1,6 @@
 <?php
 // integration_php/api_get_notifications.php
-require_once __DIR__ . '/../asosiacionMexicanaDeDiabetes/includes/db.php';
+require_once __DIR__ . '/../includes/db.php';
 header('Content-Type: application/json; charset=utf-8');
 
 $role = strtoupper(trim($_GET['role'] ?? ''));

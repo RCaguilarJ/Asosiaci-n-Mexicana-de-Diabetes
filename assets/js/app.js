@@ -39,11 +39,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const desktopBreakpoint = 1024;
     const desktopRedirectUrl = 'https://diabetesjalisco.org/';
     const desktopHost = new URL(desktopRedirectUrl).hostname;
-    const appPathPrefix = '/asosiacionMexicanaDeDiabetes';
+    const appHost = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+        ? window.location.hostname
+        : 'amd.desingsgdl.net';
+    const knownPrefix = '/asosiacionMexicanaDeDiabetes';
+    const appPathPrefix = (window.location.pathname === knownPrefix || window.location.pathname.startsWith(knownPrefix + '/'))
+        ? knownPrefix
+        : '';
     const defaultAppUrl = `${window.location.origin}${appPathPrefix}/index.php`;
     let redirecting = false;
 
-    const isInApp = () => window.location.pathname.startsWith(appPathPrefix);
+    const isInApp = () => window.location.hostname === appHost && window.location.pathname.startsWith(appPathPrefix || '/');
     const isOnDesktopSite = () => window.location.hostname === desktopHost;
     const setLastAppUrl = (url) => {
         try {
@@ -411,74 +417,6 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Aquí se puede añadir lógica para filtrar artículos
             // Por ahora solo manejamos la UI
-        });
-    });
-});
-
-/* ====================================
-   FUNCIONALIDAD DEL FORMULARIO DE CITAS
-   ==================================== */
-document.addEventListener('DOMContentLoaded', function() {
-    const formCitas = document.getElementById('form-citas');
-    const inputFecha = document.getElementById('fecha');
-    
-    if (!formCitas) return; // Si no estamos en la página de citas, salir
-
-    // Establecer fecha mínima como hoy
-    if (inputFecha) {
-        const hoy = new Date();
-        hoy.setDate(hoy.getDate() + 1); // Permitir agendar desde mañana
-        const fechaMinima = hoy.toISOString().split('T')[0];
-        inputFecha.min = fechaMinima;
-    }
-
-    // Manejar envío del formulario
-    formCitas.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const formData = new FormData(this);
-        const btnSubmit = this.querySelector('button[type="submit"]');
-        const textoBtnOriginal = btnSubmit.textContent;
-        
-        // Deshabilitar botón y mostrar loading
-        btnSubmit.disabled = true;
-        btnSubmit.textContent = 'Procesando...';
-
-        // Enviar datos
-        fetch('../actions/guardar_cita.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.error) {
-                mostrarToast(data.error, 'error');
-            } else {
-                // Mostrar mensaje de éxito
-                mostrarToast(data.mensaje || 'Cita agendada exitosamente', 'success');
-                
-                // Limpiar formulario
-                formCitas.reset();
-                
-                // Recargar página después de 2 segundos
-                setTimeout(() => {
-                    window.location.reload();
-                }, 2000);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            mostrarToast('Error al agendar la cita. Inténtelo de nuevo.', 'error');
-        })
-        .finally(() => {
-            // Reestablecer botón
-            btnSubmit.disabled = false;
-            btnSubmit.textContent = textoBtnOriginal;
         });
     });
 });

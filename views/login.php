@@ -238,6 +238,6 @@
 
     <?php include '../includes/layout/footer.php'; ?>
     
-    <script src="/asosiacionMexicanaDeDiabetes/assets/js/login.js"></script>
+    <script src="<?php echo $basePath; ?>/assets/js/login.js"></script>
 </body>
 </html>

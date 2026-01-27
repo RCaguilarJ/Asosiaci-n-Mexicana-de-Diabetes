@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/base_path.php';
 /**
  * Banner informativo para usuarios invitados o no logueados
  */
@@ -41,7 +42,7 @@ if (!$usuarioCompleto): ?>
                 </small>
             </div>
             <div>
-                <a href="/asosiacionMexicanaDeDiabetes/views/login.php" 
+                <a href="<?php echo $basePath; ?>/views/login.php" 
                    style="
                        background: rgba(255, 255, 255, 0.2);
                        color: white;

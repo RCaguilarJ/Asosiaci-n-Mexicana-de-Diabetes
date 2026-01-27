@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <?php require_once __DIR__ . '/security-headers.php'; ?>
+<?php require_once __DIR__ . '/../base_path.php'; ?>
 <?php
     //session_start();
     // Si no se ha definido un título, ponemos uno por defecto
@@ -18,7 +19,7 @@
     
     <title><?php echo $tituloDeLaPagina; // Título dinámico ?></title>
     
-    <link rel="stylesheet" href="/asosiacionMexicanaDeDiabetes/assets/css/style.css">
+    <link rel="stylesheet" href="<?php echo $basePath; ?>/assets/css/style.css">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

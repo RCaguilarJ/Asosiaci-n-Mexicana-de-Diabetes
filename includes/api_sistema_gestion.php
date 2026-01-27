@@ -13,8 +13,9 @@ class ApiSistemaGestionHelper {
     private static $syncQueueTableExists = null; // Cache para verificación de tabla
     
     public function __construct() {
-        // Temporalmente usar endpoint local hasta que se configure el sistema real
-        $this->baseUrl = 'http://localhost/asosiacionMexicanaDeDiabetes/api/especialistas_local.php';
+        // Endpoint local (misma app) para especialistas
+        $remoteBase = rtrim(getenv('REMOTE_API_URL') ?: '', '/');
+        $this->baseUrl = $remoteBase ? $remoteBase . '/api/especialistas_local.php' : 'http://localhost/api/especialistas_local.php';
         $this->secret = getenv('AMD_SYNC_SECRET') ?: 'default_secret_change_in_production';
         
         // URL original para cuando esté disponible
@@ -137,7 +138,8 @@ class ApiSistemaGestionHelper {
             $medicoId = $datosCita['medicoId'];
             
             // Obtener datos del médico desde nuestro endpoint local
-            $especialistasUrl = 'http://localhost/asosiacionMexicanaDeDiabetes/api/especialistas_local.php';
+            $remoteBase = rtrim(getenv('REMOTE_API_URL') ?: '', '/');
+            $especialistasUrl = $remoteBase ? $remoteBase . '/api/especialistas_local.php' : 'http://localhost/api/especialistas_local.php';
             $context = stream_context_create([
                 'http' => [
                     'method' => 'GET',

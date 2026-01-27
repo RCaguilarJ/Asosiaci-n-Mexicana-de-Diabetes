@@ -3,6 +3,7 @@
  * check-session.php
  * Verifica sesión y redirige usando la ruta completa del proyecto
  */
+require_once __DIR__ . '/../base_path.php';
 
 // Hardened session start: secure cookie params, timeout e invalidación
 ini_set('session.use_strict_mode', 1);
@@ -39,7 +40,7 @@ if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > 
             $params['path'], $params['domain'], $params['secure'], $params['httponly']);
     }
     session_destroy();
-    header('Location: /asosiacionMexicanaDeDiabetes/login.php');
+    header('Location: ' . $basePath . '/login.php');
     exit;
 }
 $_SESSION['LAST_ACTIVITY'] = time();
@@ -48,7 +49,7 @@ $_SESSION['LAST_ACTIVITY'] = time();
 if (!isset($_SESSION['usuario_id']) && !isset($_SESSION['es_invitado'])) {
     // Guardar la página actual para volver después de loguearse
     $_SESSION['pagina_anterior'] = $_SERVER['REQUEST_URI'];
-    header('Location: /asosiacionMexicanaDeDiabetes/login.php');
+    header('Location: ' . $basePath . '/login.php');
     exit;
 }
 ?>

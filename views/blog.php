@@ -5,7 +5,7 @@
     $paginaActual = 'blog';
     $tituloDeLaPagina = "Blog Educativo - Asoc. Mexicana de Diabetes"; 
     $feedUrl = 'https://diabetesjalisco.org/feed/';
-    $imagenPorDefecto = '/asosiacionMexicanaDeDiabetes/assets/img/platilloSano.jpg';
+    $imagenPorDefecto = $basePath . '/assets/img/platilloSano.jpg';
 
     /**
      * Descarga el contenido remoto usando cURL con fallback a file_get_contents.
@@ -143,7 +143,7 @@
                 'desc'   => 'Aprende cómo el ejercicio regular puede mejorar significativamente el control de la diabetes.',
                 'autor'  => 'Equipo Médico',
                 'fecha'  => '18 Oct 2025',
-                'imagen' => '/asosiacionMexicanaDeDiabetes/assets/img/medidorInsulina.jpg',
+                'imagen' => $basePath . '/assets/img/medidorInsulina.jpg',
                 'link'   => '#',
                 'tag'    => 'Actividad Física',
                 'tag_clase' => 'event-tag--actividad-blue',
@@ -154,7 +154,7 @@
                 'desc'   => 'Conoce las últimas tecnologías disponibles para el monitoreo continuo y cómo pueden mejorar tu control.',
                 'autor'  => 'Ing. Juan Pérez',
                 'fecha'  => '15 Oct 2025',
-                'imagen' => '/asosiacionMexicanaDeDiabetes/assets/img/medidorInsulina.jpg',
+                'imagen' => $basePath . '/assets/img/medidorInsulina.jpg',
                 'link'   => '#',
                 'tag'    => 'Tecnología',
                 'tag_clase' => 'event-tag--tecnologia',
@@ -210,7 +210,7 @@
                 </div>
 
                 <div class="blog-hero__actions">
-                    <a href="../views/index.php" class="btn-back" style="color: #0066b2; text-decoration: none; padding: 10px; border: 1px solid #0066b2; border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; margin-right: 15px; background: white;">
+                    <a href="<?php echo $basePath; ?>/views/index.php" class="btn-back" style="color: #0066b2; text-decoration: none; padding: 10px; border: 1px solid #0066b2; border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; margin-right: 15px; background: white;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"></path><path d="M12 19l-7-7 7-7"></path></svg>
                     </a>
                     <a class="btn-hero" href="https://diabetesjalisco.org" target="_blank" rel="noopener">
@@ -221,7 +221,7 @@
             </div>
             <div class="blog-hero__figure">
                 <div class="hero-illustration">
-                    <img src="/asosiacionMexicanaDeDiabetes/assets/img/medidorInsulina.jpg" alt="Personas aprendiendo sobre diabetes">
+                    <img src="<?php echo $basePath; ?>/assets/img/medidorInsulina.jpg" alt="Personas aprendiendo sobre diabetes">
                 </div>
             </div>
         </div>
@@ -322,6 +322,6 @@
     </main>
 
     <?php include '../includes/layout/footer.php'; ?>
-    <script src="/asosiacionMexicanaDeDiabetes/assets/js/app.js"></script> 
+    <script src="<?php echo $basePath; ?>/assets/js/app.js"></script> 
 </body>
 </html>
