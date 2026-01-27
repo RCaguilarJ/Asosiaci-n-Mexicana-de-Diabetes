@@ -15,10 +15,10 @@
         }
 
         // 2. Lógica normal para producción
-        // if (window.innerWidth >= ANCHO_MINIMO_DESKTOP && !alreadyRedirected) {
-        //     alreadyRedirected = true; 
-        //     window.location.href = URL_DESTINO; 
-        // }
+        if (window.innerWidth >= ANCHO_MINIMO_DESKTOP && !alreadyRedirected) {
+            alreadyRedirected = true; 
+            window.location.href = URL_DESTINO; 
+        }
     }
 
     // Comprobar al cargar y redimensionar
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const body = document.body;
     const desktopBreakpoint = 1024;
     const desktopRedirectUrl = 'https://diabetesjalisco.org/';
-    // const desktopHost = new URL(desktopRedirectUrl).hostname;
+    const desktopHost = new URL(desktopRedirectUrl).hostname;
     const appHost = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
         ? window.location.hostname
         : 'amd.desingsgdl.net';
@@ -75,14 +75,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const width = window.innerWidth || document.documentElement.clientWidth || screen.width || 0;
 
-        // if (width >= desktopBreakpoint) {
-        //     if (isInApp() && !isOnDesktopSite()) {
-        //         redirecting = true;
-        //         setLastAppUrl(window.location.href);
-        //         window.location.href = desktopRedirectUrl;
-        //     }
-        //     return;
-        // }
+        if (width >= desktopBreakpoint) {
+            if (isInApp() && !isOnDesktopSite()) {
+                redirecting = true;
+                setLastAppUrl(window.location.href);
+                window.location.href = desktopRedirectUrl;
+            }
+            return;
+        }
 
         if (!isInApp()) {
             const fallbackUrl = getLastAppUrl() || defaultAppUrl;

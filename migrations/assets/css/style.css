@@ -1,0 +1,2241 @@
+/* ====================================
+   1. VARIABLES GLOBALES
+   ==================================== */
+:root {
+    /* Colores Azules (Calculadora, Blog) */
+    --color-primario-azul-borde: rgb(0, 102, 178);
+    --color-primario-azul-fondo: rgb(230, 244, 255);
+    
+    /* Colores Eventos (Verde 1) */
+    --color-eventos-borde: rgb(124, 179, 66);
+    --color-eventos-fondo: rgb(241, 248, 233);
+    
+    /* Colores Contacto (Verde 2) */
+    --color-contacto-borde: rgb(0, 168, 89);
+    --color-contacto-fondo: rgb(232, 245, 233);
+    
+    /* Color Verde Sólido (Tips) */
+    --color-secundario-verde: #28a745;
+
+    /* Otros */
+    --color-advertencia: #ffc107;
+    --color-blanco: #FFFFFF;
+    --color-texto-oscuro: #333333;
+    --color-texto-gris: #6c757d;
+    --color-texto-blanco: #FFFFFF;
+    --color-fondo-app: #f8f9fa;
+    --color-borde-suave: #eeeeee; /* Borde gris sutil */
+    --color-borde-cita: #8446ff;
+
+    /* Estilos de Tarjetas */
+    --radio-borde-grande: 15px;
+    --radio-borde-pequeno: 8px;
+    --sombra-tarjeta: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* ====================================
+   2. ESTILOS BASE (Mobile First)
+   ==================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', -apple-system, sans-serif;
+    background-color: var(--color-fondo-app);
+    color: var(--color-texto-oscuro);
+    font-size: 16px;
+    line-height: 1.5;
+}
+h1, h2, h3 { font-weight: 700; }
+h2 { font-size: 22px; margin-bottom: 15px; }
+h3 { font-size: 18px; margin-bottom: 5px; }
+img { max-width: 100%; display: block; }
+a { text-decoration: none; color: var(--color-primario-azul-borde); }
+
+.contenedor {
+    width: 90%;
+    margin: 0 auto;
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+.body-noscroll { /* Para el menú */
+    overflow: hidden;
+}
+
+/* ====================================
+   3. HEADER (Menú Superior)
+   ==================================== */
+.site-header {
+    background-color: var(--color-blanco);
+    padding: 15px 5%;
+    border-bottom: 1px solid var(--color-borde-suave);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+.header-contenido {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.site-header .logo img {
+    height: 30px;
+}
+.navegacion-principal {
+    display: none; /* Oculta la barra cuando se muestra el menú hamburguesa */
+    gap: 20px;
+    font-weight: 500;
+}
+.navegacion-principal a {
+    color: var(--color-texto-oscuro);
+}
+.navegacion-principal a.activo {
+    color: var(--color-primario-azul-borde);
+}
+.menu-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
+.menu-btn span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: var(--color-texto-oscuro);
+    margin: 5px 0;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+.menu-btn.activo span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.menu-btn.activo span:nth-child(2) { opacity: 0; }
+.menu-btn.activo span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+body.body-noscroll .navegacion-principal {
+    display: none; /* Oculta el menú principal cuando el offcanvas está abierto */
+}
+@media (min-width: 992px) {
+    .menu-btn {
+        display: none;
+    }
+    .navegacion-principal {
+        display: flex;
+        align-items: center;
+    }
+}
+
+/* ====================================
+   4. WELCOME HERO (Sección Azul)
+   ==================================== */
+.welcome-hero {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: var(--color-texto-blanco);
+    padding: 30px 5%;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+}
+.welcome-hero-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+.welcome-hero h1 { font-size: 28px; margin-bottom: 4px; }
+.welcome-hero p { font-size: 16px; font-weight: 300; opacity: 0.9; }
+.welcome-icon {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ====================================
+   5. TARJETAS DE ESTADO
+   ==================================== */
+.status-cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.status-card {
+    background-color: var(--color-blanco);
+    color: var(--color-texto-oscuro);
+    border-radius: var(--radio-borde-grande);
+    box-shadow: var(--sombra-tarjeta);
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    overflow: hidden;
+}
+.status-icon-container {
+    padding: 10px;
+    border-radius: var(--radio-borde-pequeno);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.status-text { flex-grow: 1; }
+.status-text .status-title {
+    display: block;
+    font-size: 14px;
+    color: var(--color-texto-gris);
+}
+.status-text .status-value {
+    display: block;
+    font-size: 18px;
+    font-weight: 700;
+}
+.status-bar {
+    width: 8px;
+    height: 50px;
+    border-radius: 4px;
+}
+
+/* ====================================
+   6. SECCIÓN RECORDATORIOS
+   ==================================== */
+.reminders-section {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.card-base {
+    background-color: var(--color-blanco);
+    border-radius: var(--radio-borde-pequeno);
+    box-shadow: var(--sombra-tarjeta);
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-left-width: 5px;
+    border-left-style: solid;
+}
+.card-base svg { flex-shrink: 0; }
+.card-base .card-title {
+    font-weight: 500;
+    display: block;
+    color: var(--color-texto-oscuro);
+}
+.card-base .card-subtitle {
+    font-size: 14px;
+    color: var(--color-texto-gris);
+}
+.card-reminder { border-left-color: var(--color-advertencia); }
+.card-appointment { border-left-color: var(--color-borde-cita); }
+
+/* ====================================
+   7. SECCIÓN ACCIONES RÁPIDAS
+   ==================================== */
+.quick-actions {
+    margin-top: 25px;
+}
+.actions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+.action-button {
+    border-radius: var(--radio-borde-pequeno);
+    padding: 20px 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 10px;
+    font-weight: 500;
+    border: 2px solid;
+    box-shadow: var(--sombra-tarjeta);
+    outline-style: none;
+    transition: all 0.2s ease;
+}
+.action-button--blue {
+    background-color: var(--color-primario-azul-fondo);
+    border-color: var(--color-primario-azul-borde);
+    color: var(--color-primario-azul-borde);
+}
+.action-button--eventos {
+    background-color: var(--color-eventos-fondo);
+    border-color: var(--color-eventos-borde);
+    color: var(--color-eventos-borde);
+}
+.action-button--contacto {
+    background-color: var(--color-contacto-fondo);
+    border-color: var(--color-contacto-borde);
+    color: var(--color-contacto-borde);
+}
+
+
+/* ====================================
+   8. SECCIÓN CONSEJOS DE SALUD
+   ==================================== */
+.health-tips {
+    margin-top: 25px;
+}
+.tips-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.tip-item {
+    background-color: var(--color-blanco);
+    border-radius: var(--radio-borde-grande); 
+    box-shadow: var(--sombra-tarjeta);
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border: 1px solid var(--color-borde-suave); 
+}
+.tip-item .tip-image {
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radio-borde-pequeno); 
+    object-fit: cover;
+    flex-shrink: 0;
+}
+.tip-item .tip-content h3 {
+    font-size: 16px;
+    color: var(--color-primario-azul-borde);
+}
+.tip-item .tip-content p {
+    font-size: 14px;
+    color: var(--color-texto-gris);
+    line-height: 1.4;
+}
+
+/* ====================================
+   9. TARJETA TIP NUTRICIONAL
+   ==================================== */
+.nutrition-tip-card {
+    background-color: var(--color-secundario-verde);
+    color: var(--color-texto-blanco);
+    border-radius: var(--radio-borde-grande);
+    padding: 25px;
+    margin-top: 25px;
+    text-align: center;
+}
+.nutrition-tip-card svg {
+    margin: 0 auto 10px auto;
+}
+.nutrition-tip-card h3 {
+    font-size: 20px;
+}
+.nutrition-tip-card p {
+    font-weight: 300;
+    opacity: 0.9;
+    margin-bottom: 20px;
+}
+.nutrition-tip-card .btn-ver-mas {
+    background-color: transparent;
+    color: var(--color-texto-blanco);
+    border: 2px solid var(--color-texto-blanco);
+    padding: 10px 25px;
+    border-radius: 50px;
+    font-weight: 700;
+    display: inline-block;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    outline-style: none;
+}
+.nutrition-tip-card .btn-ver-mas:hover {
+    background-color: var(--color-blanco);
+    color: var(--color-secundario-verde);
+}
+
+/* ====================================
+   10. FOOTER
+   ==================================== */
+.site-footer {
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 20px;
+    border-top: 1px solid var(--color-borde-suave);
+}
+.site-footer p {
+    font-size: 12px;
+    color: var(--color-texto-gris);
+}
+
+/* ====================================
+   11. AJUSTES PARA TABLETS
+   ==================================== */
+@media (min-width: 768px) {
+    .contenedor {
+        width: 90%;
+        max-width: 700px;
+    }
+    .welcome-hero {
+        padding-left: calc( (100% - 700px) / 2 );
+        padding-right: calc( (100% - 700px) / 2 );
+    }
+    .actions-grid {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+}
+
+/* ====================================
+   12. ESTILOS DEL MENÚ DESLIZANTE (OFFCANVAS)
+   ==================================== */
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1001;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+.offcanvas-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 320px;
+    max-width: 90%;
+    height: 100%;
+    background-color: var(--color-blanco);
+    z-index: 1002;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+}
+/* --- Estados Visibles --- */
+.menu-overlay.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+.offcanvas-menu.visible {
+    transform: translateX(0);
+    box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+}
+/* --- Estilos Internos del Menú --- */
+.menu-drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--color-borde-suave);
+    flex-shrink: 0;
+}
+.menu-drawer-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.menu-drawer-logo img { height: 35px; }
+.menu-drawer-logo span {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+.menu-drawer-logo strong {
+    font-size: 14px;
+    color: var(--color-texto-oscuro);
+}
+.menu-drawer-logo small {
+    font-size: 12px;
+    color: var(--color-texto-gris);
+}
+.menu-close-btn {
+    background: none;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    color: var(--color-texto-gris);
+}
+.menu-close-btn:hover { color: var(--color-texto-oscuro); }
+.menu-drawer-nav {
+    list-style: none;
+    padding: 15px 10px;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+.menu-drawer-link {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+.menu-drawer-link:hover {
+    background-color: var(--color-fondo-app);
+}
+.menu-drawer-link__icon {
+    flex-shrink: 0;
+    color: var(--color-texto-gris);
+}
+.menu-drawer-link__icon svg { width: 22px; height: 22px; }
+.menu-drawer-link__text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.3;
+}
+.menu-drawer-link__title {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-texto-oscuro);
+}
+.menu-drawer-link__subtitle {
+    font-size: 12px;
+    color: var(--color-texto-gris);
+}
+.menu-drawer-link.active {
+    background-color: var(--color-primario-azul-fondo);
+}
+.menu-drawer-link.active .menu-drawer-link__icon,
+.menu-drawer-link.active .menu-drawer-link__title {
+    color: var(--color-primario-azul-borde);
+}
+.menu-drawer-link.active .menu-drawer-link__subtitle {
+    color: var(--color-primario-azul-borde);
+    opacity: 0.8;
+}
+.menu-drawer-footer {
+    padding: 20px;
+    border-top: 1px solid var(--color-borde-suave);
+    background-color: var(--color-fondo-app);
+    flex-shrink: 0;
+}
+.menu-drawer-footer p {
+    font-size: 11px;
+    color: var(--color-texto-gris);
+    text-align: center;
+    line-height: 1.4;
+}
+
+/* ====================================
+   13. ESTILOS PÁGINA CALCULADORA (NUEVO)
+   ==================================== */
+
+/* Encabezado azul de la página */
+.page-header {
+    background: var(--color-primario-azul-borde);
+    color: var(--color-texto-blanco);
+    padding: 20px 5%;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+}
+.page-header-icon {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: var(--radio-borde-pequeno);
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.page-header-icon svg {
+    stroke: var(--color-blanco);
+}
+.page-header h1 {
+    font-size: 24px;
+    margin-bottom: 2px;
+}
+.page-header p {
+    font-size: 14px;
+    font-weight: 300;
+    opacity: 0.9;
+}
+
+/* Formulario y tarjetas */
+.calculadora-form {
+    margin-top: -20px; /* Sube las tarjetas sobre el arco azul */
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Espacio entre tarjetas */
+}
+.card-form {
+    background: var(--color-blanco);
+    border: 1px solid var(--color-borde-suave);
+    border-radius: var(--radio-borde-grande);
+    box-shadow: var(--sombra-tarjeta);
+    padding: 20px;
+    margin: 0;
+}
+.card-form-legend {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-texto-oscuro);
+    margin-bottom: 15px; /* Espacio entre el título y el primer campo */
+}
+.card-form-legend svg {
+    /* color: var(--color-secundario-verde); Iconos de leyenda en verde */
+    width: 24px;
+    height: 24px;
+}
+
+/* Grupos de Formulario (label + input) */
+.form-group {
+    margin-bottom: 15px;
+}
+.form-group:last-child {
+    margin-bottom: 0;
+}
+.form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-texto-gris);
+    margin-bottom: 8px;
+}
+.form-group .form-control {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 16px;
+    font-family: var(--fuente-principal);
+    border: 1px solid #ccc;
+    border-radius: var(--radio-borde-pequeno);
+    background-color: var(--color-fondo-app);
+    appearance: none; /* Quita estilos por defecto de select */
+}
+
+/* Contenedor para campos de contraseña con ojo */
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper .password-input {
+    width: 100%;
+    padding-right: 45px;
+}
+
+.toggle-password-btn {
+    position: absolute;
+    right: 15px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    color: #999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s ease, color 0.2s ease;
+    opacity: 0.5;
+}
+
+.toggle-password-btn:hover {
+    color: var(--color-primario-azul-borde);
+}
+
+.toggle-password-btn svg {
+    stroke: currentColor;
+}
+
+.form-group select.form-control {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%236c757d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 16px;
+}
+
+/* Botón de Calcular */
+.btn-calculadora {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: var(--radio-borde-pequeno);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+.btn-calculadora:disabled {
+    background-color: #e0e0e0;
+    color: var(--color-texto-gris);
+    cursor: not-allowed;
+}
+.btn-calculadora:disabled svg {
+    stroke: var(--color-texto-gris);
+}
+.btn-calculadora:not(:disabled) {
+    background-color: var(--color-primario-azul-borde);
+    color: var(--color-blanco);
+}
+.btn-calculadora:not(:disabled):hover {
+    background-color: #0056b3;
+}
+.btn-calculadora:not(:disabled) svg {
+    stroke: var(--color-blanco);
+}
+
+/* Alerta de "Importante" (Roja) */
+.alert-importante {
+    display: flex;
+    gap: 15px;
+    background-color: #fff8f8;
+    border: 1px solid #f0c0c0;
+    border-radius: var(--radio-borde-pequeno);
+    padding: 15px;
+    margin-top: 10px;
+}
+.alert-importante .alert-icon {
+    flex-shrink: 0;
+    /* color: #d9534f; El color se define en el SVG */
+}
+.alert-importante .alert-text strong {
+    display: block;
+    color: #a94442;
+    margin-bottom: 5px;
+}
+.alert-importante .alert-text p {
+    font-size: 14px;
+    color: var(--color-texto-oscuro);
+    line-height: 1.5;
+}
+
+/* ====================================
+   14. ESTILOS SECCIÓN DE RESULTADOS (NUEVO)
+   ==================================== */
+
+/* Clase para ocultar/mostrar la sección */
+.seccion-resultados.oculto {
+    display: none;
+}
+
+.titulo-resultados {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--color-primario-azul-borde); 
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
+.card-resultados {
+    background: var(--color-blanco);
+    border: 1px solid var(--color-borde-suave);
+    border-radius: var(--radio-borde-grande);
+    box-shadow: var(--sombra-tarjeta);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Espacio entre items */
+}
+
+.resultado-item {
+    /* Contenedor para label + valor */
+}
+
+.resultado-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-texto-gris);
+    margin-bottom: 5px;
+}
+
+.resultado-valor {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-texto-oscuro);
+}
+
+.resultado-valor--dosis {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--color-secundario-verde); /* Verde para la dosis */
+}
+
+/* Alerta de Estado (Amarilla/Naranja) */
+.alert-status {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    background-color: #fffaf0; /* Fondo naranja claro */
+    border: 1px solid #fce0a8; /* Borde naranja */
+    border-radius: var(--radio-borde-pequeno);
+    padding: 15px;
+}
+.alert-status .alert-icon {
+    flex-shrink: 0;
+    /* color: #f59e0b; El color se define en el SVG */
+}
+.alert-status .alert-text p {
+    font-size: 14px;
+    color: var(--color-texto-oscuro);
+    line-height: 1.5;
+    font-weight: 500;
+    margin: 0;
+}
+
+/* Botón de Guardar (Fantasma) */
+.btn-guardar {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: var(--radio-borde-pequeno);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    
+    background-color: transparent;
+    border: 2px solid var(--color-primario-azul-borde);
+    color: var(--color-primario-azul-borde);
+    outline: none;
+}
+.btn-guardar:hover {
+    background-color: var(--color-primario-azul-fondo);
+}
+/* ====================================
+   15. ESTILOS PÁGINA EVENTOS
+   ==================================== */
+
+/* Encabezado de página verde */
+.page-header--green {
+    background: var(--color-secundario-verde);
+}
+
+/* Contenedor de estadísticas */
+.event-stats-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: -20px; /* Sube las tarjetas sobre el banner */
+    position: relative;
+    z-index: 2;
+}
+.stat-card {
+    background: var(--color-blanco);
+    border-radius: var(--radio-borde-pequeno);
+    box-shadow: var(--sombra-tarjeta);
+    padding: 15px;
+    text-align: center;
+    flex: 1; /* Ocupa 1/3 del espacio */
+    border: 1px solid var(--color-borde-suave);
+}
+.stat-card strong {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--color-primario-azul-borde);
+    display: block;
+}
+.stat-card span {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-texto-gris);
+}
+
+/* Título de la sección "Próximos Eventos" */
+.event-list-section h2 {
+    margin-top: 25px; /* Espacio después de las estadísticas */
+}
+
+/* Lista de tarjetas de evento */
+.event-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.event-card {
+    background: var(--color-blanco);
+    border-radius: var(--radio-borde-grande);
+    box-shadow: var(--sombra-tarjeta);
+    border: 1px solid var(--color-borde-suave);
+    overflow: hidden; /* Para que la imagen no rompa los bordes */
+}
+.event-card-image {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+}
+.event-card-content {
+    padding: 20px;
+}
+
+/* Etiquetas de categoría */
+.event-tag {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+.event-tag--educativo {
+    background-color: var(--color-primario-azul-fondo);
+    color: var(--color-primario-azul-borde);
+}
+.event-tag--actividad {
+    background-color: var(--color-eventos-fondo);
+    color: var(--color-eventos-borde);
+}
+.event-tag--conferencia {
+    background-color: #f0e6ff; /* Color morado/lila (ejemplo) */
+    color: #8446ff;
+}
+
+.event-card h3 {
+    font-size: 20px;
+    color: var(--color-texto-oscuro);
+    margin-bottom: 8px;
+}
+.event-card p {
+    font-size: 14px;
+    color: var(--color-texto-gris);
+    line-height: 1.5;
+}
+
+/* Detalles del evento (fecha, hora, lugar) */
+.event-details {
+    list-style: none;
+    margin: 20px 0;
+    padding: 0;
+}
+.event-details li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    color: var(--color-texto-gris);
+    font-size: 14px;
+    font-weight: 500;
+}
+.event-details li svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    /* El color se debe definir en el SVG */
+}
+
+/* Barra de Progreso */
+.event-progress {
+    margin-bottom: 20px;
+}
+.event-progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-texto-gris);
+    margin-bottom: 6px;
+}
+.event-progress-bar {
+    background-color: #e0e0e0; /* Fondo gris de la barra */
+    border-radius: 50px;
+    height: 8px;
+    overflow: hidden;
+}
+.event-progress-fill {
+    background-color: var(--color-primario-azul-borde); /* Relleno azul */
+    height: 100%;
+    border-radius: 50px;
+}
+
+/* Botones de Evento */
+.btn-evento {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: var(--radio-borde-pequeno);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+.btn-evento svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Botón Verde (Registrarse) */
+.btn-evento--registrar {
+    background-color: var(--color-secundario-verde);
+    color: var(--color-blanco);
+    border: 2px solid var(--color-secundario-verde);
+}
+.btn-evento--registrar:hover {
+    background-color: #218838; /* Verde más oscuro */
+}
+
+/* Botón Gris (Ya Registrado) */
+.btn-evento--registrado {
+    background-color: transparent;
+    border: 2px solid var(--color-borde-suave);
+    color: var(--color-texto-gris);
+    cursor: not-allowed;
+}
+.btn-evento--registrado svg {
+    /* El color se hereda (gris) */
+}
+/* ====================================
+   16. ESTILOS PÁGINA CONTACTO
+   ==================================== */
+
+/* Grid de Info (2x2) */
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: -20px; /* Sube las tarjetas sobre el banner */
+    position: relative;
+    z-index: 2;
+}
+
+.info-card {
+    background: var(--color-blanco);
+    border: 1px solid var(--color-borde-suave);
+    border-radius: var(--radio-borde-grande);
+    box-shadow: var(--sombra-tarjeta);
+    padding: 20px;
+    text-align: center;
+}
+.info-card svg {
+    margin: 0 auto 10px auto;
+    /* El color se debe definir en el SVG */
+    width: 28px;
+    height: 28px;
+}
+.info-card h3 {
+    font-size: 16px;
+    margin-bottom: 5px;
+    color: var(--color-texto-oscuro);
+}
+.info-card a, 
+.info-card p {
+    font-size: 14px;
+    color: var(--color-texto-gris);
+    line-height: 1.4;
+    text-decoration: none;
+    word-break: break-word; /* Para emails largos */
+    display: block;
+}
+
+/* Sección de Redes Sociales */
+.social-section {
+    margin-top: 30px;
+}
+.social-section h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--color-primario-azul-borde);
+    margin-bottom: 15px;
+}
+.social-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+}
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    border-radius: var(--radio-borde-pequeno);
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    border: 1px solid;
+    transition: all 0.2s ease;
+}
+.social-btn svg {
+    width: 20px;
+    height: 20px;
+}
+/* Colores de cada botón */
+.social-btn--facebook {
+    background-color: #eaf2ff;
+    border-color: #b3d1ff;
+    color: #3b5998;
+}
+.social-btn--facebook:hover {
+    background-color: #3b5998;
+    color: white;
+}
+.social-btn--instagram {
+    background-color: #fff0f5;
+    border-color: #ffcce0;
+    color: #c13584;
+}
+.social-btn--instagram:hover {
+    background-color: #c13584;
+    color: white;
+}
+.social-btn--whatsapp {
+    background-color: #eaf6ea;
+    border-color: #b3ddb3;
+    color: #25D366;
+}
+.social-btn--whatsapp:hover {
+    background-color: #25D366;
+    color: white;
+}
+
+/* Grid del formulario para Email/Teléfono */
+.contact-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+/* Estilo para el <textarea> */
+.form-control[rows] {
+    min-height: 120px;
+    resize: vertical; /* Permite al usuario cambiar el tamaño verticalmente */
+}
+
+/* Tarjeta de Mapa */
+.map-card {
+    background-color: var(--color-primario-azul-fondo);
+    border: 1px solid var(--color-primario-azul-borde);
+    border-radius: var(--radio-borde-grande);
+    padding: 25px;
+    text-align: center;
+    margin-top: 20px;
+}
+.map-card svg {
+    margin: 0 auto 10px auto;
+    /* El color debe venir del SVG */
+    width: 32px;
+    height: 32px;
+}
+.map-card h3 {
+    font-size: 18px;
+    color: var(--color-primario-azul-borde);
+}
+.map-card p {
+    font-size: 14px;
+    color: var(--color-texto-gris);
+    margin-bottom: 15px;
+}
+.btn-maps {
+    display: inline-block;
+    background-color: var(--color-primario-azul-borde);
+    color: var(--color-blanco);
+    padding: 10px 25px;
+    font-size: 14px;
+    font-weight: 700;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+.btn-maps:hover {
+    background-color: #0056b3;
+}
+
+/* Tarjeta de Emergencias */
+.emergency-card {
+    background-color: #d9534f; /* Rojo */
+    border-radius: var(--radio-borde-grande);
+    padding: 25px;
+    text-align: center;
+    margin-top: 20px;
+    color: var(--color-blanco);
+}
+.emergency-card svg {
+    margin: 0 auto 10px auto;
+    stroke: var(--color-blanco);
+    width: 32px;
+    height: 32px;
+}
+.emergency-card h3 {
+    font-size: 18px;
+    color: var(--color-blanco);
+}
+.emergency-card p {
+    font-size: 14px;
+    color: var(--color-blanco);
+    opacity: 0.9;
+    margin-bottom: 15px;
+}
+.btn-emergency {
+    display: inline-block;
+    background-color: var(--color-blanco);
+    color: #d9534f; /* Texto rojo */
+    padding: 12px 30px;
+    font-size: 18px;
+    font-weight: 700;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+.btn-emergency:hover {
+    transform: scale(1.05);
+}
+/* ====================================
+   17. ESTILOS PÁGINA AGENDAR CITA
+   ==================================== */
+
+/* Título de la sección "Próximas Citas" */
+.section-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-texto-oscuro);
+    margin-bottom: 15px;
+    margin-top: -10px; /* Ajuste visual por el arco azul */
+    position: relative;
+    z-index: 2;
+}
+
+/* Lista de citas */
+.appointments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    position: relative;
+    z-index: 2;
+}
+
+/* Tarjeta de Cita (Doctor) */
+.appointment-card {
+    background: var(--color-blanco);
+    border-radius: var(--radio-borde-grande);
+    box-shadow: var(--sombra-tarjeta);
+    padding: 20px;
+    /* Borde izquierdo azul como en el diseño */
+    border-left: 5px solid var(--color-primario-azul-borde);
+}
+
+/* Cabecera de la tarjeta (Nombre + Badge) */
+.appointment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.doctor-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-texto-oscuro);
+    margin-bottom: 2px;
+}
+
+.doctor-specialty {
+    font-size: 14px;
+    color: var(--color-texto-gris);
+}
+
+/* Etiquetas de Estado */
+.status-badge {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 4px;
+}
+
+.status-confirmed {
+    background-color: #dff0d8; /* Verde claro */
+    color: #3c763d; /* Verde oscuro */
+}
+
+.status-pending {
+    background-color: #fcf8e3; /* Naranja/Amarillo claro */
+    color: #8a6d3b; /* Marrón/Naranja oscuro */
+}
+
+/* Detalles de la cita (lista) */
+.appointment-details {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.appointment-details li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--color-texto-gris);
+    margin-bottom: 8px;
+}
+
+.appointment-details li svg {
+    width: 16px;
+    height: 16px;
+    color: var(--color-primario-azul-borde); /* Íconos azules */
+}
+
+/* Utilidad: Margen superior */
+.mt-30 {
+    margin-top: 30px;
+}
+
+/* Utilidad: Grid de 2 columnas para formularios */
+.form-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+/* Banner de Ayuda (Verde) */
+.help-banner {
+    background-color: #28a745; /* Verde fuerte */
+    border-radius: var(--radio-borde-grande);
+    padding: 30px 20px;
+    text-align: center;
+    color: var(--color-blanco);
+    margin-top: 30px;
+}
+
+.help-icon svg {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 10px;
+    stroke: var(--color-blanco);
+}
+
+.help-banner h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.help-banner p {
+    font-size: 14px;
+    opacity: 0.9;
+    margin-bottom: 20px;
+}
+
+.btn-help {
+    display: inline-block;
+    background-color: var(--color-blanco);
+    color: #28a745; /* Texto verde */
+    font-size: 18px;
+    font-weight: 700;
+    padding: 12px 30px;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: transform 0.2s ease;
+}
+
+.btn-help:hover {
+    transform: scale(1.05);
+}
+/* ====================================
+   18. ESTILOS PÁGINA LOGIN
+   ==================================== */
+
+.section-subtitle {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-texto-oscuro);
+    margin-bottom: 15px;
+}
+
+/* Contenedor de tarjetas de beneficios */
+.benefits-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.benefit-card {
+    background: var(--color-blanco);
+    border-radius: var(--radio-borde-grande);
+    box-shadow: var(--sombra-tarjeta);
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border: 1px solid var(--color-borde-suave);
+}
+
+/* Círculos de íconos */
+.benefit-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.benefit-icon svg { width: 20px; height: 20px; }
+
+.benefit-icon--blue { background-color: #e0f0ff; color: #007bff; }
+.benefit-icon--green { background-color: #e0fff0; color: #28a745; }
+.benefit-icon--cyan { background-color: #e0f7fa; color: #00bcd4; }
+
+.benefit-text h4 {
+    font-size: 16px;
+    margin-bottom: 2px;
+    color: var(--color-texto-oscuro);
+}
+.benefit-text p {
+    font-size: 12px;
+    color: var(--color-texto-gris);
+    line-height: 1.3;
+}
+
+/* --- Inputs con Íconos --- */
+.input-icon-wrapper {
+    position: relative;
+}
+.input-icon-left {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-texto-gris);
+    pointer-events: none; /* Clic pasa a través */
+}
+.form-control.pl-icon {
+    padding-left: 40px; /* Espacio para el ícono */
+}
+
+/* Toggle Password (Ojo) */
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-texto-gris);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+.toggle-password:hover { color: var(--color-primario-azul-borde); }
+
+.forgot-link {
+    display: block;
+    font-size: 13px;
+    color: var(--color-primario-azul-borde);
+    text-decoration: underline;
+    margin-top: 5px;
+}
+
+.mt-20 { margin-top: 20px; }
+
+/* Separador */
+.form-divider {
+    text-align: center;
+    margin: 15px 0;
+    position: relative;
+}
+.form-divider span {
+    background-color: var(--color-blanco);
+    padding: 0 10px;
+    color: var(--color-texto-gris);
+    font-size: 12px;
+    position: relative;
+    z-index: 1;
+}
+.form-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: var(--color-borde-suave);
+    z-index: 0;
+}
+
+/* Botón Crear Cuenta (Outline Verde) */
+.btn-outline-green {
+    background-color: transparent;
+    border: 2px solid var(--color-secundario-verde);
+    color: var(--color-secundario-verde);
+}
+.btn-outline-green:hover {
+    background-color: var(--color-secundario-verde);
+    color: var(--color-blanco);
+}
+.btn-outline-green svg { stroke: currentColor; }
+
+
+/* Banner de Seguridad (Footer) */
+.security-banner {
+    background-color: #eaf2ff; /* Azul muy claro */
+    border: 1px solid #cce5ff;
+    border-radius: var(--radio-borde-pequeno);
+    padding: 15px;
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+    align-items: flex-start;
+}
+.security-icon {
+    color: var(--color-primario-azul-borde);
+    flex-shrink: 0;
+}
+.security-text h4 {
+    font-size: 14px;
+    color: var(--color-primario-azul-borde);
+    margin-bottom: 5px;
+}
+.security-text p {
+    font-size: 11px;
+    color: var(--color-texto-gris);
+    line-height: 1.4;
+}
+/* ====================================
+   19. ESTILOS PÁGINA BLOG
+   ==================================== */
+
+/* --- Hero del Blog --- */
+.blog-hero {
+    background: linear-gradient(120deg, #015ac7, #00a3cf);
+    color: var(--color-blanco);
+    border-radius: var(--radio-borde-grande);
+    padding: 38px 42px;
+    margin-top: -10px;
+    margin-bottom: 30px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--sombra-tarjeta);
+}
+.blog-hero::after {
+    content: '';
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    top: -70px;
+    right: -50px;
+}
+.blog-hero-inner {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+}
+.blog-hero__content {
+    flex: 1 1 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+.blog-hero__label {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.85);
+}
+.blog-hero__content h1 {
+    font-size: 30px;
+    margin: 0;
+}
+.blog-hero__content p {
+    margin: 0;
+    color: rgba(255,255,255,0.9);
+    line-height: 1.45;
+}
+.blog-hero__stats {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+.hero-stat {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 20px;
+    padding: 14px 22px;
+    min-width: 150px;
+}
+.hero-stat strong {
+    display: block;
+    font-size: 30px;
+    margin-bottom: 4px;
+}
+.hero-stat span {
+    font-size: 13px;
+    letter-spacing: 0.02em;
+}
+.blog-hero__actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.btn-hero {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--color-blanco);
+    color: #015ac7;
+    border-radius: 999px;
+    font-weight: 700;
+    padding: 12px 24px;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.btn-hero svg {
+    stroke: currentColor;
+}
+.btn-hero:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(0,0,0,0.2);
+}
+.blog-hero__figure {
+    flex: 1 1 260px;
+}
+.hero-illustration {
+    border-radius: 30px;
+    overflow: hidden;
+    border: 4px solid rgba(255,255,255,0.2);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+}
+.hero-illustration img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+/* Utilidades de padding/overflow para las tarjetas */
+.p-0 { padding: 0 !important; }
+.p-20 { padding: 20px; }
+.overflow-hidden { overflow: hidden; }
+
+/* --- Filtro de Categorías (Scroll Horizontal) --- */
+.category-scroll-container {
+    background-color: var(--color-blanco);
+    border-radius: var(--radio-borde-grande);
+    box-shadow: var(--sombra-tarjeta);
+    padding: 18px 28px;
+    margin-top: -25px;
+    margin-bottom: 35px;
+    position: relative;
+    z-index: 2;
+}
+
+.category-filter {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 0;
+    white-space: nowrap;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+.category-filter::-webkit-scrollbar { display: none; }
+
+.cat-btn {
+    background-color: transparent;
+    border: 1.5px solid var(--color-secundario-verde);
+    color: var(--color-secundario-verde);
+    padding: 10px 22px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cat-btn.active {
+    background-color: var(--color-primario-azul-borde);
+    color: var(--color-blanco);
+    border-color: var(--color-primario-azul-borde);
+    box-shadow: 0 10px 18px rgba(0,90,200,0.25);
+}
+.cat-btn:not(.active):hover {
+    background-color: #e7f4ff;
+    color: var(--color-primario-azul-borde);
+    border-color: var(--color-primario-azul-borde);
+}
+
+/* --- Tarjeta Destacada --- */
+.featured-post {
+    margin-top: 20px;
+}
+.featured-image-container {
+    width: 100%;
+    height: 200px; /* Altura fija para la imagen */
+}
+.featured-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.tags-container {
+    margin-bottom: 10px;
+}
+.event-tag--destacado {
+    background-color: #fff8e1; /* Amarillo claro */
+    color: #ff8f00; /* Naranja */
+    border: 1px solid #ffecb3;
+    margin-left: 5px;
+}
+
+.featured-content h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: var(--color-texto-oscuro);
+}
+.featured-content p {
+    font-size: 14px;
+    color: var(--color-texto-gris);
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+/* Metadata (Autor, Tiempo, Fecha) */
+.post-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #999;
+}
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* --- Artículos Recientes (Horizontal) --- */
+.blog-recent-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.blog-card-horizontal {
+    display: flex; /* Flexbox para poner imagen a la izq */
+    height: 100%; /* Asegura altura consistente */
+}
+
+.horizontal-img-container {
+    width: 120px; /* Ancho fijo de la imagen */
+    flex-shrink: 0; /* Evita que se encoja */
+}
+.horizontal-img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.horizontal-content {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Etiquetas Específicas */
+.event-tag--actividad-blue {
+    background-color: #e0f7fa; /* Cyan claro */
+    color: #006064; /* Cyan oscuro */
+}
+.event-tag--tecnologia {
+    background-color: #e3f2fd; /* Azul muy claro */
+    color: #1565c0; /* Azul fuerte */
+}
+.event-tag--bienestar {
+    background-color: #e8f5e9; /* Verde muy claro */
+    color: #2e7d32; /* Verde fuerte */
+}
+
+.horizontal-content h4 {
+    font-size: 16px;
+    margin: 5px 0;
+    line-height: 1.3;
+    color: var(--color-texto-oscuro);
+}
+.horizontal-content p {
+    font-size: 12px;
+    color: var(--color-texto-gris);
+    margin-bottom: 10px;
+    /* Limitar a 2 líneas */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.post-meta-simple {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #999;
+}
+.post-meta-simple span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* --- Banner Suscripción (Verde) --- */
+.newsletter-card {
+    background: linear-gradient(135deg, #28a745, #218838); /* Gradiente verde */
+    border-radius: var(--radio-borde-grande);
+    padding: 30px 20px;
+    text-align: center;
+    color: var(--color-blanco);
+}
+.newsletter-icon {
+    margin-bottom: 10px;
+}
+.newsletter-card h3 {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+.newsletter-card p {
+    font-size: 14px;
+    opacity: 0.9;
+    margin-bottom: 20px;
+}
+.btn-suscribir {
+    background-color: var(--color-blanco);
+    color: #28a745; /* Texto verde */
+    border: none;
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+.btn-suscribir:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 900px) {
+    .blog-hero {
+        padding: 28px 24px;
+    }
+    .blog-hero__content h1 {
+        font-size: 26px;
+    }
+    .category-scroll-container {
+        margin-top: 10px;
+        padding: 16px 18px;
+    }
+}
+
+@media (max-width: 600px) {
+    .hero-stat {
+        min-width: auto;
+        flex: 1 1 140px;
+        text-align: center;
+    }
+    .category-filter {
+        gap: 8px;
+    }
+    .cat-btn {
+        padding: 9px 18px;
+        font-size: 13px;
+    }
+}
+/* ====================================
+   20. ESTILOS GALERÍA DE VIDEOS
+   ==================================== */
+
+/* Header Azul Claro (Cyan) */
+.page-header--cyan {
+    background: #0097d8; /* Azul cyan similar a la imagen */
+}
+
+/* Lista de Videos */
+.video-list {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.video-card {
+    background: var(--color-blanco);
+    border-radius: var(--radio-borde-grande);
+    box-shadow: var(--sombra-tarjeta);
+    overflow: hidden;
+    border: 1px solid var(--color-borde-suave);
+    transition: transform 0.2s ease;
+}
+.video-card:hover {
+    transform: translateY(-3px); /* Efecto sutil al pasar el mouse */
+}
+
+/* --- Thumbnail y Overlays --- */
+.video-thumbnail-container {
+    position: relative;
+    width: 100%;
+    height: 180px; /* Altura fija para uniformidad */
+    background-color: #000;
+}
+
+.video-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.9;
+}
+
+/* Badge de Categoría (Arriba Izquierda) */
+.video-cat-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: white;
+    text-transform: uppercase;
+}
+/* Colores de etiquetas */
+.cat-prevencion { background-color: #8bc34a; } /* Verde Lima */
+.cat-nutricion { background-color: #4caf50; } /* Verde */
+.cat-ejercicio { background-color: #cddc39; color: #555; } /* Amarillo Lima */
+.cat-medicamentos { background-color: #9ccc65; } /* Verde claro */
+
+/* Botón Play (Centro) */
+.play-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0,0,0,0.2);
+    transition: background-color 0.2s ease;
+}
+.video-card:hover .play-overlay {
+    background-color: rgba(0,0,0,0.1);
+}
+
+.play-circle {
+    width: 50px;
+    height: 50px;
+    background-color: rgba(0, 151, 216, 0.9); /* Azul logo */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+.play-circle svg {
+    width: 24px;
+    height: 24px;
+    fill: white;
+    margin-left: 2px; /* Ajuste óptico */
+}
+
+/* Badge de Duración (Abajo Derecha) */
+.duration-badge {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: rgba(0,0,0,0.7);
+    color: white;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.duration-badge svg { width: 10px; height: 10px; }
+
+
+/* --- Contenido del Video --- */
+.video-content {
+    padding: 15px 20px;
+}
+
+.video-content h3 {
+    margin: 0 0 5px 0;
+    font-size: 16px;
+    line-height: 1.3;
+}
+.video-content h3 a {
+    text-decoration: none;
+    color: #007bff; /* Azul título */
+}
+.video-content h3 a:hover {
+    text-decoration: underline;
+}
+
+.video-content p {
+    font-size: 12px;
+    color: var(--color-texto-gris);
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+.video-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 10px;
+}
+
+.video-views {
+    font-size: 11px;
+    color: #999;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.video-views svg { width: 14px; height: 14px; }
+
+.btn-ver-video {
+    background-color: #007bff;
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 15px;
+    border-radius: 20px;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+.btn-ver-video:hover {
+    background-color: #0056b3;
+}
+
+/* ====================================
+   21. BOTÓN SCROLL-TO-TOP
+   ==================================== */
+.scroll-to-top-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background-color: var(--color-primario-azul-borde);
+    color: var(--color-blanco);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+}
+
+.scroll-to-top-btn.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.scroll-to-top-btn:hover {
+    background-color: #0056b3; /* Un azul un poco más oscuro */
+}
+
+.scroll-to-top-btn svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* ====================================
+   HISTORIAL ROTATIVO DE CITAS
+   ==================================== */
+.historial-section {
+    margin-top: 30px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.stat-card {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid #e9ecef;
+    transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card .stat-number {
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.stat-card .stat-label {
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.historial-list {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.historial-item {
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+    background: #fff;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.historial-item:hover {
+    border-color: #0066b2;
+    box-shadow: 0 2px 8px rgba(0, 102, 178, 0.1);
+}
+
+.historial-item:last-child {
+    margin-bottom: 0;
+}
+
+.historial-item .status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.historial-item .status-indicator.completada {
+    background: #28a745;
+}
+
+.historial-item .status-indicator.pendiente {
+    background: #ffc107;
+}
+
+.historial-item .status-indicator.cancelada {
+    background: #6c757d;
+}
+
+.historial-item .especialidad {
+    font-weight: 600;
+    color: #333;
+    margin-right: 10px;
+}
+
+.historial-item .estado {
+    font-size: 12px;
+    color: #666;
+    text-transform: capitalize;
+    background: #f8f9fa;
+    padding: 2px 8px;
+    border-radius: 12px;
+}
+
+.historial-item .fecha {
+    font-size: 14px;
+    color: #666;
+    margin: 8px 0 5px 0;
+    display: flex;
+    align-items: center;
+}
+
+.historial-item .descripcion {
+    font-size: 13px;
+    color: #888;
+    font-style: italic;
+    line-height: 1.4;
+    margin-top: 8px;
+}
+
+.historial-item .fecha-registro {
+    font-size: 11px;
+    color: #aaa;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    text-align: right;
+    line-height: 1.2;
+}
+
+.info-note {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 20px;
+    text-align: center;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border-left: 3px solid #0066b2;
+}
+
+.historial-empty {
+    text-align: center;
+    color: #666;
+    padding: 30px;
+}
+
+.historial-empty svg {
+    margin-bottom: 15px;
+    opacity: 0.5;
+}
+
+/* Responsive para historial */
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+    
+    .stat-card {
+        padding: 12px 8px;
+    }
+    
+    .stat-card .stat-number {
+        font-size: 20px;
+    }
+    
+    .historial-item {
+        padding: 12px;
+    }
+    
+    .historial-item .fecha-registro {
+        position: static;
+        margin-top: 10px;
+        text-align: left;
+        border-top: 1px solid #f0f0f0;
+        padding-top: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .historial-list {
+        max-height: 300px;
+    }
+}

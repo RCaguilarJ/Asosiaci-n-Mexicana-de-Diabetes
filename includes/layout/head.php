@@ -38,15 +38,15 @@
         }
         
         // Verificar inmediatamente
-        if (esDispositivoEscritorio()) {
-            window.location.href = 'https://diabetesjalisco.org/';
-        }
+        // if (esDispositivoEscritorio()) {
+        //     window.location.href = 'https://diabetesjalisco.org/';
+        // }
         
         // También verificar después de que la página se cargue completamente
-        window.addEventListener('load', function() {
-            if (esDispositivoEscritorio()) {
-                window.location.href = 'https://diabetesjalisco.org/';
-            }
-        });
+        // window.addEventListener('load', function() {
+        //     if (esDispositivoEscritorio()) {
+        //         window.location.href = 'https://diabetesjalisco.org/';
+        //     }
+        // });
     </script>
 </head>

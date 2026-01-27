@@ -4,7 +4,7 @@
  */
 function amd_base_path() {
     $uriPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
-    $prefix = ''
+    $prefix = '/asosiacionMexicanaDeDiabetes';
 
     if ($uriPath === $prefix || strpos($uriPath, $prefix . '/') === 0) {
         return $prefix;

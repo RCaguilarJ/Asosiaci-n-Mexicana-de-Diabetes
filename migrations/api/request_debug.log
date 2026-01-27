@@ -1,0 +1,85 @@
+
+---- 2026-01-12T18:00:24+00:00 ----
+METHOD: POST
+HEADERS:
+Array
+(
+    [Authorization] => Bearer CHANGE_THIS_TO_A_STRONG_SECRET_TOKEN
+    [Content-Type] => application/json
+    [User-Agent] => Mozilla/5.0 (Windows NT; Windows NT 10.0; es-MX) WindowsPowerShell/5.1.19041.6456
+    [Host] => localhost
+    [Content-Length] => 134
+    [Connection] => Keep-Alive
+)
+
+RAW_BODY (first 200 chars):
+{"pacienteId": 1, "fechaHora": "2026-01-15 10:00:00", "motivo": "Control", "medicoId": 14, "notas": "Test", "especialidad": "GENERAL"}
+
+---- 2026-01-12T18:01:07+00:00 ----
+METHOD: POST
+HEADERS:
+Array
+(
+    [Authorization] => Bearer CHANGE_THIS_TO_A_STRONG_SECRET_TOKEN
+    [Content-Type] => application/json
+    [User-Agent] => Mozilla/5.0 (Windows NT; Windows NT 10.0; es-MX) WindowsPowerShell/5.1.19041.6456
+    [Host] => localhost
+    [Content-Length] => 134
+)
+
+RAW_BODY (first 200 chars):
+{"pacienteId": 1, "fechaHora": "2026-01-15 10:00:00", "motivo": "Control", "medicoId": 14, "notas": "Test", "especialidad": "GENERAL"}
+
+---- 2026-01-12T18:01:33+00:00 ----
+METHOD: GET
+HEADERS:
+Array
+(
+    [Host] => localhost
+    [Connection] => keep-alive
+    [Pragma] => no-cache
+    [Cache-Control] => no-cache
+    [sec-ch-ua] => "Google Chrome";v="143", "Chromium";v="143", "Not A(Brand";v="24"
+    [sec-ch-ua-mobile] => ?0
+    [sec-ch-ua-platform] => "Windows"
+    [Upgrade-Insecure-Requests] => 1
+    [User-Agent] => Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36
+    [Accept] => text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+    [Sec-Fetch-Site] => none
+    [Sec-Fetch-Mode] => navigate
+    [Sec-Fetch-User] => ?1
+    [Sec-Fetch-Dest] => document
+    [Accept-Encoding] => gzip, deflate, br, zstd
+    [Accept-Language] => es-US,es-419;q=0.9,es;q=0.8
+    [Cookie] => PHPSESSID=lmuhecvgfcoljmf6lbi08tfdlo
+)
+
+RAW_BODY (first 200 chars):
+
+
+---- 2026-01-12T18:01:35+00:00 ----
+METHOD: GET
+HEADERS:
+Array
+(
+    [Host] => localhost
+    [Connection] => keep-alive
+    [Pragma] => no-cache
+    [Cache-Control] => no-cache
+    [sec-ch-ua] => "Google Chrome";v="143", "Chromium";v="143", "Not A(Brand";v="24"
+    [sec-ch-ua-mobile] => ?0
+    [sec-ch-ua-platform] => "Windows"
+    [Upgrade-Insecure-Requests] => 1
+    [User-Agent] => Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36
+    [Accept] => text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+    [Sec-Fetch-Site] => none
+    [Sec-Fetch-Mode] => navigate
+    [Sec-Fetch-User] => ?1
+    [Sec-Fetch-Dest] => document
+    [Accept-Encoding] => gzip, deflate, br, zstd
+    [Accept-Language] => es-US,es-419;q=0.9,es;q=0.8
+    [Cookie] => PHPSESSID=lmuhecvgfcoljmf6lbi08tfdlo
+)
+
+RAW_BODY (first 200 chars):
+
