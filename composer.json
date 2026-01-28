@@ -1,0 +1,26 @@
+{
+  "name": "amd/asosiacion-mexicana-de-diabetes",
+  "description": "Sitio y sistema de citas de la Asociacion Mexicana de Diabetes.",
+  "type": "project",
+  "require": {
+    "php": ">=7.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "Amd\\": "src/"
+    }
+  },
+  "scripts": {
+    "autoload": "composer dump-autoload",
+    "migrate": "php scripts/db/ejecutar_migracion.php",
+    "migrate:sync-queue": "php migrations/create_sync_queue_table.php",
+    "worker:sync": "php workers/sync_worker.php",
+    "test:sync": "php tests/test_sync.php"
+  },
+  "config": {
+    "platform": {
+      "php": "7.4.33"
+    },
+    "sort-packages": true
+  }
+}

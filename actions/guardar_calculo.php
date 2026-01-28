@@ -122,15 +122,3 @@ try {
 
 // Asegurar que no hay output adicional
 exit;
-?>
-        } else {
-            echo json_encode(['success' => false, 'message' => 'Error al guardar en BD']);
-        }
-
-    } catch (Exception $e) {
-        echo json_encode(['success' => false, 'message' => $e->getMessage()]);
-    }
-} else {
-    echo json_encode(['success' => false, 'message' => 'Datos no recibidos']);
-}
-?>

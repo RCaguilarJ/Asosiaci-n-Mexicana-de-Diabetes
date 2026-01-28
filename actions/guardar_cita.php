@@ -68,8 +68,10 @@ try {
     $stmtCheck = $pdo->prepare("SELECT id FROM citas WHERE usuario_id = ? AND medico_id = ? AND fecha_cita = ? AND estado != 'cancelada' LIMIT 1");
     $stmtCheck->execute([$usuario_id, $medico_id, $fechaHora]);
     if ($stmtCheck->fetchColumn()) {
-        http_response_code(409);
-        echo json_encode(['error' => 'Ya tienes una cita en ese horario con ese especialista.']);
+        echo json_encode([
+            'success' => true,
+            'mensaje' => 'Cita registrada exitosamente. Espere a ser confirmada.'
+        ]);
         exit;
     }
     

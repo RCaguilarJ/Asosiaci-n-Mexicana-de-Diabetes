@@ -1,0 +1,10 @@
+<IfModule mod_authz_core.c>
+    <FilesMatch "^(test_.*\.php|ejecutar_migracion\.php|verificar_migracion\.php|setup_database\.php)$">
+        Require all denied
+    </FilesMatch>
+</IfModule>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(tests|scripts|archive)/ - [F,L]
+</IfModule>

@@ -1,0 +1,15 @@
+# Dependencies
+/vendor/
+
+# Logs and cache
+/logs/
+*.log
+
+# OS / editor
+.DS_Store
+Thumbs.db
+
+# Local tooling
+.phpunit.result.cache
+/.idea/
+/.vscode/

@@ -1,6 +1,4 @@
-/* ====================================
-   LOGICA DE PANTALLA DE ESCRITORIO (REDIRECCIÓN)
-   ==================================== */
+
 (function() {
    
     const ANCHO_MINIMO_DESKTOP = 1025; 
@@ -8,17 +6,11 @@
     let alreadyRedirected = false; 
 
     function gestionarRedireccionDesktop() {
-        // 1. VERIFICACIÓN DE SEGURIDAD PARA DESARROLLADORES
-        // Si estamos en localhost o 127.0.0.1, NO hacemos nada.
+
         if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-            return; // Salimos de la función sin redirigir
+            return; 
         }
 
-        // 2. Lógica normal para producción
-        // if (window.innerWidth >= ANCHO_MINIMO_DESKTOP && !alreadyRedirected) {
-        //     alreadyRedirected = true; 
-        //     window.location.href = URL_DESTINO; 
-        // }
     }
 
     // Comprobar al cargar y redimensionar
@@ -38,7 +30,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const body = document.body;
     const desktopBreakpoint = 1024;
     const desktopRedirectUrl = 'https://diabetesjalisco.org/';
-    // const desktopHost = new URL(desktopRedirectUrl).hostname;
     const appHost = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
         ? window.location.hostname
         : 'amd.desingsgdl.net';
@@ -50,7 +41,6 @@ document.addEventListener('DOMContentLoaded', function() {
     let redirecting = false;
 
     const isInApp = () => window.location.hostname === appHost && window.location.pathname.startsWith(appPathPrefix || '/');
-    const isOnDesktopSite = () => window.location.hostname === desktopHost;
     const setLastAppUrl = (url) => {
         try {
             sessionStorage.setItem('amdLastAppUrl', url);
@@ -75,14 +65,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const width = window.innerWidth || document.documentElement.clientWidth || screen.width || 0;
 
-        // if (width >= desktopBreakpoint) {
-        //     if (isInApp() && !isOnDesktopSite()) {
-        //         redirecting = true;
-        //         setLastAppUrl(window.location.href);
-        //         window.location.href = desktopRedirectUrl;
-        //     }
-        //     return;
-        // }
 
         if (!isInApp()) {
             const fallbackUrl = getLastAppUrl() || defaultAppUrl;
@@ -158,11 +140,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-/* ====================================
-   FUNCIONALIDAD ADICIONAL
-   ==================================== */
-
-// Smooth scrolling para enlaces internos
 document.addEventListener('DOMContentLoaded', function() {
     const links = document.querySelectorAll('a[href^="#"]');
     
@@ -185,9 +162,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Función para mostrar notificaciones toast (si se necesita)
+
 function mostrarToast(mensaje, tipo = 'info') {
-    // Crear elemento toast
+
     const toast = document.createElement('div');
     toast.className = `toast toast-${tipo}`;
     toast.innerHTML = `
@@ -197,36 +174,31 @@ function mostrarToast(mensaje, tipo = 'info') {
         </div>
     `;
     
-    // Agregar al DOM
     document.body.appendChild(toast);
     
-    // Mostrar
+    
     setTimeout(() => toast.classList.add('show'), 100);
     
-    // Auto-ocultar después de 3 segundos
+   
     setTimeout(() => {
         toast.classList.remove('show');
         setTimeout(() => document.body.removeChild(toast), 300);
     }, 3000);
     
-    // Permitir cerrar manualmente
+   
     toast.querySelector('.toast-close').addEventListener('click', () => {
         toast.classList.remove('show');
         setTimeout(() => document.body.removeChild(toast), 300);
     });
 }
 
-/* ====================================
-   FUNCIONALIDAD DE LA CALCULADORA DE DIABETES
-   ==================================== */
+
 document.addEventListener('DOMContentLoaded', function() {
     const formCalculadora = document.getElementById('form-calculadora');
     const btnCalcular = document.getElementById('btn-calcular');
     const seccionResultados = document.getElementById('seccion-resultados');
 
-    if (!formCalculadora) return; // Si no estamos en la página de calculadora, salir
-
-    // Campos del formulario (nombres reales del HTML)
+    if (!formCalculadora) return; 
     const inputs = {
         glucosa: document.getElementById('glucosa'),
         momento: document.getElementById('momento'),
@@ -234,7 +206,7 @@ document.addEventListener('DOMContentLoaded', function() {
         ratio: document.getElementById('ratio')
     };
 
-    // Validar campos y habilitar/deshabilitar el botón
+    
     function validarCampos() {
         const todosLlenos = Object.values(inputs).every(input => 
             input && input.value.trim() !== ''
@@ -243,7 +215,7 @@ document.addEventListener('DOMContentLoaded', function() {
         btnCalcular.disabled = !todosLlenos;
     }
 
-    // Añadir event listeners a todos los campos
+   
     Object.values(inputs).forEach(input => {
         if (input) {
             input.addEventListener('input', validarCampos);
@@ -251,7 +223,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Manejar envío del formulario
     formCalculadora.addEventListener('submit', function(e) {
         e.preventDefault();
         calcularDosis();
@@ -265,7 +236,7 @@ document.addEventListener('DOMContentLoaded', function() {
             ratio: parseInt(inputs.ratio.value)
         };
 
-        // Definir rangos objetivo según momento
+ 
         const rangosObjetivo = {
             'ayunas': { min: 80, max: 130 },
             'antes_comer': { min: 80, max: 130 },
@@ -275,20 +246,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const rango = rangosObjetivo[datos.momento] || rangosObjetivo.ayunas;
         
-        // Calcular dosis de corrección (simplificado)
+      
         let dosisCorreccion = 0;
         if (datos.glucosa > rango.max) {
-            // Usar factor de sensibilidad básico de 50 mg/dL por unidad
+ 
             dosisCorreccion = Math.ceil((datos.glucosa - rango.max) / 50);
         }
         
-        // Calcular dosis para carbohidratos
         const dosisCarbs = datos.carbohidratos / datos.ratio;
         
-        // Dosis total
+      
         const dosisTotal = dosisCorreccion + dosisCarbs;
 
-        // Mostrar resultados
         mostrarResultados({
             dosisCorreccion: dosisCorreccion.toFixed(1),
             dosisCarbs: dosisCarbs.toFixed(1),
@@ -300,7 +269,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function mostrarResultados(resultados) {
-        // Actualizar los elementos de resultado
+       
         document.getElementById('resultado-imc').textContent = 'N/A'; // No calculamos IMC en esta versión
         document.getElementById('resultado-dosis-correccion').textContent = `${resultados.dosisCorreccion} unidades`;
         document.getElementById('resultado-dosis-carbs').textContent = `${resultados.dosisCarbs} unidades`;

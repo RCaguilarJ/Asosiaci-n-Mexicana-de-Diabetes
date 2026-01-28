@@ -1,10 +1,16 @@
 <?php
     session_start();
-    require '../includes/db.php';
-    require '../includes/sync_helper.php';
 
-    if (!isset($pdo) || !($pdo instanceof PDO)) {
-        throw new RuntimeException('Conexión a la base de datos no disponible.');
+    $dbError = null;
+    try {
+        require '../includes/db.php';
+    } catch (Throwable $e) {
+        $dbError = 'No se pudo conectar con la base de datos. Intenta más tarde.';
+        error_log('Login DB error: ' . $e->getMessage());
+    }
+
+    if (!$dbError && isset($pdo) && ($pdo instanceof PDO)) {
+        require '../includes/sync_helper.php';
     }
 
     $paginaActual = 'login';
@@ -12,28 +18,25 @@
     $mensaje = '';
     $tipoMensaje = ''; 
 
-    // =======================================================
-    // PROCESAMIENTO DE DATOS (PHP)
-    // =======================================================
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        
-        // --- 1. LÓGICA LOGIN ---
-        if (isset($_POST['accion']) && $_POST['accion'] === 'login') {
+        if ($dbError) {
+            $mensaje = $dbError;
+            $tipoMensaje = 'error';
+        }
+   
+        if (!$dbError && isset($_POST['accion']) && $_POST['accion'] === 'login') {
             $email = trim($_POST['email']);
             $password = $_POST['password'];
 
-            // DEBUG: registrar intento de login (sólo en logs, no en pantalla)
             error_log("[LOGIN DEBUG] intento de login para: " . $email);
             error_log("[LOGIN DEBUG] \\_ POST keys: " . implode(',', array_keys($_POST)));
 
-            // Intentamos obtener rol si existe; si la columna 'rol' no está creada, hacemos fallback
             try {
                 $stmt = $pdo->prepare("SELECT id, nombre, email, password, rol FROM usuarios WHERE email = ?");
                 $stmt->execute([$email]);
                 $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
             } catch (PDOException $e) {
-                // Si la columna 'rol' no existe, caemos a una consulta sin ella
-                // SQLSTATE[42S22] -> column not found
+             
                 if (strpos($e->getMessage(), 'Unknown column') !== false || strpos($e->getCode(), '42S22') !== false) {
                     // Asegurarse de que $pdo es una instancia válida de PDO antes de usarla
                     if (!isset($pdo) || !$pdo instanceof PDO) {
@@ -73,7 +76,7 @@
         }
 
         // --- 2. LÓGICA REGISTRO ---
-        if (isset($_POST['accion']) && $_POST['accion'] === 'registro') {
+        if (!$dbError && isset($_POST['accion']) && $_POST['accion'] === 'registro') {
             $nombre = trim($_POST['nombre']);
             $email = trim($_POST['email']);
             $password = $_POST['password'];
@@ -94,21 +97,25 @@
                         $usuarioId = $pdo->lastInsertId();
                         
                         // Sincronizar con el sistema de gestión médica
-                        try {
-                            $pacienteId = sincronizarPacienteEnSistemaGestion([
-                                'nombre' => $nombre,
-                                'email' => $email,
-                                'telefono' => '', // Se puede actualizar después en el perfil
-                                'usuario_id_app' => $usuarioId
-                            ]);
-                            
-                            $mensaje = $pacienteId ? 
-                                "¡Cuenta creada con éxito y registrada en el sistema médico! Por favor inicia sesión." :
-                                "¡Cuenta creada con éxito! Por favor inicia sesión.";
-                        } catch (Exception $e) {
+                        if (function_exists('sincronizarPacienteEnSistemaGestion')) {
+                            try {
+                                $pacienteId = sincronizarPacienteEnSistemaGestion([
+                                    'nombre' => $nombre,
+                                    'email' => $email,
+                                    'telefono' => '', // Se puede actualizar después en el perfil
+                                    'usuario_id_app' => $usuarioId
+                                ]);
+                                
+                                $mensaje = $pacienteId ? 
+                                    "¡Cuenta creada con éxito y registrada en el sistema médico! Por favor inicia sesión." :
+                                    "¡Cuenta creada con éxito! Por favor inicia sesión.";
+                            } catch (Exception $e) {
+                                $mensaje = "¡Cuenta creada con éxito! Por favor inicia sesión.";
+                                // Log del error de sincronización sin mostrar al usuario
+                                error_log("Error sincronizando paciente: " . $e->getMessage());
+                            }
+                        } else {
                             $mensaje = "¡Cuenta creada con éxito! Por favor inicia sesión.";
-                            // Log del error de sincronización sin mostrar al usuario
-                            error_log("Error sincronizando paciente: " . $e->getMessage());
                         }
                         
                         $tipoMensaje = 'exito';
@@ -124,7 +131,7 @@
         }
 
         // --- 3. LÓGICA INVITADO ---
-        if (isset($_POST['accion']) && $_POST['accion'] === 'invitado') {
+        if (!$dbError && isset($_POST['accion']) && $_POST['accion'] === 'invitado') {
             $_SESSION['es_invitado'] = true;
             $_SESSION['usuario_nombre'] = 'Invitado';
             unset($_SESSION['usuario_id']);
