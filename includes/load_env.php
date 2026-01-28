@@ -49,6 +49,12 @@ function loadEnvFile($path) {
             if (getenv($key) === false) {
                 putenv("$key=$value");
             }
+            if (!isset($_ENV[$key])) {
+                $_ENV[$key] = $value;
+            }
+            if (!isset($_SERVER[$key])) {
+                $_SERVER[$key] = $value;
+            }
         }
     }
 
