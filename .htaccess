@@ -2,9 +2,12 @@
     <FilesMatch "^(test_.*\.php|ejecutar_migracion\.php|verificar_migracion\.php|setup_database\.php)$">
         Require all denied
     </FilesMatch>
+    <Files ".env">
+        Require all denied
+    </Files>
 </IfModule>
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteRule ^(tests|scripts|archive)/ - [F,L]
+    RewriteRule ^(tests|scripts|archive|migrations|logs)/ - [F,L,NC]
 </IfModule>
