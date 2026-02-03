@@ -13,35 +13,41 @@ if (file_exists(__DIR__ . '/load_env.php')) {
     require_once __DIR__ . '/load_env.php';
 }
 
-try {
-    $host = getenv('DB_HOST') ?: 'localhost';
-    $dbname = getenv('DB_NAME') ?: 'sistema_gestion_medica';
-    $username = getenv('DB_USER') ?: 'root';
-    $password = getenv('DB_PASS') ?: '';
+if (!isset($pdo) || !($pdo instanceof PDO)) {
+    try {
+        $host = getenv('DB_HOST') ?: 'localhost';
+        $port = getenv('DB_PORT') ?: null;
+        $dbname = getenv('DB_NAME') ?: 'sistema_gestion_medica';
+        $username = getenv('DB_USER') ?: 'root';
+        $password = getenv('DB_PASS') ?: '';
 
-    $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
+        $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
+        if ($port !== null && $port !== '') {
+            $dsn .= ";port=$port";
+        }
 
-    $pdo = new PDO($dsn, $username, $password, [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-        PDO::ATTR_EMULATE_PREPARES => false,
-        PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4"
-    ]);
-
-} catch (PDOException $e) {
-    error_log("Error de conexion DB: " . $e->getMessage());
-
-    if (php_sapi_name() !== 'cli' && strpos($_SERVER['REQUEST_URI'] ?? '', 'api/') !== false) {
-        header('Content-Type: application/json');
-        http_response_code(500);
-        echo json_encode([
-            'success' => false,
-            'message' => 'Error de conexion a base de datos'
+        $pdo = new PDO($dsn, $username, $password, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES => false,
+            PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4"
         ]);
-        exit;
-    }
 
-    throw $e;
+    } catch (PDOException $e) {
+        error_log("Error de conexion DB: " . $e->getMessage());
+
+        if (php_sapi_name() !== 'cli' && strpos($_SERVER['REQUEST_URI'] ?? '', 'api/') !== false) {
+            header('Content-Type: application/json');
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Error de conexion a base de datos'
+            ]);
+            exit;
+        }
+
+        throw $e;
+    }
 }
 
 if (!function_exists('getRemoteConnection')) {
@@ -64,6 +70,7 @@ function getRemoteConnection() {
     $attempted = true;
 
     $host = getenv('REMOTE_DB_HOST');
+    $port = getenv('REMOTE_DB_PORT') ?: null;
     $dbname = getenv('REMOTE_DB_NAME');
     $username = getenv('REMOTE_DB_USER');
     $password = getenv('REMOTE_DB_PASS') ?: '';
@@ -75,6 +82,9 @@ function getRemoteConnection() {
 
     try {
         $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
+        if ($port !== null && $port !== '') {
+            $dsn .= ";port=$port";
+        }
         $remotePdo = new PDO($dsn, $username, $password, [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,

@@ -22,6 +22,7 @@
             ]);
             $data = curl_exec($ch);
             $error = curl_errno($ch);
+            curl_close($ch);
             if ($error === 0 && $data) {
                 return $data;
             }

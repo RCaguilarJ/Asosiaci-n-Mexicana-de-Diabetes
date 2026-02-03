@@ -15,20 +15,25 @@ final class Db
         Env::load();
 
         $host = getenv('DB_HOST') ?: 'localhost';
+        $port = getenv('DB_PORT') ?: null;
         $dbname = getenv('DB_NAME') ?: 'sistema_gestion_medica';
         $username = getenv('DB_USER') ?: 'root';
         $password = getenv('DB_PASS') ?: '';
 
-        $dsn = "mysql:host={$host};dbname={$dbname};charset=utf8mb4";
-
         try {
-            return new PDO($dsn, $username, $password, [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::ATTR_EMULATE_PREPARES => false,
-                PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4",
-            ]);
+            return self::connectMysql($host, $port, $dbname, $username, $password);
         } catch (PDOException $e) {
+            // Common production mismatch: grants exist for user@localhost but env points to 127.0.0.1 (or vice versa).
+            $alternateHost = self::alternateLocalhost($host);
+            if ($alternateHost !== null) {
+                try {
+                    error_log(sprintf('DB connection retry with host=%s after failure on host=%s', $alternateHost, $host));
+                    return self::connectMysql($alternateHost, $port, $dbname, $username, $password);
+                } catch (PDOException $retryException) {
+                    error_log('DB retry connection error: ' . $retryException->getMessage());
+                }
+            }
+
             error_log('DB connection error: ' . $e->getMessage());
 
             if (php_sapi_name() !== 'cli' && strpos($_SERVER['REQUEST_URI'] ?? '', 'api/') !== false) {
@@ -58,6 +63,7 @@ final class Db
         self::$remoteAttempted = true;
 
         $host = getenv('REMOTE_DB_HOST');
+        $port = getenv('REMOTE_DB_PORT') ?: null;
         $dbname = getenv('REMOTE_DB_NAME');
         $username = getenv('REMOTE_DB_USER');
         $password = getenv('REMOTE_DB_PASS') ?: '';
@@ -68,18 +74,39 @@ final class Db
         }
 
         try {
-            $dsn = "mysql:host={$host};dbname={$dbname};charset=utf8mb4";
-            self::$remotePdo = new PDO($dsn, $username, $password, [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::ATTR_EMULATE_PREPARES => false,
-                PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4",
-            ]);
+            self::$remotePdo = self::connectMysql($host, $port, $dbname, $username, $password);
 
             return self::$remotePdo;
         } catch (PDOException $e) {
             error_log('connectRemote error: ' . $e->getMessage());
             return null;
         }
+    }
+
+    private static function connectMysql(string $host, ?string $port, string $dbname, string $username, string $password): PDO
+    {
+        $dsn = "mysql:host={$host};dbname={$dbname};charset=utf8mb4";
+        if ($port !== null && $port !== '') {
+            $dsn .= ";port={$port}";
+        }
+
+        return new PDO($dsn, $username, $password, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES => false,
+            PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4",
+        ]);
+    }
+
+    private static function alternateLocalhost(string $host): ?string
+    {
+        if ($host === '127.0.0.1') {
+            return 'localhost';
+        }
+        if ($host === 'localhost') {
+            return '127.0.0.1';
+        }
+
+        return null;
     }
 }
