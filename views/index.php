@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <?php
     require '../includes/security/check-session.php'; // Verificación de seguridad
     require '../includes/db.php'; // Conexión a BD
@@ -74,6 +73,7 @@
         }
     }
 ?>
+<!DOCTYPE html>
 <html lang="es">
 <?php include '../includes/layout/head.php'; ?>
 <body>
