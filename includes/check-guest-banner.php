@@ -17,7 +17,7 @@ if (!$usuarioCompleto): ?>
         margin-bottom: 25px;
         text-align: center;
         box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
-    ">S
+    ">
         <div style="display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;">
             <div>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

@@ -5,7 +5,7 @@ if (file_exists($autoload)) {
     require_once $autoload;
 }
 
-if (class_exists('Amd\\Support\\Db')) {
+if (class_exists(Amd\Support\Db::class)) {
     $pdo = Amd\Support\Db::connect();
 }
 
@@ -46,7 +46,7 @@ try {
 
 if (!function_exists('getRemoteConnection')) {
 function getRemoteConnection() {
-    if (class_exists('Amd\\Support\\Db')) {
+    if (class_exists(Amd\Support\Db::class)) {
         return Amd\Support\Db::connectRemote();
     }
 
@@ -90,4 +90,3 @@ function getRemoteConnection() {
     }
 }
 }
-?>

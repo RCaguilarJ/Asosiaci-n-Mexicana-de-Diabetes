@@ -46,8 +46,6 @@ function remote_api_request($method, $path, $data = null) {
     $resp = curl_exec($ch);
     $err = curl_error($ch);
     $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-
     if ($err) {
         error_log('remote_api_request curl error: ' . $err . ' url=' . $url);
         return null;
