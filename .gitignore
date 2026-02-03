@@ -13,3 +13,6 @@ Thumbs.db
 .phpunit.result.cache
 /.idea/
 /.vscode/
+
+# Environment secrets
+.env
