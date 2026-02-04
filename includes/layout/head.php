@@ -17,6 +17,7 @@ if (!isset($metaDescription)) {
 
     <title><?php echo $tituloDeLaPagina; ?></title>
 
+    <link rel="icon" type="image/png" href="<?php echo $basePath; ?>/assets/img/logo.png">
     <link rel="stylesheet" href="<?php echo $basePath; ?>/assets/css/style.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">

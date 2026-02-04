@@ -9,5 +9,6 @@
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
+    RewriteRule ^favicon\.ico$ assets/img/logo.png [L,NC]
     RewriteRule ^(tests|scripts|archive|migrations|logs)/ - [F,L,NC]
 </IfModule>
