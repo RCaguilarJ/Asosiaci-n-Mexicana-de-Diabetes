@@ -26,7 +26,7 @@ if (!isset($metaDescription)) {
     <script>
         (function() {
             const desktopQuery = window.matchMedia('(min-width: 1025px)');
-            const desktopRedirectUrl = 'https://app.diabetesjalisco.org/';
+            const desktopRedirectUrl = 'https://app.desingsgdl.app/';
 
             function validarResolucionYRedirigir() {
                 if (desktopQuery.matches) {

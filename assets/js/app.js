@@ -2,7 +2,7 @@
 (function() {
    
     const ANCHO_MINIMO_DESKTOP = 1025; 
-    const URL_DESTINO = 'https://app.diabetesjalisco.org/';
+    const URL_DESTINO = 'https://app.desingsgdl.app/';
     let alreadyRedirected = false; 
 
     function gestionarRedireccionDesktop() {
@@ -29,10 +29,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const offcanvasMenu = document.querySelector('.offcanvas-menu');
     const body = document.body;
     const desktopBreakpoint = 1024;
-    const desktopRedirectUrl = 'https://app.diabetesjalisco.org/';
+    const desktopRedirectUrl = 'https://app.desingsgdl.app/';
     const appHost = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
         ? window.location.hostname
-        : 'app.diabetesjalisco.org';
+        : 'app.desingsgdl.app';
     const knownPrefix = '/asosiacionMexicanaDeDiabetes';
     const appPathPrefix = (window.location.pathname === knownPrefix || window.location.pathname.startsWith(knownPrefix + '/'))
         ? knownPrefix

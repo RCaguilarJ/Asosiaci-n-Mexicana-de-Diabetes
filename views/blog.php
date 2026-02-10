@@ -4,7 +4,7 @@
     
     $paginaActual = 'blog';
     $tituloDeLaPagina = "Blog Educativo - Asoc. Mexicana de Diabetes"; 
-    $feedUrl = 'https://app.diabetesjalisco.org/feed/';
+    $feedUrl = 'https://app.desingsgdl.app/feed/';
     $imagenPorDefecto = $basePath . '/assets/img/platilloSano.jpg';
 
     /**
@@ -18,7 +18,7 @@
                 CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_CONNECTTIMEOUT => 5,
                 CURLOPT_TIMEOUT => 8,
-                CURLOPT_USERAGENT => 'AMD-Jalisco/1.0 (+https://app.diabetesjalisco.org)'
+                CURLOPT_USERAGENT => 'AMD-Jalisco/1.0 (+https://app.desingsgdl.app)'
             ]);
             $data = curl_exec($ch);
             $error = curl_errno($ch);
@@ -213,7 +213,7 @@
                     <a href="<?php echo $basePath; ?>/views/index.php" class="btn-back" style="color: #0066b2; text-decoration: none; padding: 10px; border: 1px solid #0066b2; border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; margin-right: 15px; background: white;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"></path><path d="M12 19l-7-7 7-7"></path></svg>
                     </a>
-                    <a class="btn-hero" href="https://app.diabetesjalisco.org" target="_blank" rel="noopener">
+                    <a class="btn-hero" href="https://app.desingsgdl.app" target="_blank" rel="noopener">
                         Visitar sitio oficial
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
                     </a>

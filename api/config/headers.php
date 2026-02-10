@@ -9,7 +9,7 @@ if (file_exists(__DIR__ . '/../../includes/load_env.php')) {
 
 // 2. Configuración de CORS (Permitir peticiones desde tu Frontend)
 // En producción, cambia '*' por tu dominio real, ej: 'https://mi-app-diabetes.com'
-header("Access-Control-Allow-Origin: *"); 
+header("Access-Control-Allow-Origin: https://app.desingsgdl.app");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
 header("Content-Type: application/json; charset=UTF-8");
