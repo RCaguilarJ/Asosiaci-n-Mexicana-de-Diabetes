@@ -4,12 +4,14 @@
  * Basado en estructura actual confirmada del dump SQL
  */
 
-// Conexión directa
-$host = 'localhost';
-$port = '3306';
-$dbname = 'sistema_gestion_medica';
-$username = 'root';
-$password = '';
+require_once __DIR__ . '/../../includes/load_env.php';
+
+// Conexión directa (desde .env)
+$host = getenv('DB_HOST') ?: 'localhost';
+$port = getenv('DB_PORT') ?: '3306';
+$dbname = getenv('DB_NAME') ?: 'sistema_gestion_medica';
+$username = getenv('DB_USER') ?: 'root';
+$password = getenv('DB_PASS') ?: '';
 
 try {
     $pdo = new PDO(
@@ -48,12 +50,12 @@ try {
     <body>
     <div class='container'>";
     
-    echo "<h1>🚀 MIGRACIÓN DEFINITIVA - TABLA CITAS</h1>";
-    echo "<div class='info'><strong>📅 Fecha:</strong> " . date('Y-m-d H:i:s') . "</div>";
-    echo "<div class='info'><strong>🗄️ Base de datos:</strong> $dbname</div>";
+    echo "<h1> MIGRACIÓN DEFINITIVA - TABLA CITAS</h1>";
+    echo "<div class='info'><strong> Fecha:</strong> " . date('Y-m-d H:i:s') . "</div>";
+    echo "<div class='info'><strong> Base de datos:</strong> $dbname</div>";
     
     // PASO 1: Verificar estructura actualtructura actual
-    echo "<h2>📋 PASO 1: Verificando Estructura Actual</h2>";
+    echo "<h2> PASO 1: Verificando Estructura Actual</h2>";
     
     $stmt = $pdo->query("DESCRIBE citas");
     $columnasActuales = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -83,14 +85,14 @@ try {
     if (!in_array('fecha_actualizacion', $camposActuales)) $faltantes[] = 'fecha_actualizacion';
     
     if (empty($faltantes)) {
-        echo "<div class='success'><h3>✅ ¡Tabla ya actualizada! </h3><p>No se requiere migración.</p></div>";
-        echo "<div><a href='/views/citas.php' class='btn'>📝 Ir al Formulario</a></div>";
+        echo "<div class='success'><h3> ¡Tabla ya actualizada! </h3><p>No se requiere migración.</p></div>";
+        echo "<div><a href='/views/citas.php' class='btn'> Ir al Formulario</a></div>";
         echo "</div></body></html>";
         exit;
     }
     
     echo "<div class='warning'>";
-    echo "<h4>⚠️ Columnas faltantes detectadas:</h4>";
+    echo "<h4> Columnas faltantes detectadas:</h4>";
     echo "<ul>";
     foreach ($faltantes as $col) {
         echo "<li><strong>$col</strong></li>";
@@ -99,7 +101,7 @@ try {
     echo "</div>";
     
     // PASO 2: Crear backup
-    echo "<h2>💾 PASO 2: Creando Backup de Seguridad</h2>";
+    echo "<h2> PASO 2: Creando Backup de Seguridad</h2>";
     
     $backupName = 'citas_backup_' .  date('Ymd_His');
     
@@ -109,16 +111,16 @@ try {
     $count = $pdo->query("SELECT COUNT(*) FROM $backupName")->fetchColumn();
     
     echo "<div class='success'>";
-    echo "✅ <strong>Backup creado:</strong> <code>$backupName</code><br>";
-    echo "📊 <strong>Registros guardados:</strong> $count";
+    echo " <strong>Backup creado:</strong> <code>$backupName</code><br>";
+    echo " <strong>Registros guardados:</strong> $count";
     echo "</div>";
     
     // PASO 3: Eliminar tabla antigua
-    echo "<h2>🗑️ PASO 3: Eliminando Tabla Antigua</h2>";
+    echo "<h2> PASO 3: Eliminando Tabla Antigua</h2>";
     
     $pdo->exec("DROP TABLE IF EXISTS citas");
     
-    echo "<div class='success'>✅ Tabla antigua eliminada</div>";
+    echo "<div class='success'>Tabla antigua eliminada</div>";
     
     // PASO 4: Crear nueva tabla
     echo "<h2>🔨 PASO 4: Creando Nueva Tabla con Estructura Correcta</h2>";
@@ -162,13 +164,13 @@ try {
     
     $pdo->exec($createSQL);
     
-    echo "<div class='success'>✅ Nueva tabla creada con estructura correcta</div>";
+    echo "<div class='success'> Nueva tabla creada con estructura correcta</div>";
     
     // PASO 5: Restaurar datos
-    echo "<h2>♻️ PASO 5: Restaurando Datos del Backup</h2>";
+    echo "<h2> PASO 5: Restaurando Datos del Backup</h2>";
     
     if ($count > 0) {
-        echo "<div class='info'>📦 Restaurando $count registros...</div>";
+        echo "<div class='info'> Restaurando $count registros...</div>";
         
         // Obtener datos del backup
         $stmt = $pdo->query("SELECT * FROM $backupName ORDER BY fecha_creacion");
@@ -200,19 +202,19 @@ try {
                 $restaurados++;
             } catch (Exception $e) {
                 $errores++;
-                echo "<div class='warning'>⚠️ Error en registro ID {$reg['id']}: " . $e->getMessage() . "</div>";
+                echo "<div class='warning'> Error en registro ID {$reg['id']}: " . $e->getMessage() . "</div>";
             }
         }
         
         echo "<div class='success'>";
-        echo "✅ <strong>Registros restaurados:</strong> $restaurados de $count<br>";
+        echo " <strong>Registros restaurados:</strong> $restaurados de $count<br>";
         if ($errores > 0) {
-            echo "⚠️ <strong>Errores: </strong> $errores";
+            echo " <strong>Errores: </strong> $errores";
         }
         echo "</div>";
         
         echo "<div class='warning'>";
-        echo "<h4>⚠️ IMPORTANTE:  Datos temporales</h4>";
+        echo "<h4> IMPORTANTE:  Datos temporales</h4>";
         echo "<p>Los registros antiguos fueron restaurados con: </p>";
         echo "<ul>";
         echo "<li><strong>nombre:</strong> 'Paciente App' (temporal)</li>";
@@ -222,11 +224,11 @@ try {
         echo "<p>Las <strong>nuevas citas</strong> tendrán datos reales.</p>";
         echo "</div>";
     } else {
-        echo "<div class='info'>ℹ️ No había registros para restaurar (tabla nueva)</div>";
+        echo "<div class='info'>ℹ No había registros para restaurar (tabla nueva)</div>";
     }
     
     // PASO 6: Verificar estructura final
-    echo "<h2>✅ PASO 6: Verificación Final</h2>";
+    echo "<h2> PASO 6: Verificación Final</h2>";
     
     $stmt = $pdo->query("DESCRIBE citas");
     $estructuraFinal = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -253,8 +255,8 @@ try {
     $totalFinal = $pdo->query("SELECT COUNT(*) FROM citas")->fetchColumn();
     
     echo "<div class='final-box'>";
-    echo "<h2>🎉 ¡MIGRACIÓN COMPLETADA EXITOSAMENTE!</h2>";
-    echo "<h3>📊 Resumen: </h3>";
+    echo "<h2> ¡MIGRACIÓN COMPLETADA EXITOSAMENTE!</h2>";
+    echo "<h3> Resumen: </h3>";
     echo "<ul style='font-size: 16px; line-height: 2;'>";
     echo "<li> <strong>Columnas agregadas:</strong> nombre, email, telefono, fecha_actualizacion</li>";
     echo "<li> <strong>Engine:</strong> InnoDB (antes MyISAM)</li>";
@@ -264,7 +266,7 @@ try {
     echo "<li> <strong>Registros actuales:</strong> $totalFinal</li>";
     echo "</ul>";
     
-    echo "<h3>🎯 Siguiente Paso: </h3>";
+    echo "<h3> Siguiente Paso: </h3>";
     echo "<p style='font-size: 18px;'>El formulario de citas ahora funcionará correctamente.</p>";
     
     echo "<div style='text-align: center; margin-top: 30px;'>";
@@ -273,7 +275,7 @@ try {
     echo "</div>";
     
     echo "<div class='info'>";
-    echo "<h4>📝 Archivos de log sugeridos para revisar:</h4>";
+    echo "<h4> Archivos de log sugeridos para revisar:</h4>";
     echo "<ul>";
     echo "<li><code>logs/citas_errors.log</code> - Errores de guardado de citas</li>";
     echo "<li><code>C:\\wamp64\\logs\\php_error.log</code> - Errores de PHP</li>";
@@ -287,7 +289,7 @@ try {
     echo "<style>body{font-family: Arial;padding:20px;background:#f8d7da;}";
     echo ". error{background: white;padding:30px;border-radius:10px;max-width:800px;margin:0 auto;border-left:5px solid #dc3545;}</style></head><body>";
     echo "<div class='error'>";
-    echo "<h1>❌ ERROR EN LA MIGRACIÓN</h1>";
+    echo "<h1> ERROR EN LA MIGRACIÓN</h1>";
     echo "<p><strong>Error:</strong> " .  htmlspecialchars($e->getMessage()) . "</p>";
     echo "<p><strong>Código: </strong> " . $e->getCode() . "</p>";
     echo "<p><strong>Archivo:</strong> " . $e->getFile() . "</p>";
@@ -302,3 +304,6 @@ try {
     echo "</div></body></html>";
 }
 ?>
+
+
+

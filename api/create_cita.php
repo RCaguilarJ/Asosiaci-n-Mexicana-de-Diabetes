@@ -87,9 +87,6 @@ try {
 
     // --- Intentar escribir copia en la BD central `sistema_gestion_medica` ---
     try {
-      $dsn2 = 'mysql:host=127.0.0.1;dbname=sistema_gestion_medica;charset=utf8mb4';
-      $user2 = 'root'; // ajustar si tu instalación usa otro usuario
-      $pass2 = '';     // ajustar si tu root tiene contraseña
       $db2 = getRemoteConnection();
       if (!$db2) {
         throw new Exception('No se pudo conectar a la BD remota');
@@ -142,7 +139,14 @@ try {
 
       // --- Intentar escribir copia en la BD central `sistema_gestion_medica` usando mysqli ---
       try {
-        $db2 = new mysqli('127.0.0.1', 'root', '', 'sistema_gestion_medica');
+        $remoteHost = getenv('REMOTE_DB_HOST') ?: '127.0.0.1';
+        $remotePort = getenv('REMOTE_DB_PORT') ?: '3306';
+        $remoteName = getenv('REMOTE_DB_NAME') ?: 'sistema_gestion_medica';
+        $remoteUser = getenv('REMOTE_DB_USER') ?: 'root';
+        $remotePass = getenv('REMOTE_DB_PASS') ?: '';
+
+        $db2 = new mysqli($remoteHost, $remoteUser, $remotePass, $remoteName, (int)$remotePort);
+
         if ($db2->connect_errno) throw new Exception('MySQL connect error: ' . $db2->connect_error);
         $sql2 = sprintf("INSERT INTO citas (paciente_id, medico_id, fecha_hora, tipo_cita, motivo, estado, fecha_creacion, origen) VALUES ('%s','%s','%s','%s','%s','pendiente', NOW(), 'app_diabetes')",
           $db2->real_escape_string($pacienteId), $db2->real_escape_string($medicoId), $db2->real_escape_string($fechaHora), $db2->real_escape_string($especialidad), $db2->real_escape_string($motivo)
@@ -172,4 +176,10 @@ try {
   http_response_code(500);
   echo json_encode(['error' => $e->getMessage()]);
 }
+
+
+
+
+
+
 

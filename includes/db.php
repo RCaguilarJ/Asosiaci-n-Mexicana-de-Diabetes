@@ -1,5 +1,32 @@
 <?php
 
+function loadEnvFromFileLegacy() {
+    $envPath = __DIR__ . '/../.env';
+    if (!file_exists($envPath)) {
+        return;
+    }
+
+    $lines = file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        $line = trim($line);
+        if ($line === '' || $line[0] === '#') {
+            continue;
+        }
+        if (strpos($line, '=') === false) {
+            continue;
+        }
+        [$key, $value] = explode('=', $line, 2);
+        $key = trim($key);
+        $value = trim($value);
+        if ($value !== '' && ($value[0] === '"' || $value[0] === "'")) {
+            $value = substr($value, 1, -1);
+        }
+        putenv("$key=$value");
+    }
+}
+
+loadEnvFromFileLegacy();
+
 $autoload = __DIR__ . '/../vendor/autoload.php';
 if (file_exists($autoload)) {
     require_once $autoload;
