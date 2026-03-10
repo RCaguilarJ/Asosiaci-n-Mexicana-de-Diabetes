@@ -12,6 +12,32 @@ function amd_base_path() {
         return '/' . trim($envBasePath, " \t\n\r\0\x0B/");
     }
 
+    $scriptName = $_SERVER['SCRIPT_NAME'] ?? $_SERVER['PHP_SELF'] ?? '';
+    if ($scriptName !== '') {
+        $dir = rtrim(str_replace('\\', '/', dirname($scriptName)), '/');
+        $stripDirs = [
+            'views',
+            'actions',
+            'includes',
+            'api',
+            'workers',
+            'scripts',
+            'migrations',
+            'archive',
+        ];
+        if ($dir !== '' && $dir !== '.') {
+            $segments = explode('/', ltrim($dir, '/'));
+            if (!empty($segments) && in_array(end($segments), $stripDirs, true)) {
+                array_pop($segments);
+                $dir = '/' . implode('/', $segments);
+            }
+        }
+        if ($dir === '/' || $dir === '.') {
+            return '';
+        }
+        return $dir;
+    }
+
     $docRoot = realpath($_SERVER['DOCUMENT_ROOT'] ?? '');
     $appRoot = realpath(__DIR__ . '/..');
 

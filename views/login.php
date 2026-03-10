@@ -1,6 +1,13 @@
 <?php
     session_start();
 
+    require_once __DIR__ . '/../includes/base_path.php';
+    $esInvitado = !empty($_SESSION['es_invitado']);
+    if (isset($_SESSION['usuario_id']) && !$esInvitado) {
+        header('Location: ' . $basePath . '/views/index.php');
+        exit;
+    }
+
     $dbError = null;
     try {
         require '../includes/db.php';
@@ -167,7 +174,6 @@
         <?php endif; ?>
 
         <form id="form-login" method="POST" class="card-form mt-30">
-            <input type="hidden" name="accion" value="login">
             <legend class="card-form-legend"><span>Iniciar Sesión</span></legend>
             
             <div class="form-group">
@@ -183,7 +189,7 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn-calculadora mt-20"><span>Entrar</span></button>
+            <button type="submit" name="accion" value="login" class="btn-calculadora mt-20"><span>Entrar</span></button>
 
             <div class="form-divider" style="text-align:center; margin: 15px 0;"><span>O</span></div>
 

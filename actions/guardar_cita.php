@@ -1,11 +1,10 @@
 <?php
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
+    // Habilitar modo invitado con usuario_id si aplica
+    require_once '../includes/security/check-session.php';
 
-// Incluir conexión a la base de datos local y el helper de la API
-require '../includes/db.php';
-require '../includes/api_sistema_gestion.php';
+    // Incluir conexion a la base de datos local y el helper de la API
+    require_once '../includes/db.php';
+    require_once '../includes/api_sistema_gestion.php';
 
 // Establecer header para respuesta JSON
 header('Content-Type: application/json');

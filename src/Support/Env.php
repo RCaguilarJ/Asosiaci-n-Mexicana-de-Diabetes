@@ -60,7 +60,13 @@ final class Env
     private static function defaultPaths(string $appEnv): array
     {
         $root = dirname(__DIR__, 2);
-        return [$root . '/.env'];
+        $paths = [];
+        $local = $root . '/.env.local';
+        if (file_exists($local)) {
+            $paths[] = $local;
+        }
+        $paths[] = $root . '/.env';
+        return $paths;
     }
 
     private static function isQuoted(string $value): bool

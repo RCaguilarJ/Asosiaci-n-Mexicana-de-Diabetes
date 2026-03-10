@@ -35,14 +35,14 @@ if (!$usuarioCompleto): ?>
                 </strong>
                 <small style="opacity: 0.9; font-size: 13px;">
                     <?php if ($esInvitado): ?>
-                        Estás navegando como invitado. Los datos no se guardarán permanentemente.
+                        Estas navegando como invitado. Tus datos se guardan como cualquier usuario. Crea cuenta para conservar acceso.
                     <?php else: ?>
                         Registra tus datos de salud y accede a funciones personalizadas.
                     <?php endif; ?>
                 </small>
             </div>
             <div>
-                <a href="<?php echo $basePath; ?>/views/login.php" 
+                <a href="<?php echo $esInvitado ? ($basePath . '/views/perfil.php') : ($basePath . '/views/login.php'); ?>" 
                    style="
                        background: rgba(255, 255, 255, 0.2);
                        color: white;
@@ -57,7 +57,7 @@ if (!$usuarioCompleto): ?>
                    onmouseover="this.style.background='rgba(255,255,255,0.3)'"
                    onmouseout="this.style.background='rgba(255,255,255,0.2)'">
                     <?php if ($esInvitado): ?>
-                        Crear Cuenta
+                        Convertir a Cuenta
                     <?php else: ?>
                         Iniciar Sesión
                     <?php endif; ?>
@@ -66,3 +66,4 @@ if (!$usuarioCompleto): ?>
         </div>
     </div>
 <?php endif; ?>
+

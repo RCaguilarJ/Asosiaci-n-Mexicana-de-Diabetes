@@ -1,9 +1,9 @@
-<?php
+﻿<?php
     // views/citas.php
     
     // Subimos un nivel (../) para encontrar la carpeta includes
     require '../includes/security/check-session.php'; 
-    require '../includes/db.php'; 
+    require_once '../includes/db.php'; 
     require '../includes/historial_citas.php';
 
     $paginaActual = 'citas';
@@ -30,10 +30,10 @@
             }
             $citasUsuario = array_values($citasUnicas);
             
-            // Historial rotativo (últimas 5 citas)
+            // Historial rotativo (Ãºltimas 5 citas)
             $historialCitas = obtenerHistorialCitas($_SESSION['usuario_id']);
             
-            // Estadísticas
+            // EstadÃ­sticas
             $estadisticas = obtenerEstadisticasHistorial($_SESSION['usuario_id']);
         } catch (Exception $e) {
             // Manejo silencioso
@@ -121,7 +121,7 @@
 
             <div class="form-group">
                 <label for="nombre">Nombre Completo</label>
-                <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Juan Pérez García" value="<?php echo isset($_SESSION['usuario_nombre']) ? $_SESSION['usuario_nombre'] : ''; ?>" autocomplete="name" required>
+                <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Juan PÃ©rez GarcÃ­a" value="<?php echo isset($_SESSION['usuario_nombre']) ? $_SESSION['usuario_nombre'] : ''; ?>" autocomplete="name" required>
             </div>
 
             <div class="form-grid-2">
@@ -191,7 +191,7 @@
                     <span>Historial de Citas (Últimas 5)</span>
                 </legend>
 
-                <!-- Estadísticas rápidas -->
+                <!-- EstadÃ­sticas rÃ¡pidas -->
                 <?php if (!empty($estadisticas) && $estadisticas['total_citas'] > 0): ?>
                 <div class="stats-grid mb-20" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 15px;">
                     <div class="stat-card" style="background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center;">
@@ -209,7 +209,7 @@
                 </div>
                 <p class="info-note" style="font-size: 13px; color: #666; margin-bottom: 20px; text-align: center;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
-                    Se mantienen solo las últimas 5 citas por fecha. Las anteriores se eliminan automáticamente.
+                    Se mantienen solo las Ãºltimas 5 citas por fecha. Las anteriores se eliminan automÃ¡ticamente.
                 </p>
                 <?php endif; ?>
 
@@ -251,7 +251,7 @@
                 <?php else: ?>
                 <div style="text-align: center; color: #666; padding: 30px;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 15px; opacity: 0.5;"><circle cx="12" cy="12" r="10"></circle><path d="M12 7v5l3 3"></path></svg>
-                    <p>Aún no tienes citas en tu historial.</p>
+                    <p>AÃºn no tienes citas en tu historial.</p>
                     <p style="font-size: 13px; color: #888;">Agenda tu primera cita arriba.</p>
                 </div>
                 <?php endif; ?>
@@ -265,7 +265,7 @@
     <script src="<?php echo $basePath; ?>/assets/js/app.js"></script>
     
     <script>
-    // Sistema de citas con especialistas dinámicos
+    // Sistema de citas con especialistas dinÃ¡micos
     document.addEventListener('DOMContentLoaded', function() {
         cargarEspecialistas();
         
@@ -329,19 +329,19 @@
             }
             
         } catch (error) {
-            console.error('Error cargando especialistas:', error);
+            console.error('Convierta de visita a cuenta registrada para escoger a su especialista:', error);
             
             // Fallback manual en caso de error completo
             selectEspecialidad.innerHTML = `
                 <option value="" disabled selected>Selecciona una especialidad</option>
                 <option value="Medicina General">Medicina General</option>
-                <option value="Nutrición">Nutrición</option>
-                <option value="Endocrinología">Endocrinología</option>
+                <option value="NutriciÃ³n">NutriciÃ³n</option>
+                <option value="Endocrinologí­a">Endocrinologí­a</option>
                 <option value="Podología">Podología</option>
                 <option value="Psicología">Psicología</option>
             `;
             
-            mostrarNotificacion('Error cargando especialistas. Usando lista básica.', 'error');
+            mostrarNotificacion('Convierta de visita a cuenta registrada para escoger a su especialista', 'error');
         } finally {
             loadingSpinner.style.display = 'none';
         }
@@ -355,7 +355,7 @@
             medicoGroup.style.display = 'block';
             selectMedico.innerHTML = '<option value="" disabled selected>Cargando especialistas...</option>';
             
-            // Obtener role del dataset de la opción seleccionada
+            // Obtener role del dataset de la opciÃ³n seleccionada
             const selectEspecialidad = document.getElementById('especialidad');
             const selectedOption = selectEspecialidad.options[selectEspecialidad.selectedIndex];
             const role = selectedOption.dataset.role;
@@ -370,12 +370,12 @@
             const data = await response.json();
             
             if (!data.success) {
-                throw new Error(data.error || 'Error cargando médicos');
+                throw new Error(data.error || 'Error cargando mÃ©dicos');
             }
             
             selectMedico.innerHTML = '<option value="" disabled selected>Selecciona un especialista</option>';
             
-            // Agregar médicos del rol específico
+            // Agregar mÃ©dicos del rol especÃ­fico
             if (data.roles.length > 0) {
                 data.roles[0].especialistas.forEach(medico => {
                     const option = document.createElement('option');
@@ -394,8 +394,8 @@
             }
             
         } catch (error) {
-            console.error('Error cargando médicos:', error);
-            selectMedico.innerHTML = '<option value="" disabled>Error cargando especialistas</option>';
+            console.error('Convierta de visita a cuenta registrada para escoger a su especialista:', error);
+            selectMedico.innerHTML = '<option value="" disabled>Convierta de visita a cuenta registrada para escoger a su especialista</option>';
         }
     }
     
@@ -410,7 +410,7 @@
         const hora = formData.get('hora');
         
         if (!medico_id) {
-            mostrarNotificacion('Debe seleccionar un especialista específico', 'error');
+            mostrarNotificacion('Debe seleccionar un especialista especÃ­fico', 'error');
             return;
         }
         
@@ -429,9 +429,9 @@
         }
         
         try {
-            // Deshabilitar botón durante envío
+            // Deshabilitar botÃ³n durante envÃ­o
             const submitBtn = form.querySelector('button[type="submit"]');
-            const originalText = submitBtn.textContent; // Definir originalText aquí
+            const originalText = submitBtn.textContent; // Definir originalText aquÃ­
             submitBtn.setAttribute('data-original-text', originalText); // Guardar para later
             submitBtn.disabled = true;
             submitBtn.textContent = 'Agendando...';
@@ -446,7 +446,7 @@
             if (result.success) {
                 mostrarNotificacion(result.mensaje, 'success');
                 
-                // Mostrar confirmación específica si hay médico asignado
+                // Mostrar confirmaciÃ³n especÃ­fica si hay mÃ©dico asignado
                 if (result.confirmacion) {
                     setTimeout(() => {
                         mostrarNotificacion(result.confirmacion, 'info');
@@ -457,7 +457,7 @@
                 form.reset();
                 document.getElementById('medico-group').style.display = 'none';
                 
-                // Recargar página para mostrar historial actualizado
+                // Recargar pÃ¡gina para mostrar historial actualizado
                 setTimeout(() => {
                     location.reload();
                 }, 3000);
@@ -468,9 +468,9 @@
             
         } catch (error) {
             console.error('Error enviando cita:', error);
-            mostrarNotificacion('Error de conexión. Intente nuevamente.', 'error');
+            mostrarNotificacion('Error de conexiÃ³n. Intente nuevamente.', 'error');
         } finally {
-            // Rehabilitar botón
+            // Rehabilitar botÃ³n
             const submitBtn = form.querySelector('button[type="submit"]');
             if (submitBtn) {
                 submitBtn.disabled = false;
@@ -480,7 +480,7 @@
     }
     
     function mostrarNotificacion(mensaje, tipo) {
-        // Crear elemento de notificación
+        // Crear elemento de notificaciÃ³n
         const notification = document.createElement('div');
         notification.className = `notification notification-${tipo}`;
         notification.style.cssText = `
@@ -497,7 +497,7 @@
             animation: slideIn 0.3s ease;
         `;
         
-        // Colores según tipo
+        // Colores segÃºn tipo
         const colores = {
             success: '#28a745',
             error: '#dc3545',
@@ -510,7 +510,7 @@
         
         document.body.appendChild(notification);
         
-        // Auto-remover después de 5 segundos
+        // Auto-remover despuÃ©s de 5 segundos
         setTimeout(() => {
             if (notification.parentNode) {
                 notification.remove();
@@ -549,3 +549,4 @@
     </style>
 </body>
 </html>
+

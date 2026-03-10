@@ -14,6 +14,6 @@ if (!headers_sent()) {
 
 	// Content Security Policy: mantengo 'unsafe-inline' temporalmente si el proyecto usa scripts inline.
 	// Para producción, reemplazar por nonces y eliminar 'unsafe-inline'.
-	header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:;");
+	header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; frame-src 'self' https://www.google.com https://maps.google.com;");
 }
 ?>

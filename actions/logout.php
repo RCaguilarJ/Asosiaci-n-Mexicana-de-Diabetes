@@ -17,7 +17,7 @@ if (ini_get("session.use_cookies")) {
 // 3. Destruir la sesión en el servidor
 session_destroy();
 
-// 4. Redirigir al Login (saliendo de la carpeta actions hacia views)
-header("Location: ../views/login.php?logout=success");
+// 4. Redirigir al inicio en modo invitado
+header("Location: ../views/index.php?logout=success");
 exit;
 ?>

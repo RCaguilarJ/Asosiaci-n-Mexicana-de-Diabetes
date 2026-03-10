@@ -151,12 +151,17 @@
                         </svg>
                     </span>
                     <span class="menu-drawer-link__text">
-                        <span class="menu-drawer-link__title">Cerrar Sesión</span>
-                        <span class="menu-drawer-link__subtitle">Finalizar sesión actual</span>
+                        <span class="menu-drawer-link__title">
+                            <?php echo !empty($_SESSION['es_invitado']) ? 'Salir de Invitado' : 'Cerrar Sesión'; ?>
+                        </span>
+                        <span class="menu-drawer-link__subtitle">
+                            <?php echo !empty($_SESSION['es_invitado']) ? 'Finalizar modo invitado' : 'Finalizar sesión actual'; ?>
+                        </span>
                     </span>
                 </a>
             </li>
-        <?php else: ?>
+        <?php endif; ?>
+        <?php if (!isset($_SESSION['usuario_id']) || !empty($_SESSION['es_invitado'])): ?>
             <li>
                 <a href="<?php echo $basePath; ?>/views/login.php" class="menu-drawer-link <?php echo ($paginaActual == 'login') ? 'active' : ''; ?> menu-drawer-link--login">
                     <span class="menu-drawer-link__icon">

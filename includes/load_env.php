@@ -61,6 +61,9 @@ function loadEnvFile($path) {
     return true;
 }
 
-$envPath = __DIR__ . '/../.env';
-loadEnvFile($envPath);
+$envLocalPath = __DIR__ . '/../.env.local';
+if (!loadEnvFile($envLocalPath)) {
+    $envPath = __DIR__ . '/../.env';
+    loadEnvFile($envPath);
+}
 ?>
